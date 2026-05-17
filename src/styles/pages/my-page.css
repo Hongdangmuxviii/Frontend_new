@@ -1,0 +1,284 @@
+.mypage{
+  max-width:1024px;
+  margin:0 auto;
+  padding:48px 32px 128px;
+  display:flex;
+  flex-direction:column;
+  gap:64px;
+}
+
+.mypage__profile{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+.mypage__avatarWrap{
+  width:96px;
+  height:96px;
+  border-radius:9999px;
+  background:#e5e7eb;
+  border:4px solid #fff;
+  box-shadow:0px 10px 15px -3px rgba(0,0,0,0.1),0px 4px 6px -4px rgba(0,0,0,0.1);
+  padding:4px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.mypage__avatar{
+  width:100%;
+  height:100%;
+  border-radius:9999px;
+  object-fit:cover;
+  background:#fff;
+}
+
+.mypage__name{
+  margin-top:8px;
+  font-size:30px;
+  line-height:36px;
+  font-weight:800;
+  color:#111827;
+}
+
+.mypage__sub{
+  margin-top:8px;
+  font-size:16px;
+  line-height:24px;
+  color:var(--muted);
+}
+
+.mypage__editBtn{
+  margin-top:16px;
+  background:#f3f4f6;
+  border:0;
+  border-radius:8px;
+  padding:8px 16px;
+  color:#374151;
+  font-size:14px;
+  font-weight:500;
+  box-shadow:none;
+  cursor:pointer;
+}
+
+.mypage__section{
+  display:flex;
+  flex-direction:column;
+  gap:28px;
+}
+
+.mypage__sectionTitle{
+  margin:0;
+  font-size:20px;
+  line-height:36px;
+  font-weight:800;
+  color:#111827;
+  display:block;
+  padding-bottom:2px;
+}
+
+.mypage__sectionTitle--tight{
+  margin-bottom:0;
+}
+
+.mypage__cards3{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:24px;
+}
+
+.mypage__statCard{
+  background:#fff;
+  border:1px solid #f3f4f6;
+  border-radius:12px;
+  box-shadow:var(--shadow-1);
+  padding:33px;
+  min-height:164px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  transition:
+    background-color .18s ease,
+    border-color .18s ease;
+}
+
+.mypage__statCard--link{
+  color:inherit;
+  text-decoration:none;
+  cursor:pointer;
+}
+
+.mypage__statCard--primary{
+  /* No longer used as default state. Kept for compatibility. */
+  background:#fff;
+  border-color:#f3f4f6;
+}
+
+.mypage__statIcon{
+  width:26px;
+  height:26px;
+  object-fit:contain;
+  transition: filter .18s ease;
+}
+
+.mypage__statLabel{
+  margin-top:6px;
+  font-size:14px;
+  line-height:20px;
+  font-weight:600;
+  color:#6b7280;
+  transition: color .18s ease;
+}
+
+.mypage__statCard--primary .mypage__statLabel{
+  color:#6b7280;
+}
+
+.mypage__statValue{
+  margin-top:6px;
+  font-size:30px;
+  line-height:36px;
+  font-weight:800;
+  color:#111827;
+  transition: color .18s ease;
+}
+
+.mypage__statValue--primary{
+  color:#111827;
+}
+
+/* Hover state: match "보유 폰트" card look */
+.mypage__statCard:hover{
+  background:#1832ff;
+  border-color:#1832ff;
+}
+.mypage__statCard:hover .mypage__statLabel{
+  color:#dbeafe;
+}
+.mypage__statCard:hover .mypage__statValue{
+  color:#ffffff;
+}
+
+/* Convert icons to white on blue background (hover only). */
+.mypage__statCard:hover .mypage__statIcon{
+  filter: brightness(0) invert(1);
+}
+
+/* Some exported icons are white-fill by default; make them dark on the white card. */
+.mypage__statIcon--darkOnWhite{
+  filter: brightness(0);
+}
+
+.mypage__statCard:hover .mypage__statIcon--darkOnWhite{
+  filter: brightness(0) invert(1);
+}
+
+.mypage__viewRow{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+
+.mypage__viewAll{
+  color:#1832ff;
+  text-decoration:none;
+  font-size:14px;
+  font-weight:600;
+}
+
+.mypage__grid4{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:24px;
+}
+
+.mypage__fontCard{
+  border:1px solid #f3f4f6;
+  border-radius:12px;
+  background:#fff;
+  box-shadow:var(--shadow-1);
+  overflow:hidden;
+  position:relative;
+  min-height:222px;
+}
+
+.mypage__fontTop{
+  height:128px;
+  background:#f9fafb;
+  border-bottom:1px solid #f3f4f6;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  padding:24px;
+}
+
+.mypage__fontSample{
+  font-size:24px;
+  line-height:32px;
+  font-weight:700;
+  color:#1f2937;
+  text-align:center;
+}
+
+.mypage__fontPlus{
+  position:absolute;
+  right:12px;
+  top:12px;
+  opacity:0;
+  width:20px;
+  height:18px;
+  object-fit:contain;
+}
+
+.mypage__fontBottom{
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.mypage__fontKind{
+  font-size:12px;
+  line-height:16px;
+  font-weight:800;
+}
+
+.mypage__fontKind--free{
+  color:#1832ff;
+}
+
+.mypage__fontKind--paid{
+  color:#6b7280;
+}
+
+.mypage__fontName{
+  font-size:14px;
+  line-height:20px;
+  font-weight:700;
+  color:#111827;
+}
+
+.mypage__fontCompany{
+  font-size:12px;
+  line-height:16px;
+  font-weight:400;
+  color:#6b7280;
+}
+
+@media (max-width: 1024px){
+  .mypage__grid4{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .mypage__cards3{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+
+@media (max-width: 640px){
+  .mypage{padding:32px 16px 80px;}
+  .mypage__grid4{grid-template-columns:1fr;}
+  .mypage__cards3{grid-template-columns:1fr;}
+}
+
+

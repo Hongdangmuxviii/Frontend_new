@@ -1,0 +1,16 @@
+@import url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard@latest/dist/pretendard.css');
+@import url('https://fonts.googleapis.com/css2?family=Black+And+White+Picture&family=Black+Han+Sans&family=Nanum+Brush+Script&family=Nanum+Myeongjo:wght@400;700;800&family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@400;500;700;800&display=swap');
+
+/* Keep same import order as the original Next.js globals.css */
+@import './pages/home.css';
+@import './pages/selected.css';
+@import './pages/english-detail.css';
+@import './pages/my-page.css';
+@import './pages/handwriting.css';
+@import './pages/login.css';
+@import './pages/review.css';
+@import './pages/profile-edit.css';
+@import './pages/top10.css';
+@import './pages/english-fonts.css';
+@import './pages/my-works.css';
+@import './pages/image-font-search.css';

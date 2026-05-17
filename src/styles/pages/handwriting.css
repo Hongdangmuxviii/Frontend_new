@@ -1,0 +1,470 @@
+.handwriting {
+  display: flex;
+  flex-direction: column;
+  /* 섹션(히어로/스텝/프리뷰) 간 세로 여백 */
+  gap: 64px;
+}
+
+/* Hero 영역: 상단 타이틀/서브카피 */
+.handwriting__hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  /* 제목과 설명 사이 세로 간격 */
+  gap: 18px;
+  /* 섹션 상단 여백 */
+  padding-top: 16px;
+}
+
+.handwriting__title {
+  margin: 0;
+  /* 메인 타이틀 크기 */
+  font-size: 60px;
+  /* 메인 타이틀 줄높이 */
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: #0f172a;
+  font-weight: 800;
+  max-width: 980px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.handwriting__titleAccent {
+  background: linear-gradient(90deg, #e91e63, #8e44ad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.handwriting__desc {
+  margin: 0;
+  /* 히어로 보조 설명 글자 크기 */
+  font-size: 18px;
+  /* 히어로 보조 설명 줄간격 */
+  line-height: 1.625;
+  color: #475569;
+  max-width: 760px;
+}
+
+/* Process Steps: 3단계 카드 영역 */
+.handwritingSteps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* 3개 카드 사이 가로 간격 */
+  gap: 40px;
+}
+
+.stepCard {
+  background: rgba(233, 30, 99, 0.03);
+  border: 1px solid rgba(233, 30, 99, 0.08);
+  border-radius: 48px;
+  padding: 33px;
+  box-shadow: 0 8px 16px rgba(26, 0, 51, 0.04);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  /* 카드 내부 모든 요소의 기본 간격 */
+  gap: 12px;
+}
+.stepCard:nth-child(2) {
+  background: rgba(142, 68, 173, 0.03);
+  border-color: rgba(142, 68, 173, 0.1);
+}
+.stepCard:nth-child(3) {
+  background: rgba(233, 30, 99, 0.05);
+}
+
+.stepCard__icon {
+  width: 96px;
+  height: 96px;
+  border-radius: 9999px;
+  background: #ffffff;
+  color: #e91e63;
+  font-size: 30px;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+.stepCard__icon--write {
+  color: #8e44ad;
+}
+.stepCard__icon--spark {
+  color: #e91e63;
+}
+
+.stepCard h2 {
+  margin: 0;
+  /* 단계 카드 제목 크기 */
+  font-size: 20px;
+  /* 단계 카드 제목 줄높이 */
+  line-height: 28px;
+  color: #1e293b;
+}
+
+.stepCard p {
+  margin: 0;
+  /* 단계 카드 본문 설명 크기 */
+  font-size: 14px;
+  /* 단계 카드 본문 줄간격 */
+  line-height: 22.75px;
+  color: #4a444e;
+  min-height: 46px;
+}
+
+.stepCard__panel {
+  width: 100%;
+  /* 박스 최소 높이(아이콘/파일명 영역 높이) */
+  min-height: 112px;
+  border: 1px solid rgba(142, 68, 173, 0.05);
+  border-radius: 24px;
+  background: #ffffff;
+  display: grid;
+  place-items: center;
+  /* 박스 내부 여백 */
+  padding: 21px;
+}
+
+.stepCard__panel--row {
+  gap: 6px;
+}
+
+.stepCard__badge {
+  display: inline-flex;
+  padding: 5px 10px;
+  border-radius: 9999px;
+  background: rgba(233, 30, 99, 0.08);
+  color: #e91e63;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.stepCard__sub {
+  font-size: 10px;
+  color: #94a3b8;
+}
+
+.stepCard__panel--drop {
+  border-style: dashed;
+  border-width: 2px;
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.stepCard__panel--preview {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px dashed rgba(142, 68, 173, 0.2);
+  backdrop-filter: blur(3px);
+}
+
+.stepCard__btn {
+  margin-top: 4px;
+  width: 100%;
+  border: 0;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #e91e63 0%, #8e44ad 100%);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  /* 버튼 높이(세로 크기 체감) */
+  min-height: 48px;
+  cursor: pointer;
+  box-shadow: 0 10px 15px -3px rgba(142, 68, 173, 0.2), 0 4px 6px -4px rgba(142, 68, 173, 0.2);
+}
+
+.stepCard__btn--ghost {
+  background: #fff;
+  color: #8e44ad;
+  border: 1px solid rgba(142, 68, 173, 0.2);
+  box-shadow: none;
+}
+
+/* Preview Section: 생성 폰트 미리보기 카드 영역 */
+.handwritingPreviewSection {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.handwritingPreviewSection__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.handwritingPreviewSection__head h2 {
+  margin: 0;
+  font-size: 32px;
+  line-height: 1.2;
+}
+
+.handwritingPreviewSection__head a {
+  color: #8e44ad;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.previewLayout {
+  display: grid;
+  /* 좌측 큰 카드 : 우측 작은 카드 영역 비율 */
+  grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
+  /* 큰 카드와 오른쪽 카드 컬럼 사이 간격 */
+  gap: 24px;
+}
+
+.previewLayout__large {
+  border-radius: 48px;
+  border: 1px solid #f1f5f9;
+  background: #fff;
+  box-shadow: 0 8px 16px rgba(26, 0, 51, 0.04);
+  /* 큰 카드 내부 여백 */
+  padding: 41px;
+  display: flex;
+  flex-direction: column;
+  /* 큰 카드 내부 블록 간격 */
+  gap: 28px;
+}
+
+.previewCard__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.previewCard__label {
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: rgba(233, 30, 99, 0.1);
+  color: #e91e63;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.previewCard__top h3 {
+  margin: 12px 0 0;
+  font-size: 30px;
+  line-height: 1.2;
+}
+
+.previewCard__top button {
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  border: 1px solid #f1f5f9;
+  background: #f8fafc;
+  color: #cbd5e1;
+  cursor: pointer;
+}
+
+.previewCard__quote {
+  margin: 0;
+  /* 큰 카드 손글씨 본문 크기 */
+  font-size: 48px;
+  /* 큰 카드 손글씨 줄간격 */
+  line-height: 1.35;
+  color: #111827;
+  font-family: "Nanum Pen Script", cursive;
+}
+
+.previewCard__footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 70px;
+  padding-top: 18px;
+  border-top: 1px solid #e5e7eb;
+  font-size: 15px;
+  color: #64748b;
+}
+
+.previewCard__dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 9999px;
+  background: #94a3b8;
+}
+
+.previewCard__footer button {
+  margin-left: auto;
+  border: 0;
+  border-radius: 9999px;
+  min-height: 40px;
+  padding: 0 24px;
+  background: linear-gradient(135deg, #e91e63 0%, #8e44ad 100%);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 20px 25px -5px rgba(142, 68, 173, 0.2), 0 8px 10px -6px rgba(142, 68, 173, 0.2);
+}
+
+.previewLayout__side {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.previewSmallCard {
+  /* 오른쪽 작은 카드 높이 */
+  min-height: 219px;
+  border-radius: 40px;
+  border: 1px solid #f1f5f9;
+  background: #fff;
+  box-shadow: 0 8px 16px rgba(26, 0, 51, 0.04);
+  /* 작은 카드 내부 여백 */
+  padding: 33px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.previewSmallCard h4 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 28px;
+  color: #111827;
+}
+
+.previewSmallCard p {
+  margin: 16px 0 0;
+  /* 오른쪽 작은 카드 손글씨 크기 */
+  font-size: 36px;
+  /* 오른쪽 작은 카드 줄간격 */
+  line-height: 1.45;
+  color: #1f2937;
+  font-family: "Nanum Pen Script", cursive;
+}
+
+.previewSmallCard button {
+  margin-top: 16px;
+  margin-left: auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 9999px;
+  border: 1px solid #f1f5f9;
+  background: #f8fafc;
+  color: #8e44ad;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* Bottom Banner: 하단 CTA 배너 */
+.handwritingBanner {
+  /* 하단 배너 최소 높이 */
+  min-height: 160px;
+  border-radius: 48px;
+  border: 1px solid #0f172a;
+  background: #0f172a;
+  /* 하단 배너 내부 여백 */
+  padding: 30px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.handwritingBanner h3 {
+  margin: 0;
+  font-size: 32px;
+  line-height: 1.2;
+  color: #ffffff;
+}
+
+.handwritingBanner p {
+  margin: 8px 0 0;
+  font-size: 16px;
+  line-height: 1.3;
+  color: #94a3b8;
+}
+
+.handwritingBanner button {
+  flex-shrink: 0;
+  min-height: 56px;
+  padding: 0 30px;
+  border: 0;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #e91e63 0%, #8e44ad 100%);
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 10px 15px -3px rgba(142, 68, 173, 0.2), 0 4px 6px -4px rgba(142, 68, 173, 0.2);
+}
+
+@media (max-width: 1024px) {
+  .handwriting__title {
+    /* 태블릿 메인 타이틀 크기 */
+    font-size: 44px;
+  }
+  .handwriting__desc {
+    font-size: 18px;
+  }
+  .handwritingSteps {
+    /* 태블릿부터 단계 카드 1열 */
+    grid-template-columns: 1fr;
+  }
+  .previewLayout {
+    grid-template-columns: 1fr;
+  }
+  .previewCard__quote {
+    font-size: 34px;
+  }
+  .previewSmallCard p {
+    font-size: 24px;
+  }
+  .handwritingBanner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .handwritingBanner h3 {
+    font-size: 28px;
+  }
+  .handwritingBanner p {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 640px) {
+  .handwriting__title {
+    /* 모바일 메인 타이틀 크기 */
+    font-size: 32px;
+  }
+  .handwriting__desc {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .stepCard h2 {
+    font-size: 24px;
+  }
+  .previewLayout__large,
+  .previewSmallCard {
+    /* 모바일 카드 내부 여백 축소 */
+    padding: 20px;
+  }
+  .previewCard__top h3 {
+    font-size: 24px;
+  }
+  .previewCard__quote {
+    font-size: 28px;
+  }
+  .handwritingPreviewSection__head h2 {
+    font-size: 26px;
+  }
+  .handwritingBanner {
+    padding: 22px;
+  }
+  .handwritingBanner h3 {
+    font-size: 24px;
+  }
+  .handwritingBanner button {
+    width: 100%;
+  }
+}

@@ -1,0 +1,238 @@
+.profileEdit{
+  padding:72px 32px 160px;
+}
+
+.profileEdit__card{
+  width:min(100%, 484px);
+  margin:0 auto;
+  background:#fff;
+  border:1px solid #e5e7eb;
+  border-radius:16px;
+  box-shadow:0 1px 2px rgba(0,0,0,.05);
+  padding:40px 38px 48px;
+}
+
+.profileEdit__title{
+  margin:0;
+  color:#111827;
+  font-size:24px;
+  line-height:32px;
+  font-weight:700;
+  text-align:center;
+}
+
+.profileEdit__avatarSection{
+  position:relative;
+  width:128px;
+  margin:32px auto 0;
+}
+
+.profileEdit__avatarWrap{
+  width:128px;
+  height:128px;
+  border-radius:9999px;
+  background:#e5e7eb;
+  border:4px solid #fff;
+  box-shadow:0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -2px rgba(0,0,0,.1);
+  padding:4px;
+  box-sizing:border-box;
+}
+
+.profileEdit__avatar{
+  width:100%;
+  height:100%;
+  border-radius:9999px;
+  object-fit:cover;
+  background:#fff;
+}
+
+.profileEdit__avatarButton{
+  position:absolute;
+  right:0;
+  bottom:0;
+  width:40px;
+  height:40px;
+  border-radius:9999px;
+  border:1px solid #e5e7eb;
+  background:#fff;
+  box-shadow:0 1px 1px rgba(0,0,0,.05);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+
+.profileEdit__avatarIcon{
+  color:#6b7280;
+  font-size:14px;
+  line-height:1;
+}
+
+.profileEdit__photoInput{
+  position:absolute;
+  width:1px;
+  height:1px;
+  padding:0;
+  margin:-1px;
+  overflow:hidden;
+  clip:rect(0, 0, 0, 0);
+  white-space:nowrap;
+  border:0;
+}
+
+.profileEdit__form{
+  margin-top:32px;
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+}
+
+.profileEdit__field{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.profileEdit__label{
+  color:#374151;
+  font-size:14px;
+  line-height:20px;
+  font-weight:500;
+}
+
+.profileEdit__input{
+  width:100%;
+  padding:13px 17px;
+  border:1px solid #d1d5db;
+  border-radius:8px;
+  background:#fff;
+  color:#111827;
+  font-size:16px;
+  line-height:24px;
+  box-sizing:border-box;
+}
+
+.profileEdit__input:focus{
+  outline:none;
+  border-color:#1832ff;
+  box-shadow:0 0 0 3px rgba(24,50,255,.08);
+}
+
+.profileEdit__input--readonly{
+  background:#f9fafb;
+  border-color:#e5e7eb;
+  color:#6b7280;
+  cursor:not-allowed;
+}
+
+.profileEdit__consentRow{
+  padding:17px 0 8px;
+  border-top:1px solid #f3f4f6;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+}
+
+.profileEdit__consentText{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.profileEdit__consentTitle{
+  color:#111827;
+  font-size:14px;
+  line-height:20px;
+  font-weight:500;
+}
+
+.profileEdit__consentDesc{
+  margin:0;
+  color:#6b7280;
+  font-size:12px;
+  line-height:16px;
+  white-space:nowrap;
+}
+
+.profileEdit__switch{
+  margin-top:2px;
+  width:44px;
+  height:24px;
+  padding:2px;
+  border:2px solid transparent;
+  border-radius:9999px;
+  background:#d1d5db;
+  position:relative;
+  cursor:pointer;
+  transition:background-color .18s ease;
+}
+
+.profileEdit__switch--on{
+  background:#1832ff;
+}
+
+.profileEdit__switchThumb{
+  display:block;
+  width:20px;
+  height:20px;
+  border-radius:9999px;
+  background:#fff;
+  box-shadow:0 1px 3px rgba(0,0,0,.1), 0 1px 2px rgba(0,0,0,.1);
+  transform:translateX(0);
+  transition:transform .18s ease;
+  position:absolute;
+  top:50%;
+  left:2px;
+  margin-top:-10px;
+}
+
+.profileEdit__switch--on .profileEdit__switchThumb{
+  transform:translateX(18px);
+}
+
+.profileEdit__actions{
+  display:flex;
+  gap:16px;
+  padding-top:32px;
+}
+
+.profileEdit__btn{
+  flex:1 0 0;
+  min-height:52px;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+  font-size:16px;
+  line-height:24px;
+  font-weight:500;
+  border:1px solid transparent;
+  cursor:pointer;
+}
+
+.profileEdit__btn--ghost{
+  background:#fff;
+  border-color:#d1d5db;
+  color:#374151;
+}
+
+.profileEdit__btn--primary{
+  background:#1832ff;
+  color:#fff;
+}
+
+@media (max-width: 640px){
+  .profileEdit{
+    padding:40px 16px 100px;
+  }
+
+  .profileEdit__card{
+    padding:32px 20px 36px;
+  }
+
+  .profileEdit__actions{
+    flex-direction:column;
+  }
+}

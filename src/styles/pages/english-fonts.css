@@ -1,0 +1,573 @@
+.englishFonts{
+  padding:40px 48px 80px;
+  background:#fff;
+}
+
+.englishFonts__inner{
+  max-width:1280px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:240px minmax(0, 1fr);
+  gap:48px;
+}
+
+.englishFonts__sidebar{
+  padding-top:16px;
+  padding:24px 20px;
+  border:1px solid #e2e8f0;
+  border-radius:16px;
+  background:#fff;
+  align-self:start;
+  box-shadow:0 1px 2px rgba(0,0,0,.04);
+}
+
+.englishFonts__sidebarBlock{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+.englishFonts__sidebarBlock + .englishFonts__sidebarBlock{
+  margin-top:40px;
+}
+
+.englishFonts__sidebarTitle{
+  margin:0;
+  color:#001b3d;
+  font-size:14px;
+  line-height:20px;
+  font-weight:700;
+  letter-spacing:.1em;
+}
+
+.englishFonts__filterList{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.englishFonts__checkRow{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  color:#414754;
+  font-size:14px;
+  line-height:20px;
+}
+
+.englishFonts__checkRow input{
+  width:16px;
+  height:16px;
+  margin:0;
+}
+
+.englishFonts__keywordWrap{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.englishFonts__keyword{
+  border:1px solid transparent;
+  border-radius:9999px;
+  padding:7px 13px;
+  background:#eff6ff;
+  font-size:12px;
+  line-height:16px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.englishFonts__keyword--blue{background:#eff6ff;border-color:#dbeafe;color:#2563eb;}
+.englishFonts__keyword--purple{background:#faf5ff;border-color:#f3e8ff;color:#9333ea;}
+.englishFonts__keyword--green{background:#f0fdf4;border-color:#dcfce7;color:#16a34a;}
+.englishFonts__keyword--orange{background:#fff7ed;border-color:#ffedd5;color:#ea580c;}
+.englishFonts__keyword--pink{background:#fdf2f8;border-color:#fce7f3;color:#db2777;}
+.englishFonts__keyword--indigo{background:#eef2ff;border-color:#e0e7ff;color:#4f46e5;}
+
+.englishFonts__keyword--active{
+  box-shadow:0 0 0 2px rgba(0,91,191,.12);
+}
+
+.englishFonts__content{
+  display:flex;
+  flex-direction:column;
+  gap:32px;
+  min-width:0;
+}
+
+.englishFonts__head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:flex-start;
+}
+
+.englishFonts__titleRow{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.englishFonts__title{
+  margin:0;
+  color:#001b3d;
+  font-size:28px;
+  line-height:34px;
+  font-weight:700;
+  letter-spacing:-.02em;
+}
+
+.englishFonts__count{
+  color:#005bbf;
+  font-size:18px;
+  line-height:24px;
+  font-weight:700;
+}
+
+.englishFonts__inputBar{
+  min-height:51px;
+  padding:10px 20px 10px 24px;
+  border:1px solid #d9d9d9;
+  border-radius:72.576px;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
+.englishFonts__inputField{
+  flex:1 1 auto;
+  min-width:0;
+  border:0;
+  outline:none;
+  background:transparent;
+  color:#111827;
+  font-size:14px;
+  line-height:20px;
+}
+
+.englishFonts__inputField::placeholder{
+  color:#6e6e6e;
+}
+
+.englishFonts__inputTools{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  flex:0 0 auto;
+}
+
+.englishFonts__inputDivider{
+  width:1px;
+  height:18px;
+  background:#e5e7eb;
+}
+
+.englishFonts__inputScale{
+  display:flex;
+  align-items:flex-end;
+  gap:1px;
+  color:#111827;
+  line-height:1;
+}
+
+.englishFonts__inputScaleSmall{
+  font-size:13px;
+}
+
+.englishFonts__inputScaleLarge{
+  font-size:24px;
+}
+
+.englishFonts__sliderWrap{
+  width:141px;
+  display:flex;
+  align-items:center;
+}
+
+.englishFonts__slider{
+  width:100%;
+  margin:0;
+  accent-color:#0619df;
+}
+
+.englishFonts__iconGrid{
+  width:18px;
+  height:18px;
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:2px;
+}
+
+.englishFonts__iconGrid span{
+  border-radius:2px;
+  background:#2a2a2a;
+}
+
+.englishFonts__iconList{
+  width:16px;
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+
+.englishFonts__iconList span{
+  height:4px;
+  border-radius:999px;
+  background:#d9d9d9;
+}
+
+.englishFonts__viewToggle{
+  width:28px;
+  height:28px;
+  border:0;
+  border-radius:8px;
+  background:transparent;
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  transition:background-color .15s ease;
+}
+
+.englishFonts__viewToggle:hover{
+  background:#f8fafc;
+}
+
+.englishFonts__viewToggle--active{
+  background:#eff6ff;
+}
+
+.englishFonts__viewToggle--active .englishFonts__iconGrid span,
+.englishFonts__viewToggle--active .englishFonts__iconList span{
+  background:#0619df;
+}
+
+.englishFonts__grid{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:16px;
+}
+
+.englishFonts__card{
+  min-height:212px;
+  padding:21px;
+  border:1px solid #f1f5f9;
+  border-radius:12px;
+  background:#fff;
+  box-shadow:0 1px 1px rgba(0,0,0,.05);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  text-decoration:none;
+}
+
+.englishFonts__cardTags{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+}
+
+.englishFonts__tag{
+  padding:4px 8px;
+  border-radius:4px;
+  font-size:10px;
+  line-height:15px;
+  font-weight:700;
+}
+
+.englishFonts__tag--blue{background:#eff6ff;color:#2563eb;}
+.englishFonts__tag--purple{background:#faf5ff;color:#9333ea;}
+.englishFonts__tag--green{background:#f0fdf4;color:#16a34a;}
+.englishFonts__tag--orange{background:#fff7ed;color:#ea580c;}
+.englishFonts__tag--pink{background:#fdf2f8;color:#db2777;}
+.englishFonts__tag--indigo{background:#eef2ff;color:#4f46e5;}
+
+.englishFonts__preview{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#1e293b;
+  font-size:20px;
+  line-height:1.2;
+  min-height:90px;
+  text-align:center;
+  max-width:100%;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+
+.englishFonts__planeIcon{
+  width:22px;
+  height:22px;
+  object-fit:contain;
+  flex:0 0 auto;
+}
+
+.englishFonts__list{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.englishFonts__listCard{
+  border:1px solid #f1f5f9;
+  border-radius:12px;
+  background:#fff;
+  box-shadow:0 1px 1px rgba(0,0,0,.05);
+  padding:25px;
+  display:flex;
+  align-items:center;
+  gap:32px;
+  text-decoration:none;
+}
+
+.englishFonts__listMeta{
+  width:192px;
+  flex:0 0 192px;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+}
+
+.englishFonts__listName{
+  color:#001b3d;
+  font-size:14px;
+  line-height:20px;
+  font-weight:700;
+}
+
+.englishFonts__listCreator{
+  margin:0;
+  color:#001b3d;
+  font-size:11px;
+  line-height:16.5px;
+}
+
+.englishFonts__listTags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  padding-top:11px;
+}
+
+.englishFonts__listPreviewWrap{
+  flex:1 1 auto;
+  min-width:0;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  min-height:70px;
+}
+
+.englishFonts__listPreview{
+  width:100%;
+  color:#1e293b;
+  line-height:1.5;
+  text-align:left;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  padding-inline:8px 24px;
+  max-width:100%;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+
+.englishFonts__listActions{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.englishFonts__actionBtn{
+  min-width:106px;
+  padding:10px 20px;
+  border-radius:8px;
+  border:1px solid transparent;
+  font-size:14px;
+  line-height:20px;
+  font-weight:700;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+}
+
+.englishFonts__actionBtn--ghost{
+  background:#fff;
+  border-color:#cbd5e1;
+  color:#001b3d;
+}
+
+.englishFonts__actionBtn--primary{
+  background:#2563eb;
+  color:#fff;
+}
+
+.englishFonts__cardFooter{
+  padding-top:13px;
+  border-top:1px solid #f8fafc;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+
+.englishFonts__fontName{
+  display:block;
+  color:#001b3d;
+  font-size:12px;
+  line-height:16px;
+  font-weight:700;
+}
+
+.englishFonts__fontMeta{
+  margin:0;
+  color:#414754;
+  font-size:10px;
+  line-height:15px;
+}
+
+.englishFonts__downloadIcon{
+  color:#005bbf;
+  font-size:16px;
+  line-height:1;
+}
+
+.englishFonts__pagination{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding-top:16px;
+}
+
+.englishFonts__pageBtn{
+  width:32px;
+  height:32px;
+  border:0;
+  border-radius:6px;
+  background:transparent;
+  color:#475569;
+  font-size:14px;
+  line-height:20px;
+  cursor:pointer;
+}
+
+.englishFonts__pageBtn--active{
+  background:#005bbf;
+  color:#fff;
+  font-weight:700;
+}
+
+.englishFonts__pageBtn:disabled{
+  opacity:.45;
+  cursor:default;
+}
+
+@media (max-width: 1100px){
+  .englishFonts{
+    padding:32px 24px 72px;
+  }
+
+  .englishFonts__inner{
+    grid-template-columns:1fr;
+  }
+
+  .englishFonts__sidebar{
+    padding-top:24px;
+  }
+
+  .englishFonts__grid{
+    grid-template-columns:repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px){
+  .englishFonts__head{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .englishFonts__inputBar{
+    flex-direction:column;
+    align-items:stretch;
+    border-radius:28px;
+  }
+
+  .englishFonts__inputTools{
+    justify-content:space-between;
+    gap:10px;
+  }
+
+  .englishFonts__inputDivider{
+    display:none;
+  }
+
+  .englishFonts__grid{
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+  }
+
+  .englishFonts__listCard{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:20px;
+  }
+
+  .englishFonts__listMeta{
+    width:100%;
+    flex-basis:auto;
+  }
+
+  .englishFonts__listPreviewWrap{
+    width:100%;
+    justify-content:flex-start;
+  }
+
+  .englishFonts__listPreview{
+    min-height:56px;
+  }
+
+  .englishFonts__listActions{
+    width:100%;
+  }
+
+  .englishFonts__actionBtn{
+    flex:1 1 0;
+  }
+}
+
+@media (max-width: 540px){
+  .englishFonts{
+    padding:24px 16px 56px;
+  }
+
+  .englishFonts__title{
+    font-size:22px;
+    line-height:28px;
+  }
+
+  .englishFonts__inputBar{
+    padding:14px 16px;
+  }
+
+  .englishFonts__sliderWrap{
+    width:110px;
+  }
+
+  .englishFonts__grid{
+    grid-template-columns:1fr;
+  }
+
+  .englishFonts__inputTools{
+    flex-wrap:wrap;
+  }
+
+  .englishFonts__listCard{
+    padding:21px;
+  }
+}

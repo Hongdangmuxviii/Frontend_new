@@ -1,0 +1,339 @@
+.top10{
+  padding:64px 100px 120px;
+  background:#fff;
+}
+
+.top10__container{
+  max-width:1080px;
+  margin:0 auto;
+  padding:0 32px;
+}
+
+.top10__hero{
+  padding-bottom:32px;
+}
+
+.top10__title{
+  margin:0;
+  color:#111827;
+  font-size:36px;
+  line-height:40px;
+  font-weight:900;
+  letter-spacing:-.025em;
+}
+
+.top10__desc{
+  margin:16px 0 0;
+  color:#6b7280;
+  font-size:16px;
+  line-height:26px;
+}
+
+.top10__tableHead{
+  display:grid;
+  grid-template-columns:72px 128px minmax(220px, 1.8fr) minmax(180px, 1.2fr) 100px 72px;
+  gap:16px;
+  padding:0 0 17px;
+  border-bottom:1px solid #e5e7eb;
+  color:#6b7280;
+  font-size:14px;
+  line-height:20px;
+}
+
+.top10__tableHead span{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.top10__tableHead span:nth-child(3){
+  justify-content:flex-start;
+  padding-left:16px;
+}
+
+.top10__list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-top:8px;
+}
+
+.top10__row{
+  display:grid;
+  grid-template-columns:72px 128px minmax(220px, 1.8fr) minmax(180px, 1.2fr) 100px 72px;
+  gap:16px;
+  align-items:center;
+  padding:24px 16px;
+  border-radius:8px;
+  background:#fff;
+}
+
+.top10__rank{
+  text-align:center;
+  color:rgba(156,163,175,.5);
+  font-size:24px;
+  line-height:32px;
+  font-style:italic;
+  font-weight:700;
+  font-family:Georgia, 'Times New Roman', serif;
+}
+
+.top10__rank--active{
+  color:#2563eb;
+}
+
+.top10__previewCol{
+  display:flex;
+  justify-content:center;
+}
+
+.top10__previewCol--link{
+  text-decoration:none;
+}
+
+.top10__preview{
+  width:112px;
+  height:80px;
+  border-radius:4px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-size:24px;
+  line-height:32px;
+  font-weight:700;
+}
+
+.top10__info{
+  padding-left:16px;
+}
+
+.top10__fontName{
+  margin:0;
+  font-size:18px;
+  line-height:28px;
+  font-weight:700;
+}
+
+.top10__fontLink{
+  color:#111827;
+  text-decoration:none;
+}
+
+.top10__fontLink:hover{
+  color:#1832ff;
+}
+
+.top10__fontMeta{
+  margin:4px 0 0;
+  color:#6b7280;
+  font-size:14px;
+  line-height:20px;
+}
+
+.top10__tags{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.top10__tag{
+  display:inline-flex;
+  align-items:center;
+  height:24px;
+  padding:0 8px;
+  border-radius:4px;
+  font-size:12px;
+  line-height:16px;
+  font-weight:500;
+}
+
+.top10__tag--pink{
+  background:#fce8f3;
+  color:#99154b;
+}
+
+.top10__tag--blue{
+  background:#ebf5ff;
+  color:#1e429f;
+}
+
+.top10__tag--green{
+  background:#def7ec;
+  color:#03543f;
+}
+
+.top10__tag--purple{
+  background:#f3e8ff;
+  color:#7e22ce;
+}
+
+.top10__tag--yellow{
+  background:#fef3c7;
+  color:#854d0e;
+}
+
+.top10__tag--gray{
+  background:#f3f4f6;
+  color:#4b5563;
+}
+
+.top10__likesButton{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  border:0;
+  background:transparent;
+  color:#6b7280;
+  font-size:14px;
+  line-height:20px;
+  cursor:pointer;
+  transition:color .18s ease, transform .18s ease;
+}
+
+.top10__likesButton:hover{
+  color:#ec4899;
+}
+
+.top10__likesButton--active{
+  color:#ec4899;
+}
+
+.top10__likeIcon{
+  font-size:15px;
+  line-height:1;
+}
+
+.top10__download{
+  border:0;
+  background:transparent;
+  color:#6b7280;
+  font-size:16px;
+  line-height:1;
+  cursor:pointer;
+  transition:color .18s ease;
+  width:24px;
+  height:24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  justify-self:center;
+  transform:translateX(15px);
+}
+
+.top10__download:hover{
+  color:#1832ff;
+}
+
+.top10__downloadIcon{
+  width:16px;
+  height:16px;
+  display:block;
+}
+
+.top10__download--done{
+  color:#1832ff;
+  font-size:13px;
+  font-weight:700;
+}
+
+.top10__moreWrap{
+  display:flex;
+  justify-content:center;
+  padding-top:48px;
+}
+
+.top10__more{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:9px 25px;
+  border:1px solid #e5e7eb;
+  border-radius:9999px;
+  background:#fff;
+  color:#6b7280;
+  font-size:14px;
+  line-height:20px;
+  cursor:pointer;
+  box-shadow:0 1px 1px rgba(0,0,0,.05);
+  transition:border-color .18s ease, color .18s ease;
+}
+
+.top10__more:hover:not(:disabled){
+  border-color:#cbd5e1;
+  color:#111827;
+}
+
+.top10__more:disabled{
+  cursor:default;
+  opacity:.78;
+}
+
+.top10__moreArrow{
+  font-size:11px;
+}
+
+@media (max-width: 1200px){
+  .top10{
+    padding-left:32px;
+    padding-right:32px;
+  }
+}
+
+@media (max-width: 900px){
+  .top10{
+    padding:48px 16px 80px;
+  }
+
+  .top10__container{
+    padding:0;
+  }
+
+  .top10__tableHead{
+    display:none;
+  }
+
+  .top10__row{
+    grid-template-columns:56px 112px 1fr;
+    grid-template-areas:
+      'rank preview info'
+      'rank preview tags'
+      'rank preview meta'
+      'rank preview download';
+    row-gap:10px;
+  }
+
+  .top10__rank{
+    grid-area:rank;
+    align-self:start;
+    padding-top:24px;
+  }
+
+  .top10__previewCol{
+    grid-area:preview;
+    justify-content:flex-start;
+  }
+
+  .top10__info{
+    grid-area:info;
+    padding-left:0;
+  }
+
+  .top10__tags{
+    grid-area:tags;
+    justify-content:flex-start;
+  }
+
+  .top10__likesButton{
+    grid-area:meta;
+    justify-content:flex-start;
+  }
+
+  .top10__download{
+    grid-area:download;
+    justify-self:start;
+  }
+}

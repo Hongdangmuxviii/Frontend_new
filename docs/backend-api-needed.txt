@@ -1,0 +1,263 @@
+Fontify 프론트엔드 API 연동 필요 명세
+작성일: 2026-05-06
+
+현재 백엔드 기준 주소
+- 기본 URL: http://서버주소/api/v1
+- 개발 인증 헤더: x-user-id: dev-user-001
+- 프론트 환경변수:
+  - VITE_API_BASE_URL=http://localhost:8000/api/v1
+  - VITE_DEV_USER_ID=dev-user-001
+
+1. 현재 백엔드로 바로 연동 가능한 API
+
+1-1. 회원
+- POST /auth/signup
+- POST /auth/login
+- POST /auth/dev-login
+- GET /users/me
+- PATCH /users/me
+
+1-2. 마이페이지
+- GET /users/me/ratings
+- GET /users/me/generations
+- GET /users/me/downloads
+
+1-3. 폰트
+- GET /fonts?page=1&limit=100
+- GET /fonts/{font_id}
+- POST /fonts/{font_id}/download
+- POST /fonts/{font_id}/tag
+- GET /generated_fonts?page=1&limit=20
+- GET /generated_fonts/{generated_font_id}
+- POST /generated_fonts/{generated_font_id}/rate
+- GET /generated_fonts/{generated_font_id}/rate
+
+1-4. 생성 작업
+- POST /generations/google
+  요청: { "font_file_id": 1 }
+- POST /generations/handwriting
+  요청: { "handwriting_id": 1 }
+- GET /generations/{job_id}
+
+1-5. 손글씨
+- POST /handwriting/upload
+  multipart form-data: image
+
+2. 프론트에서 연동 준비 완료한 위치
+
+- API 클라이언트: src/api/client.ts
+- 백엔드 응답 타입: src/api/backendTypes.ts
+- 백엔드 서비스 함수: src/api/fontifyApi.ts
+- 백엔드 응답을 화면 데이터로 바꾸는 매퍼: src/api/mappers.ts
+- API 실패 시 목업 유지용 훅: src/hooks/useApiResource.ts
+
+연동 시도 적용 화면:
+- src/pages/MyPage.tsx
+- src/pages/MyWorksPage.tsx
+- src/pages/ReviewPage.tsx
+- src/pages/EnglishFontsPage.tsx
+- src/pages/Top10Page.tsx
+
+3. 현재 프론트가 필요하지만 백엔드에 없는 API
+
+3-1. 홈 화면 인기/추천 폰트
+필요 엔드포인트:
+- GET /home/fonts
+
+응답 예시:
+{
+  "popularFonts": [
+    {
+      "id": "nanum-pen-script",
+      "name": "nanum pen script",
+      "source": "네이버",
+      "sample": "세상은 거울과 같다.",
+      "fontFamily": "'Nanum Pen Script', cursive",
+      "description": "깔끔한 펜글씨체로 원하는 문장을 감성있게 전달해 보세요.",
+      "attribution": "명언 - 허버스 사무엘",
+      "visualVariant": "paper",
+      "quoteLines": ["세상은 거울과 같다."]
+    }
+  ],
+  "recommendedFonts": []
+}
+
+3-2. Top10 랭킹
+필요 엔드포인트:
+- GET /fonts/top10
+
+응답 예시:
+{
+  "fonts": [
+    {
+      "id": "1",
+      "rank": 1,
+      "preview": "식넴",
+      "previewBackground": "#1f1f1f",
+      "title": "Ubuntu 6",
+      "creator": "구글 (Google Fonts)",
+      "tags": [{ "label": "둥글둥글", "tone": "pink" }],
+      "likes": 1240,
+      "downloaded": false
+    }
+  ]
+}
+
+3-3. 작업 목록 확장 필드
+현재 사용 가능:
+- GET /users/me/generations
+
+현재 부족한 필드:
+- phase
+- previewLetters
+- downloadUrl
+- 현재 단계 설명
+- 실제 타임라인 로그
+
+권장 엔드포인트:
+- GET /works
+
+응답 예시:
+{
+  "works": [
+    {
+      "id": "123",
+      "title": "Neo-Modernist Sans",
+      "updatedAt": "최근 업데이트: 12분 전",
+      "progressPercent": 62,
+      "phase": "retraining",
+      "statusLabel": "IN PROGRESS",
+      "sample": "Aa",
+      "previewLetters": ["가", "나", "다", "라", "마", "바", "사", "아", "자", "차", "카", "타", "파", "하"],
+      "downloadUrl": null
+    }
+  ]
+}
+
+phase 허용값:
+- queued
+- analyzing
+- preview_ready
+- retraining
+- finalizing
+- completed
+- failed
+
+3-4. 작업 상세 타임라인
+필요 엔드포인트:
+- GET /works/{work_id}/logs
+
+응답 예시:
+{
+  "logs": [
+    {
+      "id": "log-1",
+      "time": "14:08",
+      "title": "영문 스타일 분석 완료",
+      "detail": "획 두께, 곡률, 세리프 특징 128개 파라미터 추출이 완료되었습니다.",
+      "state": "done"
+    }
+  ]
+}
+
+state 허용값:
+- done
+- active
+- waiting
+- failed
+
+3-5. 작업 취소 / 학습 중단
+필요 엔드포인트:
+- POST /works/{work_id}/cancel
+
+응답 예시:
+{
+  "ok": true
+}
+
+3-6. 리뷰 대기 폰트
+현재 대체 가능:
+- GET /users/me/downloads
+
+권장 엔드포인트:
+- GET /reviews/pending-fonts
+
+응답 예시:
+{
+  "fonts": [
+    {
+      "id": "1",
+      "label": "최근 다운로드",
+      "name": "Gwendolyn Signature",
+      "tone": "primary",
+      "mark": "quote"
+    }
+  ]
+}
+
+3-7. 리뷰 영향 통계
+필요 엔드포인트:
+- GET /reviews/impact
+
+응답 예시:
+{
+  "reachedDesigners": 3422,
+  "avatarLabels": ["AA", "BB", "CC"],
+  "growthLabel": "+3.4k"
+}
+
+3-8. 뉴스레터 이메일 수집
+필요 엔드포인트:
+- POST /newsletter/subscriptions
+
+요청 예시:
+{
+  "email": "user@example.com"
+}
+
+응답 예시:
+{
+  "ok": true
+}
+
+4. 백엔드에서 수정이 필요한 것으로 보이는 항목
+
+4-1. CORS 설정
+Vite 개발 서버가 http://localhost:5173 이므로 백엔드에서 CORS 허용이 필요합니다.
+권장 허용 origin:
+- http://localhost:5173
+- 배포 프론트 도메인
+
+4-2. /fonts/{font_id} path parameter 버그
+현재 코드상 라우트는 /fonts/{font_id}인데 함수 인자가 file_id로 되어 있습니다.
+FastAPI path param 바인딩을 위해 아래 둘 중 하나로 맞춰야 합니다.
+- def get_font(font_id: int, ...)
+- 또는 라우트를 /fonts/{file_id}로 변경
+
+4-3. 다운로드 API 이름 정리
+현재 POST /fonts/{font_id}/download 는 실제로 GeneratedFont를 조회합니다.
+혼동 방지를 위해 아래 형태를 권장합니다.
+- POST /generated_fonts/{generated_font_id}/download
+
+4-4. 정적 파일 서빙
+file_url이 /uploads/... 또는 /폰트경로 형태로 내려오므로 FastAPI에서 StaticFiles mount가 필요합니다.
+예:
+- /uploads
+- /fonts
+- /static
+
+4-5. 완료된 generation job과 generated_font 연결
+프론트 작업 완료 화면에서 TTF 다운로드 버튼을 보여주려면 generation 응답 또는 work 응답에 downloadUrl이 필요합니다.
+
+5. 현재 프론트 임시 매핑 규칙
+
+- /users/me/generations의 status/progress를 프론트 phase로 임시 변환합니다.
+- progress 0~14: analyzing
+- progress 15~34: preview_ready
+- progress 35~84: retraining
+- progress 85~99: finalizing
+- progress 100 또는 COMPLETED/DONE: completed
+- PENDING/QUEUE: queued
+- FAIL/ERROR: failed
+
+백엔드에서 phase를 직접 내려주면 이 임시 규칙은 제거할 수 있습니다.

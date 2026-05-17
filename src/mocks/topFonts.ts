@@ -1,0 +1,108 @@
+import type { TopFont } from '../types/font';
+
+export const mockTopFonts: TopFont[] = [
+  {
+    id: 'ubuntu-6',
+    rank: 1,
+    preview: '식넴',
+    previewBackground: '#1f1f1f',
+    title: 'Ubuntu 6',
+    creator: '구글 (Google Fonts)',
+    tags: [
+      { label: '둥글둥글', tone: 'pink' },
+      { label: '귀여운', tone: 'pink' },
+    ],
+    likes: 1240,
+  },
+  {
+    id: 'playfair-display',
+    rank: 2,
+    preview: '명조',
+    previewBackground: '#33475b',
+    title: 'Playfair Display',
+    creator: 'Claus Eggers Sørensen',
+    tags: [
+      { label: '세리프', tone: 'blue' },
+      { label: '모던', tone: 'gray' },
+    ],
+    likes: 1098,
+  },
+  {
+    id: 'lato-kr',
+    rank: 3,
+    preview: '라토',
+    previewBackground: '#44576c',
+    title: 'Lato KR',
+    creator: 'Łukasz Dziedzic',
+    tags: [
+      { label: '고딕', tone: 'green' },
+      { label: '깔끔한', tone: 'gray' },
+    ],
+    likes: 912,
+  },
+  {
+    id: 'roboto-mono',
+    rank: 4,
+    preview: '코딩',
+    previewBackground: '#748496',
+    title: 'Roboto Mono',
+    creator: 'Christian Robertson',
+    tags: [
+      { label: '개발자', tone: 'purple' },
+      { label: '고정폭', tone: 'gray' },
+    ],
+    likes: 844,
+  },
+  {
+    id: 'merriweather',
+    rank: 5,
+    preview: '메리',
+    previewBackground: '#b85700',
+    title: 'Merriweather',
+    creator: 'Sorkin Type',
+    tags: [
+      { label: '우아한', tone: 'yellow' },
+      { label: '세리프', tone: 'blue' },
+    ],
+    likes: 745,
+  },
+  {
+    id: 'pretendard',
+    rank: 6,
+    preview: '기본',
+    previewBackground: '#5c6b7a',
+    title: 'Pretendard',
+    creator: '길형진 · orioncactus',
+    tags: [
+      { label: '실용적', tone: 'green' },
+      { label: '가독성', tone: 'gray' },
+    ],
+    likes: 702,
+  },
+  {
+    id: 'nanum-square',
+    rank: 7,
+    preview: '네모',
+    previewBackground: '#34506a',
+    title: '나눔스퀘어',
+    creator: '네이버',
+    tags: [
+      { label: '고딕', tone: 'green' },
+      { label: '브랜드', tone: 'purple' },
+    ],
+    likes: 681,
+  },
+  {
+    id: 'spoqa',
+    rank: 8,
+    preview: '스포',
+    previewBackground: '#263442',
+    title: 'Spoqa Han Sans Neo',
+    creator: 'Spoqa',
+    tags: [
+      { label: '모던', tone: 'gray' },
+      { label: '스타트업', tone: 'blue' },
+    ],
+    likes: 654,
+  },
+];
