@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import { resolveApiAssetUrl } from '../api/client';
 import type { ApiFontFileItem } from '../api/backendTypes';
 import { fontifyApi } from '../api/fontifyApi';
 import { saveStoredGenerationJob } from '../api/generationStorage';
 import {
+  getFontAssetPath,
   getFontFamilyName,
   getFontVariantLabel,
   mapFontFileToEnglishFont,
@@ -131,6 +133,7 @@ export default function EnglishFontsPage() {
   const [previewScale, setPreviewScale] = useState(43);
   const [viewMode, setViewMode] = useState<FontViewMode>('grid');
   const [creatingFontId, setCreatingFontId] = useState<string>('');
+  const [loadedPreviewFamilies, setLoadedPreviewFamilies] = useState<Record<string, string>>({});
   const pageSize = 15;
 
   const familyCards = useMemo(
@@ -151,7 +154,10 @@ export default function EnglishFontsPage() {
   }, [familyCards, selectedFilters, sortBy]);
 
   const totalPages = Math.max(1, Math.ceil(filteredFonts.length / pageSize));
-  const visibleFonts = filteredFonts.slice((page - 1) * pageSize, page * pageSize);
+  const visibleFonts = useMemo(
+    () => filteredFonts.slice((page - 1) * pageSize, page * pageSize),
+    [filteredFonts, page],
+  );
   const maxVisiblePageButtons = 5;
   const pageGroupStart = Math.max(
     1,
@@ -163,6 +169,51 @@ export default function EnglishFontsPage() {
     (_, index) => pageGroupStart + index,
   );
   const previewText = previewInput.trim() || 'Font Preview';
+
+  useEffect(() => {
+    setLoadedPreviewFamilies({});
+
+    if (visibleFonts.length === 0 || typeof FontFace === 'undefined' || !document.fonts) {
+      return;
+    }
+
+    let cancelled = false;
+    const fontFaces: FontFace[] = [];
+
+    Promise.allSettled(
+      visibleFonts.map(async (font) => {
+        const sourceUrl = resolveApiAssetUrl(getFontAssetPath(font.representativeFont));
+        if (!sourceUrl) return null;
+        const previewFamily = `fontify-list-preview-${font.representativeFont.font_file_id}`;
+        const fontFace = new FontFace(previewFamily, `url(${JSON.stringify(sourceUrl)})`);
+        const loadedFontFace = await fontFace.load();
+        if (cancelled) return null;
+        document.fonts.add(loadedFontFace);
+        fontFaces.push(loadedFontFace);
+        return { familyKey: font.familyKey, previewFamily };
+      }),
+    ).then((results) => {
+      if (cancelled) return;
+      const nextFamilies: Record<string, string> = {};
+      results.forEach((result) => {
+        if (result.status === 'fulfilled' && result.value) {
+          nextFamilies[result.value.familyKey] = result.value.previewFamily;
+        }
+      });
+      setLoadedPreviewFamilies(nextFamilies);
+    });
+
+    return () => {
+      cancelled = true;
+      fontFaces.forEach((fontFace) => {
+        try {
+          document.fonts.delete(fontFace);
+        } catch {
+          // Ignore cleanup failures from browsers that keep the face internally.
+        }
+      });
+    };
+  }, [visibleFonts]);
 
   useEffect(() => {
     setPage((current) => Math.min(current, totalPages));
@@ -308,7 +359,9 @@ export default function EnglishFontsPage() {
                       <div
                         className="englishFonts__preview"
                         style={{
-                          fontFamily: font.previewFamily,
+                          fontFamily: loadedPreviewFamilies[font.familyKey]
+                            ? `"${loadedPreviewFamilies[font.familyKey]}", Pretendard, sans-serif`
+                            : font.previewFamily,
                           fontSize: `${18 + previewScale * 0.18}px`,
                         }}
                       >
@@ -345,7 +398,9 @@ export default function EnglishFontsPage() {
                         <div
                           className="englishFonts__listPreview"
                           style={{
-                            fontFamily: font.previewFamily,
+                            fontFamily: loadedPreviewFamilies[font.familyKey]
+                              ? `"${loadedPreviewFamilies[font.familyKey]}", Pretendard, sans-serif`
+                              : font.previewFamily,
                             fontSize: `${18 + previewScale * 0.18}px`,
                           }}
                         >

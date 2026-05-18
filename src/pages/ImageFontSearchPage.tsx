@@ -25,8 +25,8 @@ const matchResults: MatchResult[] = [
     foundry: 'Google Fonts · Designed by Google',
     similarity: 98,
     weight: '굵게',
-    slant: '0°',
-    category: '일반',
+    slant: '0도',
+    category: '산세리프',
     previewText: '폰티파이 Fontify',
     previewFamily: '"Noto Sans KR", "Pretendard", sans-serif',
     imageLabel: 'Sample',
@@ -39,7 +39,7 @@ const matchResults: MatchResult[] = [
     foundry: 'Google Fonts · Designed by NAVER',
     similarity: 85,
     weight: '보통',
-    slant: '0°',
+    slant: '0도',
     category: '세리프',
     previewText: '가나다라 Fontify',
     previewFamily: '"Nanum Myeongjo", Georgia, serif',
@@ -50,10 +50,10 @@ const matchResults: MatchResult[] = [
   {
     id: 'pretendard',
     name: 'Pretendard',
-    foundry: 'Google Fonts 스타일 매칭 샘플',
+    foundry: 'Fontify sample match',
     similarity: 81,
     weight: '중간',
-    slant: '2°',
+    slant: '2도',
     category: '산세리프',
     previewText: '이미지에서 찾은 Fontify',
     previewFamily: '"Pretendard", sans-serif',
@@ -71,13 +71,13 @@ const processSteps = [
   },
   {
     title: '특징 추출',
-    desc: '글자의 굵기, 기울기, 자폭 등 세부 특징을 AI가 분석합니다.',
-    icon: 'chart',
+    desc: '글자의 굵기, 기울기, 자폭, 세리프 특징을 분석합니다.',
+    icon: 'scan',
   },
   {
     title: 'Google Fonts 매칭',
-    desc: '라이브러리 내 가장 유사한 서체를 추천합니다.',
-    icon: 'cloud',
+    desc: '라이브러리에서 가장 유사한 서체를 추천합니다.',
+    icon: 'match',
   },
 ] as const;
 
@@ -85,30 +85,60 @@ function ProcessIcon({ type }: { type: (typeof processSteps)[number]['icon'] }) 
   if (type === 'image') {
     return (
       <svg viewBox="0 0 24 24" aria-hidden="true">
-        <rect x="4" y="5" width="16" height="14" rx="2" />
-        <circle cx="9" cy="10" r="1.5" />
-        <path d="M7 16l4-4 3 3 3-2 0 3" />
+        <rect x="4" y="5" width="16" height="14" rx="3" />
+        <path d="M7 15.5l3.2-3.2 2.4 2.4 2.2-2.2L17 15.5" />
+        <circle cx="9" cy="9" r="1.2" />
       </svg>
     );
   }
 
-  if (type === 'chart') {
+  if (type === 'scan') {
     return (
       <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M5 18V6" />
-        <path d="M9 18v-4" />
-        <path d="M13 18V9" />
-        <path d="M17 18V4" />
-        <path d="M4 18h16" />
+        <path d="M6 7V5.8A1.8 1.8 0 0 1 7.8 4h8.4A1.8 1.8 0 0 1 18 5.8V7" />
+        <path d="M6 17v1.2A1.8 1.8 0 0 0 7.8 20h8.4a1.8 1.8 0 0 0 1.8-1.8V17" />
+        <path d="M5 12h14" />
+        <path d="M9 15l3-7 3 7" />
+        <path d="M10.2 12.2h3.6" />
       </svg>
     );
   }
 
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M7 14.5A4.5 4.5 0 1 1 9.2 6" />
-      <path d="M9 18h7a4 4 0 0 0 .8-7.92A5.5 5.5 0 0 0 7 11.2" />
-      <path d="M9 14l3-3 3 3" />
+      <circle cx="10.5" cy="10.5" r="5.5" />
+      <path d="M15 15l4 4" />
+      <path d="M8.1 10.7l1.7 1.7 3.3-3.6" />
+    </svg>
+  );
+}
+
+function UploadIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 15V8" />
+      <path d="M8.8 11.2 12 8l3.2 3.2" />
+      <rect x="5" y="4" width="14" height="16" rx="3" />
+      <path d="M8 18h8" />
+    </svg>
+  );
+}
+
+function ActionIcon({ type }: { type: 'preview' | 'external' }) {
+  if (type === 'preview') {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M3.5 12s3.2-5 8.5-5 8.5 5 8.5 5-3.2 5-8.5 5-8.5-5-8.5-5Z" />
+        <circle cx="12" cy="12" r="2.5" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M8 7H6.8A1.8 1.8 0 0 0 5 8.8v8.4A1.8 1.8 0 0 0 6.8 19h8.4a1.8 1.8 0 0 0 1.8-1.8V16" />
+      <path d="M13 5h6v6" />
+      <path d="M11 13 19 5" />
     </svg>
   );
 }
@@ -129,10 +159,7 @@ export default function ImageFontSearchPage() {
     };
   }, [uploadedPreviewUrl]);
 
-  const visibleResults = useMemo(
-    () => matchResults.slice(0, visibleCount),
-    [visibleCount],
-  );
+  const visibleResults = useMemo(() => matchResults.slice(0, visibleCount), [visibleCount]);
 
   const handleOpenFilePicker = () => {
     inputRef.current?.click();
@@ -154,9 +181,9 @@ export default function ImageFontSearchPage() {
             <header className="imageFontSearch__hero">
               <h1>이미지로 폰트 찾기</h1>
               <p>
-                업로드한 이미지에서 서체 특징을 분석하여 <strong>방대한 Google Fonts 라이브러리</strong>에서
+                업로드한 이미지에서 서체 특징을 분석하여 <strong>Google Fonts 라이브러리</strong>에서
                 <br />
-                가장 유사한 무료 웹 폰트를 찾아드립니다.
+                가장 유사한 무료 영문 폰트를 찾아드립니다.
               </p>
             </header>
 
@@ -191,15 +218,10 @@ export default function ImageFontSearchPage() {
 
               <div className="imageFontSearch__uploadPanel">
                 <div className="imageFontSearch__uploadIcon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M12 16V8" />
-                    <path d="M8.5 11.5L12 8l3.5 3.5" />
-                    <path d="M6 18h12" />
-                    <path d="M8 4h5l3 3v11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" />
-                  </svg>
+                  <UploadIcon />
                 </div>
                 <h2>찾고 싶은 폰트 이미지를 업로드하세요</h2>
-                <p>JPG, PNG, WEBP (최대 10MB)</p>
+                <p>JPG, PNG, WEBP 최대 10MB</p>
                 <button type="button" className="imageFontSearch__uploadButton" onClick={handleOpenFilePicker}>
                   파일 선택하기
                 </button>
@@ -257,7 +279,7 @@ export default function ImageFontSearchPage() {
 
                         <dl className="imageFontSearch__stats">
                           <div>
-                            <dt>두께</dt>
+                            <dt>자획</dt>
                             <dd>{result.weight}</dd>
                           </div>
                           <div>
@@ -265,7 +287,7 @@ export default function ImageFontSearchPage() {
                             <dd>{result.slant}</dd>
                           </div>
                           <div>
-                            <dt>너비</dt>
+                            <dt>분류</dt>
                             <dd>{result.category}</dd>
                           </div>
                         </dl>
@@ -278,7 +300,7 @@ export default function ImageFontSearchPage() {
 
                     <div className="imageFontSearch__actions">
                       <a href={result.demoUrl} className="imageFontSearch__actionButton imageFontSearch__actionButton--ghost">
-                        <span aria-hidden="true">◌</span>
+                        <ActionIcon type="preview" />
                         시연해보기
                       </a>
                       <a
@@ -287,8 +309,8 @@ export default function ImageFontSearchPage() {
                         rel="noreferrer"
                         className="imageFontSearch__actionButton imageFontSearch__actionButton--primary"
                       >
-                        <span aria-hidden="true">↓</span>
-                        Google Fonts에서 다운로드
+                        <ActionIcon type="external" />
+                        Google Fonts에서 열기
                       </a>
                     </div>
                   </article>

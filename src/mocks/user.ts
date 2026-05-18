@@ -6,7 +6,7 @@ const statReviewIconSrc = '/images/my-page/activity-review-icon.png';
 const statOwnedIconSrc = '/images/my-page/activity-owned-font-icon.svg';
 
 export const mockUserProfile: UserProfile = {
-  name: '폰티파이님',
+  name: '폰티파이어',
   joinedDaysLabel: 'Fontify와 함께한지 124일째',
   avatarSrc: '/images/my-page/profile-avatar.png',
 };

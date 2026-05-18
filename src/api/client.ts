@@ -16,8 +16,12 @@ const fallbackApiBaseUrl = env.DEV ? '/api/v1' : 'http://localhost:8000/api/v1';
 const rawProxyTarget =
   typeof env.VITE_API_PROXY_TARGET === 'string' ? env.VITE_API_PROXY_TARGET : undefined;
 
-export const API_BASE_URL =
-  (rawApiBaseUrl ?? fallbackApiBaseUrl).replace(/\/$/, '');
+function normalizeApiBaseUrl(url: string) {
+  const trimmedUrl = url.replace(/\/$/, '');
+  return trimmedUrl.endsWith('/api/v1') ? trimmedUrl : `${trimmedUrl}/api/v1`;
+}
+
+export const API_BASE_URL = normalizeApiBaseUrl(rawApiBaseUrl ?? fallbackApiBaseUrl);
 
 export const API_ASSET_ORIGIN = (() => {
   if (rawProxyTarget) {
@@ -57,8 +61,9 @@ function buildUrl(path: string) {
 
 export function resolveApiAssetUrl(path: string | null | undefined) {
   if (!path) return undefined;
-  if (/^https?:\/\//.test(path)) return path;
-  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  const absolutePath = path.replace(/^\/+(https?:\/\/)/, '$1');
+  if (/^https?:\/\//.test(absolutePath)) return absolutePath;
+  const normalizedPath = absolutePath.startsWith('/') ? absolutePath : `/${absolutePath}`;
   return `${API_ASSET_ORIGIN}${normalizedPath}`;
 }
 

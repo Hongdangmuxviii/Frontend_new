@@ -30,5 +30,8 @@ export type WorkItem = {
   previewLetters?: string[];
   previewImageUrls?: string[];
   downloadUrl?: string;
+  generatedFontId?: number | null;
+  sourceFontId?: number | null;
+  sourceFontName?: string;
   logs: WorkTimelineLog[];
 };

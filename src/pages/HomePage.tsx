@@ -123,7 +123,7 @@ function HomeFontCard({
           <a
             className="featureFontCard__download featureFontCard__download--icon"
             href={`#/english-detail?fontName=${encodeURIComponent(font.name)}`}
-            aria-label={`${font.name} ????`}
+            aria-label={`${font.name} 상세 보기`}
           >
             <svg
               className="featureFontCard__downloadIcon"
@@ -144,6 +144,39 @@ function HomeFontCard({
         </div>
       </div>
     </article>
+  );
+}
+
+function StepIcon({ type }: { type: 'select' | 'convert' | 'download' }) {
+  if (type === 'select') {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <rect x="4" y="5" width="16" height="14" rx="3" />
+        <path d="M8 10h8" />
+        <path d="M8 14h5" />
+      </svg>
+    );
+  }
+
+  if (type === 'convert') {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M7 7h7a3 3 0 0 1 3 3v.5" />
+        <path d="M17 7l2 2-2 2" />
+        <path d="M17 17h-7a3 3 0 0 1-3-3v-.5" />
+        <path d="M7 17l-2-2 2-2" />
+        <path d="M10 11h4" />
+        <path d="M12 9v4" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M12 4v10" />
+      <path d="M8.5 10.5 12 14l3.5-3.5" />
+      <rect x="5" y="17" width="14" height="3" rx="1.5" />
+    </svg>
   );
 }
 
@@ -596,13 +629,17 @@ export default function HomePage() {
 
             <div className="steps" role="list">
               <div className="step" role="listitem">
-                <div className="step__icon step__icon--a" />
-                <h3>구글 폰트 선택</h3>
+                <div className="step__icon step__icon--a">
+                  <StepIcon type="select" />
+                </div>
+                <h3>영문 폰트 선택</h3>
                 <p>마음에 드는 영문 폰트를 선택하세요.</p>
               </div>
 
               <div className="step step--active" role="listitem">
-                <div className="step__icon step__icon--b" />
+                <div className="step__icon step__icon--b">
+                  <StepIcon type="convert" />
+                </div>
                 <h3>AI 스타일 분석 및 변환</h3>
                 <p>
                   AI가 선택한 폰트의 특징을 분석하여
@@ -612,9 +649,11 @@ export default function HomePage() {
               </div>
 
               <div className="step" role="listitem">
-                <div className="step__icon step__icon--c" />
+                <div className="step__icon step__icon--c">
+                  <StepIcon type="download" />
+                </div>
                 <h3>폰트 다운로드</h3>
-                <p>생성된 한글 폰트를 즉시 다운로드하세요.</p>
+                <p>생성된 한글 폰트를 바로 다운로드하세요.</p>
               </div>
 
               <div className="steps__line" aria-hidden="true" />

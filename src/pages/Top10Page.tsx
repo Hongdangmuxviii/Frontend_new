@@ -16,13 +16,17 @@ type FontRowProps = {
 };
 
 function FontRow({ font, liked, onToggleLike, onDownload }: FontRowProps) {
+  const selectedHref = /^\d+$/.test(font.id)
+    ? `#/selected?generatedFontId=${encodeURIComponent(font.id)}`
+    : '#/selected';
+
   return (
     <article className="top10__row">
       <div className={`top10__rank ${font.rank === 1 ? 'top10__rank--active' : ''}`}>
         {font.rank}
       </div>
 
-      <a className="top10__previewCol top10__previewCol--link" href="#/selected">
+      <a className="top10__previewCol top10__previewCol--link" href={selectedHref}>
         <div className="top10__preview" style={{ background: font.previewBackground }}>
           {font.preview}
         </div>
@@ -30,7 +34,7 @@ function FontRow({ font, liked, onToggleLike, onDownload }: FontRowProps) {
 
       <div className="top10__info">
         <h3 className="top10__fontName">
-          <a className="top10__fontLink" href="#/selected">
+          <a className="top10__fontLink" href={selectedHref}>
             {font.title}
           </a>
         </h3>

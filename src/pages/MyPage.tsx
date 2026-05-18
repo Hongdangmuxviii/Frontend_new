@@ -36,8 +36,7 @@ function StatCard({ stat }: { stat: UserActivityStat }) {
 }
 
 function FontCard({ font }: { font: UserOwnedFont }) {
-  const kindClass =
-    font.kind === '무료' ? 'mypage__fontKind--free' : 'mypage__fontKind--paid';
+  const kindClass = font.kind === '무료' ? 'mypage__fontKind--free' : 'mypage__fontKind--paid';
 
   return (
     <div className="mypage__fontCard">
@@ -122,9 +121,7 @@ export default function MyPage() {
 
           <section className="mypage__section">
             <div className="mypage__viewRow">
-              <h2 className="mypage__sectionTitle mypage__sectionTitle--tight">
-                보유 폰트
-              </h2>
+              <h2 className="mypage__sectionTitle mypage__sectionTitle--tight">보유 폰트</h2>
               <a className="mypage__viewAll" href="#/selected">
                 전체보기
               </a>

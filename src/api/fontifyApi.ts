@@ -19,6 +19,7 @@ type DevLoginResponse = {
   user_id: string;
   email: string;
   nickname: string;
+  created_at?: string;
 };
 
 type SignupRequest = {
@@ -32,7 +33,7 @@ type LoginRequest = {
 type HandwritingUploadResponse = {
   handwriting_id: number;
   image_url: string;
-  submitted_at: string;
+  submitted_at?: string;
 };
 
 export const fontifyApi = {
@@ -43,7 +44,10 @@ export const fontifyApi = {
     return apiRequest<DevLoginResponse>('/auth/login', { method: 'POST', body: payload });
   },
   devLogin() {
-    return apiRequest<DevLoginResponse>('/auth/dev-login', { method: 'POST' });
+    return apiRequest<DevLoginResponse>('/auth/dev-login', {
+      method: 'POST',
+      body: { user_id: 'dev-user-001', email: 'dev@example.com', nickname: 'Dev User' },
+    });
   },
   getMe() {
     return apiRequest<ApiMeResponse>('/users/me');

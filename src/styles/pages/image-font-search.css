@@ -416,6 +416,17 @@
   white-space:nowrap;
 }
 
+.imageFontSearch__actionButton svg{
+  width:20px;
+  height:20px;
+  flex:0 0 auto;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
 .imageFontSearch__actionButton--ghost{
   background:#fff;
   color:#1d4ed8;

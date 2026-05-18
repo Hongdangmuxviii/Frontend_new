@@ -34,15 +34,22 @@ function daysSince(dateValue: string) {
   return Math.max(0, Math.floor((Date.now() - createdAt) / 86_400_000));
 }
 
+function parseBackendDate(dateValue: string) {
+  const hasTimezone = /(?:Z|[+-]\d{2}:?\d{2})$/.test(dateValue);
+  return new Date(hasTimezone ? dateValue : `${dateValue}Z`);
+}
+
 function formatDateTime(dateValue: string | null) {
   if (!dateValue) return 'Pending';
-  const date = new Date(dateValue);
+  const date = parseBackendDate(dateValue);
   if (Number.isNaN(date.getTime())) return dateValue;
   return new Intl.DateTimeFormat('ko-KR', {
+    timeZone: 'Asia/Seoul',
     month: 'long',
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
+    hour12: true,
   }).format(date);
 }
 
@@ -98,32 +105,32 @@ function buildWorkLogs(
   const requestedAt = formatDateTime(requestedAtValue);
   const steps = [
     {
-      title: '?묒뾽 ?붿껌 ?묒닔',
-      detail: `${requestedAt}???앹꽦 ?붿껌???깅줉?섏뿀?듬땲??`,
+      title: '작업 요청 접수',
+      detail: `${requestedAt}에 생성 요청이 등록되었습니다.`,
     },
     {
-      title: '?곷Ц ?ㅽ???遺꾩꽍',
-      detail: '?좏깮???곷Ц ?고듃 ?ㅽ??쇱쓣 遺꾩꽍?섍퀬 ?쒓? 援ъ“濡?蹂?섑븯怨??덉뒿?덈떎.',
+      title: '영문 스타일 분석',
+      detail: '선택한 영문 폰트 스타일을 분석하고 한글 구조로 변환하고 있습니다.',
     },
     {
-      title: 'AI refinement',
-      detail: 'The generated preview set is being refined into the full font output.',
+      title: 'AI 재학습',
+      detail: '생성된 미리보기 세트를 기반으로 전체 폰트 출력을 다듬고 있습니다.',
     },
     {
-      title: '2,350???꾩꽦',
+      title: '2,350자 완성',
       detail:
         phase === 'failed'
-          ? failReason ?? '?앹꽦 ?묒뾽???ㅽ뙣?덉뒿?덈떎.'
+          ? failReason ?? '생성 작업이 실패했습니다.'
           : phase === 'completed'
-            ? '理쒖쥌 ?고듃 ?뚯씪???앹꽦?섏뼱 ?ㅼ슫濡쒕뱶?????덉뒿?덈떎.'
-            : '?꾨즺 ??TTF ?ㅼ슫濡쒕뱶 URL???곌껐?⑸땲??',
+            ? '최종 폰트 파일이 생성되어 다운로드할 수 있습니다.'
+            : '완료 후 TTF 다운로드 URL이 연결됩니다.',
     },
   ];
 
   return steps.map((step, index) => ({
     id: `${jobId}-log-${index + 1}`,
     time: index === 0 ? requestedAt : 'Pending',
-    title: phase === 'failed' && index === failedStageIndex ? '?앹꽦 ?ㅽ뙣' : step.title,
+    title: phase === 'failed' && index === failedStageIndex ? '생성 실패' : step.title,
     detail: step.detail,
     state: timelineStateForPhase(phase, index, failedStageIndex),
   }));
@@ -135,7 +142,7 @@ function mapPreviewUrlsToLetters(urls: string[]) {
   return urls.map((url, index) => {
     const filename = url.split('/').pop() ?? '';
     const letter = decodeURIComponent(filename).replace('.png', '');
-    return letter || fallback[index] || `誘몃━蹂닿린 ${index + 1}`;
+    return letter || fallback[index] || `미리보기 ${index + 1}`;
   });
 }
 
@@ -156,8 +163,8 @@ export function mapGenerationStatusToWorkItem(
 
   return {
     id: String(status.job_id),
-    title: storedJob.fontName || `Fontify ?묒뾽 #${status.job_id}`,
-    updatedAt: `?붿껌?? ${formatDateTime(storedJob.requestedAt)}`,
+    title: storedJob.fontName || `Fontify 작업 #${status.job_id}`,
+    updatedAt: `요청 시간: ${formatDateTime(storedJob.requestedAt)}`,
     progressPercent,
     phase,
     statusLabel: status.status,
@@ -166,6 +173,9 @@ export function mapGenerationStatusToWorkItem(
     previewLetters: hasPreview ? mapPreviewUrlsToLetters(status.preview_image_urls) : undefined,
     previewImageUrls: hasPreview ? status.preview_image_urls.map((url) => resolveApiAssetUrl(url) ?? url) : undefined,
     downloadUrl: resolveApiAssetUrl(status.generated_font_url),
+    generatedFontId: status.generated_font_id,
+    sourceFontId: storedJob.fontFileId || null,
+    sourceFontName: storedJob.fontName,
     logs: buildWorkLogs(status.job_id, storedJob.requestedAt, phase, failedStageIndex, status.fail_reason),
   };
 }
@@ -185,7 +195,7 @@ export function mapGenerationCreateResponseToStoredJob(
 export function mapMeToUserProfile(me: ApiMeResponse): UserProfile {
   return {
     name: me.nickname || me.email,
-    joinedDaysLabel: `Fontify? ?④퍡?쒖? ${daysSince(me.created_at)}?쇱㎏`,
+    joinedDaysLabel: `Fontify와 함께한지 ${daysSince(me.created_at)}일째`,
     avatarSrc: fallbackAvatarSrc,
   };
 }
@@ -205,14 +215,14 @@ export function mapUserStats(params: {
     {
       id: 'reviews',
       iconSrc: statReviewIconSrc,
-      label: '?묒꽦??由щ럭',
+      label: '작성한 리뷰',
       value: String(params.ratingsCount),
       href: '#/reviews',
     },
     {
       id: 'working-fonts',
       iconSrc: statOwnedIconSrc,
-      label: '?묒뾽以묒씤 ?고듃',
+      label: '작업중인 폰트',
       value: String(params.generationsCount),
       iconVariant: 'darkOnWhite',
       href: '#/my-works',
@@ -224,7 +234,7 @@ export function mapDownloadToOwnedFont(item: ApiDownloadItem): UserOwnedFont {
   return {
     id: String(item.generated_font_id ?? item.download_id),
     title: item.font_name,
-    kind: '臾대즺' as UserOwnedFont['kind'],
+    kind: '무료',
     company: 'Fontify',
     sampleFontFamily: 'Pretendard, sans-serif',
   };
@@ -307,14 +317,15 @@ export function mapFontFileToEnglishFont(item: ApiFontFileItem): EnglishFontCard
 
 export function mapGeneratedFontToTopFont(item: ApiGeneratedFontItem, index: number): TopFont {
   const backgrounds = ['#1f1f1f', '#33475b', '#44576c', '#748496', '#b85700'];
+  const title = item.name?.trim() || `Generated Font #${item.generated_font_id}`;
   return {
     id: String(item.generated_font_id),
     rank: index + 1,
-    preview: item.name.slice(0, 2) || 'Aa',
+    preview: title.slice(0, 2) || 'Aa',
     previewBackground: backgrounds[index % backgrounds.length],
-    title: item.name,
+    title,
     creator: 'Fontify',
-    tags: [{ label: '?앹꽦?고듃', tone: 'blue' }],
+    tags: [{ label: '생성폰트', tone: 'blue' }],
     likes: 0,
   };
 }
@@ -325,8 +336,8 @@ export function mapRatingToReview(item: ApiRatingItem): ReviewCard {
     title: item.font_name,
     rating: item.score,
     sample: item.font_name,
-    body: item.comment ?? '?묒꽦??由щ럭 ?댁슜???놁뒿?덈떎.',
-    date: `${formatDateTime(item.rated_at)} ?묒꽦`,
+    body: item.comment ?? '작성한 리뷰 내용이 없습니다.',
+    date: `${formatDateTime(item.rated_at)} 작성`,
   };
 }
 
