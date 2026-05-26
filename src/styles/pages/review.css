@@ -18,7 +18,7 @@
 
 .reviewEyebrow{
   margin:0;
-  color:#005bbf;
+  color:var(--color-primary);
   font-size:12px;
   line-height:16px;
   font-weight:800;
@@ -38,7 +38,7 @@
 .reviewHero__desc{
   max-width:360px;
   margin:0 0 4px;
-  color:#64748b;
+  color:var(--color-text-muted);
   font-size:14px;
   line-height:20px;
   text-align:right;
@@ -67,14 +67,14 @@
   min-height:196px;
   overflow:hidden;
   padding:33px;
-  background:#fff;
+  background:var(--color-bg);
   border:1px solid rgba(226,232,240,.5);
   box-shadow:0 1px 2px rgba(15,23,42,.05);
 }
 
 .pendingCard__label{
   margin:0 0 16px;
-  color:#94a3b8;
+  color:var(--color-text-soft);
   font-size:12px;
   line-height:16px;
   font-weight:800;
@@ -84,7 +84,7 @@
   position:relative;
   z-index:1;
   margin:0 0 24px;
-  color:#1e293b;
+  color:var(--color-text-strong);
   font-size:30px;
   line-height:37.5px;
   font-family:Georgia,'Times New Roman',serif;
@@ -106,7 +106,7 @@
   padding:10px 24px;
   border:0;
   border-radius:9999px;
-  background:#f1f5f9;
+  background:var(--color-border-soft);
   color:#334155;
   font-size:12px;
   line-height:16px;
@@ -115,8 +115,8 @@
 }
 
 .pendingCard__button--primary{
-  background:#005bbf;
-  color:#fff;
+  background:var(--color-primary);
+  color:var(--color-bg);
 }
 
 .pendingCard__mark{
@@ -133,7 +133,7 @@
 
 .pendingCard__mark--quote::before{
   content:'”';
-  color:#f1f5f9;
+  color:var(--color-border-soft);
   font-family:Georgia,serif;
   font-size:128px;
   line-height:1;
@@ -145,9 +145,9 @@
   width:56px;
   height:44px;
   background:
-    linear-gradient(#f1f5f9,#f1f5f9) 0 0/56px 8px no-repeat,
-    linear-gradient(#f1f5f9,#f1f5f9) 0 18px/48px 8px no-repeat,
-    linear-gradient(#f1f5f9,#f1f5f9) 0 36px/38px 8px no-repeat;
+    linear-gradient(var(--color-border-soft),var(--color-border-soft)) 0 0/56px 8px no-repeat,
+    linear-gradient(var(--color-border-soft),var(--color-border-soft)) 0 18px/48px 8px no-repeat,
+    linear-gradient(var(--color-border-soft),var(--color-border-soft)) 0 36px/38px 8px no-repeat;
 }
 
 .reviewStatsCard{
@@ -156,12 +156,12 @@
   display:flex;
   flex-direction:column;
   justify-content:center;
-  background:#2563eb;
+  background:var(--color-primary);
   box-shadow:0 10px 15px -3px rgba(37,99,235,.2),0 4px 6px -4px rgba(0,0,0,.16);
 }
 
 .reviewStatsCard strong{
-  color:#fff;
+  color:var(--color-bg);
   font-size:48px;
   line-height:48px;
   font-weight:900;
@@ -189,7 +189,7 @@
   width:34%;
   height:100%;
   border-radius:inherit;
-  background:#fff;
+  background:var(--color-bg);
 }
 
 .reviewManage{
@@ -216,9 +216,9 @@
 
 .reviewToolBtn,
 .reviewIconBtn{
-  border:1px solid #e2e8f0;
-  background:#fff;
-  color:#475569;
+  border:1px solid var(--color-border);
+  background:var(--color-bg);
+  color:var(--color-text-muted);
   border-radius:8px;
   box-shadow:0 1px 2px rgba(15,23,42,.04);
   cursor:pointer;
@@ -245,9 +245,9 @@
   width:18px;
   height:12px;
   background:
-    linear-gradient(#64748b,#64748b) 0 0/18px 2px no-repeat,
-    linear-gradient(#64748b,#64748b) 4px 5px/10px 2px no-repeat,
-    linear-gradient(#64748b,#64748b) 7px 10px/4px 2px no-repeat;
+    linear-gradient(var(--color-text-muted),var(--color-text-muted)) 0 0/18px 2px no-repeat,
+    linear-gradient(var(--color-text-muted),var(--color-text-muted)) 4px 5px/10px 2px no-repeat,
+    linear-gradient(var(--color-text-muted),var(--color-text-muted)) 7px 10px/4px 2px no-repeat;
 }
 
 .reviewMasonry{
@@ -259,7 +259,7 @@
 
 .reviewCard{
   padding:25px;
-  background:#fff;
+  background:var(--color-bg);
   border:1px solid rgba(226,232,240,.5);
   box-shadow:0 1px 2px rgba(15,23,42,.05);
 }
@@ -274,7 +274,7 @@
 
 .reviewCard__title{
   margin:0 0 4px;
-  color:#1e293b;
+  color:var(--color-text-strong);
   font-size:16px;
   line-height:24px;
   font-weight:800;
@@ -283,13 +283,13 @@
 .reviewStars{
   display:flex;
   gap:2px;
-  color:#bfdbfe;
+  color:var(--fontify-blue-200);
   font-size:12px;
   line-height:1;
 }
 
 .reviewStars__star.is-filled{
-  color:#2563eb;
+  color:var(--color-primary);
 }
 
 .reviewCard__more{
@@ -298,7 +298,7 @@
   padding:0;
   border:0;
   background:transparent;
-  color:#cbd5e1;
+  color:var(--color-border-strong);
   font-size:22px;
   line-height:18px;
   cursor:pointer;
@@ -329,8 +329,8 @@
   min-height:96px;
   border:1px solid rgba(226,232,240,.3);
   border-radius:4px;
-  background:#fff;
-  color:#94a3b8;
+  background:var(--color-bg);
+  color:var(--color-text-soft);
   font-family:'Courier New',monospace;
   font-size:20px;
   line-height:28px;
@@ -343,7 +343,7 @@
 
 .reviewCard__body{
   margin:0;
-  color:#475569;
+  color:var(--color-text-muted);
   font-size:14px;
   line-height:22.75px;
   word-break:keep-all;
@@ -356,8 +356,8 @@
   gap:16px;
   margin-top:16px;
   padding-top:17px;
-  border-top:1px solid #f1f5f9;
-  color:#94a3b8;
+  border-top:1px solid var(--color-border-soft);
+  color:var(--color-text-soft);
   font-size:10px;
   line-height:15px;
   font-weight:800;
@@ -372,7 +372,7 @@
   border:0;
   padding:0;
   background:transparent;
-  color:#2563eb;
+  color:var(--color-primary);
   font-size:12px;
   line-height:16px;
   font-weight:800;
@@ -386,8 +386,8 @@
 .reviewImpactCard{
   min-height:250px;
   padding:32px;
-  background:#2563eb;
-  color:#fff;
+  background:var(--color-primary);
+  color:var(--color-bg);
   box-shadow:0 10px 15px -3px rgba(37,99,235,.2),0 4px 6px -4px rgba(0,0,0,.16);
 }
 
@@ -422,10 +422,10 @@
   width:32px;
   height:32px;
   margin-right:-8px;
-  border:2px solid #2563eb;
+  border:2px solid var(--color-primary);
   border-radius:9999px;
-  background:#bfdbfe;
-  color:#fff;
+  background:var(--fontify-blue-200);
+  color:var(--color-bg);
   font-size:10px;
   font-weight:800;
 }
@@ -443,8 +443,8 @@
   display:flex;
   flex-direction:column;
   justify-content:center;
-  background:linear-gradient(180deg,#f1f5f9 0%,#cbd5e1 48%,#1f2937 100%);
-  color:#fff;
+  background:linear-gradient(180deg,var(--color-border-soft) 0%,var(--color-border-strong) 48%,var(--color-text) 100%);
+  color:var(--color-bg);
   box-shadow:0 1px 2px rgba(15,23,42,.05);
 }
 
@@ -462,7 +462,7 @@
   align-items:center;
   gap:8px;
   margin:auto;
-  color:#94a3b8;
+  color:var(--color-text-soft);
   text-align:center;
 }
 

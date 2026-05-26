@@ -14,3 +14,41 @@
 @import './pages/english-fonts.css';
 @import './pages/my-works.css';
 @import './pages/image-font-search.css';
+
+:root{
+  --fontify-blue-50:#eff6ff;
+  --fontify-blue-100:#dbeafe;
+  --fontify-blue-200:#bfdbfe;
+  --fontify-blue-300:#93c5fd;
+  --fontify-blue-500:#2563eb;
+  --fontify-blue-600:#1d4ed8;
+  --fontify-blue-700:#1e40af;
+  --fontify-blue-900:#001b3d;
+
+  --color-primary:var(--fontify-blue-500);
+  --color-primary-hover:var(--fontify-blue-600);
+  --color-primary-strong:var(--fontify-blue-700);
+  --color-primary-soft:var(--fontify-blue-50);
+  --color-primary-muted:#dfe8ff;
+  --color-primary-border:var(--fontify-blue-100);
+  --color-primary-ring:rgba(37,99,235,.14);
+
+  --color-bg:#ffffff;
+  --color-bg-subtle:#f8fafc;
+  --color-bg-page:#f8fbff;
+  --color-bg-panel:#f1f5f9;
+  --color-text:#111827;
+  --color-text-strong:#0f172a;
+  --color-text-brand:var(--fontify-blue-900);
+  --color-text-muted:#64748b;
+  --color-text-soft:#94a3b8;
+  --color-border:#e2e8f0;
+  --color-border-soft:#f1f5f9;
+  --color-border-strong:#cbd5e1;
+
+  --color-danger:#dc2626;
+  --color-success:#10b981;
+  --color-pink:#ec4899;
+  --shadow-sm:0 1px 2px rgba(15,23,42,.05);
+  --shadow-card:0 8px 16px rgba(15,23,42,.06);
+}

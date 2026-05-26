@@ -1,0 +1,194 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100">
+  <defs>
+    <style>
+      .bg { fill: #f7f8fb; }
+      .title { font-family: Arial, sans-serif; font-size: 34px; font-weight: 700; fill: #202632; }
+      .subtitle { font-family: Arial, sans-serif; font-size: 18px; fill: #657083; }
+      .section { font-family: Arial, sans-serif; font-size: 22px; font-weight: 700; fill: #263142; }
+      .box { fill: #ffffff; stroke: #c7ceda; stroke-width: 2; rx: 8; }
+      .box-blue { fill: #edf5ff; stroke: #8bb9ee; stroke-width: 2; rx: 8; }
+      .box-green { fill: #eef9f1; stroke: #8acb9a; stroke-width: 2; rx: 8; }
+      .box-purple { fill: #f5efff; stroke: #bca0ed; stroke-width: 2; rx: 8; }
+      .box-orange { fill: #fff5e8; stroke: #e6b26d; stroke-width: 2; rx: 8; }
+      .head { font-family: Arial, sans-serif; font-size: 19px; font-weight: 700; fill: #1f2937; }
+      .body { font-family: Arial, sans-serif; font-size: 14px; fill: #374151; }
+      .small { font-family: Arial, sans-serif; font-size: 13px; fill: #566273; }
+      .line { stroke: #596579; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+      .rel { stroke: #7b8494; stroke-width: 2; fill: none; }
+      .dashed { stroke: #7b8494; stroke-width: 2; fill: none; stroke-dasharray: 7 6; marker-end: url(#arrow); }
+      .label { font-family: Arial, sans-serif; font-size: 13px; fill: #475569; font-weight: 700; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#596579"/>
+    </marker>
+    <marker id="diamond" viewBox="0 0 12 12" refX="2" refY="6" markerWidth="10" markerHeight="10" orient="auto">
+      <path d="M 2 6 L 6 2 L 10 6 L 6 10 z" fill="#ffffff" stroke="#7b8494" stroke-width="1.5"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1600" height="1100"/>
+  <text class="title" x="70" y="70">Fontify Class Diagram</text>
+  <text class="subtitle" x="70" y="102">React + Vite frontend connected to FastAPI + SQLAlchemy backend</text>
+
+  <text class="section" x="70" y="160">Frontend Modules</text>
+  <rect class="box-blue" x="70" y="185" width="210" height="110"/>
+  <text class="head" x="95" y="220">App</text>
+  <text class="body" x="95" y="248">routeFromHash()</text>
+  <text class="body" x="95" y="270">selects current page</text>
+
+  <rect class="box-blue" x="350" y="185" width="250" height="135"/>
+  <text class="head" x="375" y="220">Pages</text>
+  <text class="body" x="375" y="248">EnglishFontsPage</text>
+  <text class="body" x="375" y="270">EnglishDetailPage</text>
+  <text class="body" x="375" y="292">MyPage, MyWorksPage</text>
+
+  <rect class="box-blue" x="670" y="185" width="240" height="135"/>
+  <text class="head" x="695" y="220">useApiResource</text>
+  <text class="body" x="695" y="248">data</text>
+  <text class="body" x="695" y="270">isLoading</text>
+  <text class="body" x="695" y="292">error + cache</text>
+
+  <rect class="box-purple" x="980" y="185" width="245" height="155"/>
+  <text class="head" x="1005" y="220">fontifyApi</text>
+  <text class="body" x="1005" y="248">getMe()</text>
+  <text class="body" x="1005" y="270">listFonts()</text>
+  <text class="body" x="1005" y="292">createGeneration()</text>
+  <text class="body" x="1005" y="314">getGenerationStatus()</text>
+
+  <rect class="box-purple" x="1300" y="185" width="230" height="135"/>
+  <text class="head" x="1325" y="220">apiRequest</text>
+  <text class="body" x="1325" y="248">fetch wrapper</text>
+  <text class="body" x="1325" y="270">API_BASE_URL</text>
+  <text class="body" x="1325" y="292">x-user-id header</text>
+
+  <rect class="box-purple" x="670" y="370" width="240" height="135"/>
+  <text class="head" x="695" y="405">Mappers</text>
+  <text class="body" x="695" y="433">mapFontFileToEnglishFont()</text>
+  <text class="body" x="695" y="455">mapStatusToWorkItem()</text>
+  <text class="body" x="695" y="477">mapMeToUserProfile()</text>
+
+  <rect class="box-purple" x="980" y="390" width="245" height="95"/>
+  <text class="head" x="1005" y="425">generationStorage</text>
+  <text class="body" x="1005" y="453">localStorage job cache</text>
+
+  <path class="line" d="M280 240 L350 240"/>
+  <path class="line" d="M600 250 L670 250"/>
+  <path class="line" d="M910 250 L980 250"/>
+  <path class="line" d="M1225 250 L1300 250"/>
+  <path class="dashed" d="M600 292 C640 345 660 390 670 425"/>
+  <path class="dashed" d="M980 438 L910 438"/>
+
+  <text class="section" x="70" y="590">Backend API</text>
+  <rect class="box-green" x="70" y="615" width="220" height="120"/>
+  <text class="head" x="95" y="650">FastAPI App</text>
+  <text class="body" x="95" y="678">app/main.py</text>
+  <text class="body" x="95" y="700">/api/v1 prefix</text>
+
+  <rect class="box-green" x="360" y="615" width="250" height="160"/>
+  <text class="head" x="385" y="650">ApiRouter</text>
+  <text class="body" x="385" y="678">/auth</text>
+  <text class="body" x="385" y="700">/users</text>
+  <text class="body" x="385" y="722">/fonts, /generated_fonts</text>
+  <text class="body" x="385" y="744">/generations, /handwriting</text>
+
+  <rect class="box-green" x="700" y="585" width="250" height="110"/>
+  <text class="head" x="725" y="620">AuthEndpoint</text>
+  <text class="body" x="725" y="648">signup(), login()</text>
+  <text class="body" x="725" y="670">dev_login()</text>
+
+  <rect class="box-green" x="1000" y="585" width="250" height="110"/>
+  <text class="head" x="1025" y="620">UsersMeEndpoint</text>
+  <text class="body" x="1025" y="648">get_me()</text>
+  <text class="body" x="1025" y="670">ratings, generations, downloads</text>
+
+  <rect class="box-green" x="1300" y="585" width="230" height="110"/>
+  <text class="head" x="1325" y="620">FontsEndpoint</text>
+  <text class="body" x="1325" y="648">list_fonts()</text>
+  <text class="body" x="1325" y="670">download, rate</text>
+
+  <rect class="box-green" x="700" y="735" width="250" height="110"/>
+  <text class="head" x="725" y="770">GenerationEndpoint</text>
+  <text class="body" x="725" y="798">create_google_generation()</text>
+  <text class="body" x="725" y="820">get_generation_status()</text>
+
+  <rect class="box-green" x="1000" y="735" width="250" height="110"/>
+  <text class="head" x="1025" y="770">HandwritingEndpoint</text>
+  <text class="body" x="1025" y="798">upload_handwriting()</text>
+  <text class="body" x="1025" y="820">create_generation_job()</text>
+
+  <path class="line" d="M1415 320 C1415 420 250 500 180 615"/>
+  <text class="label" x="1222" y="456">HTTP /api/v1</text>
+  <path class="line" d="M290 675 L360 675"/>
+  <path class="line" d="M610 665 L700 640"/>
+  <path class="line" d="M610 690 L1000 640"/>
+  <path class="line" d="M610 715 L1300 640"/>
+  <path class="line" d="M610 730 L700 790"/>
+  <path class="line" d="M610 745 L1000 790"/>
+
+  <text class="section" x="70" y="905">SQLAlchemy Domain Models</text>
+  <rect class="box-orange" x="70" y="930" width="160" height="95"/>
+  <text class="head" x="95" y="962">User</text>
+  <text class="small" x="95" y="986">user_id</text>
+  <text class="small" x="95" y="1006">email, nickname</text>
+
+  <rect class="box-orange" x="290" y="930" width="165" height="95"/>
+  <text class="head" x="315" y="962">Handwriting</text>
+  <text class="small" x="315" y="986">handwriting_id</text>
+  <text class="small" x="315" y="1006">image_url</text>
+
+  <rect class="box-orange" x="520" y="930" width="165" height="95"/>
+  <text class="head" x="545" y="962">GenerationJob</text>
+  <text class="small" x="545" y="986">status, progress</text>
+  <text class="small" x="545" y="1006">font_file_id</text>
+
+  <rect class="box-orange" x="750" y="930" width="165" height="95"/>
+  <text class="head" x="775" y="962">GeneratedFont</text>
+  <text class="small" x="775" y="986">name</text>
+  <text class="small" x="775" y="1006">file_url</text>
+
+  <rect class="box-orange" x="980" y="930" width="165" height="95"/>
+  <text class="head" x="1005" y="962">DownloadRecord</text>
+  <text class="small" x="1005" y="986">download_id</text>
+  <text class="small" x="1005" y="1006">downloaded_at</text>
+
+  <rect class="box-orange" x="1210" y="930" width="150" height="95"/>
+  <text class="head" x="1235" y="962">Rating</text>
+  <text class="small" x="1235" y="986">score</text>
+  <text class="small" x="1235" y="1006">comment</text>
+
+  <rect class="box-orange" x="1200" y="785" width="150" height="95"/>
+  <text class="head" x="1225" y="817">FontFamily</text>
+  <text class="small" x="1225" y="841">font_family_id</text>
+  <text class="small" x="1225" y="861">name</text>
+
+  <rect class="box-orange" x="1390" y="785" width="150" height="95"/>
+  <text class="head" x="1415" y="817">FontFile</text>
+  <text class="small" x="1415" y="841">weight, style</text>
+  <text class="small" x="1415" y="861">file_path</text>
+
+  <path class="rel" marker-start="url(#diamond)" d="M230 978 L290 978"/>
+  <text class="label" x="248" y="968">1:N</text>
+  <path class="rel" marker-start="url(#diamond)" d="M455 978 L520 978"/>
+  <text class="label" x="475" y="968">1:N</text>
+  <path class="rel" marker-start="url(#diamond)" d="M685 978 L750 978"/>
+  <text class="label" x="704" y="968">1:0..1</text>
+  <path class="rel" marker-start="url(#diamond)" d="M915 978 L980 978"/>
+  <text class="label" x="935" y="968">1:N</text>
+  <path class="rel" marker-start="url(#diamond)" d="M915 1008 C1020 1080 1170 1080 1210 1008"/>
+  <text class="label" x="1044" y="1070">1:N</text>
+
+  <path class="rel" marker-start="url(#diamond)" d="M230 945 C320 870 450 870 520 945"/>
+  <text class="label" x="360" y="883">User 1:N Jobs</text>
+  <path class="rel" marker-start="url(#diamond)" d="M230 1008 C430 1080 780 1080 980 1008"/>
+  <text class="label" x="535" y="1060">User 1:N Downloads</text>
+  <path class="rel" marker-start="url(#diamond)" d="M230 1020 C540 1110 1090 1110 1210 1020"/>
+  <text class="label" x="670" y="1090">User 1:N Ratings</text>
+
+  <path class="rel" marker-start="url(#diamond)" d="M1350 832 L1390 832"/>
+  <text class="label" x="1358" y="822">1:N</text>
+  <path class="rel" marker-start="url(#diamond)" d="M1390 880 C1190 955 835 900 685 955"/>
+  <text class="label" x="1065" y="910">FontFile 1:N Jobs</text>
+
+  <path class="dashed" d="M825 845 C780 885 690 900 612 930"/>
+  <text class="label" x="705" y="890">endpoints query models</text>
+</svg>

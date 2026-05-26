@@ -1,6 +1,6 @@
 .imageFontSearch{
   padding:48px 0 96px;
-  background:#fff;
+  background:var(--color-bg);
 }
 
 .imageFontSearch__inner{
@@ -22,7 +22,7 @@
 
 .imageFontSearch__hero h1{
   margin:0;
-  color:#111827;
+  color:var(--color-text);
   font-size:58px;
   line-height:1.06;
   letter-spacing:-.045em;
@@ -31,25 +31,25 @@
 
 .imageFontSearch__hero p{
   margin:0;
-  color:#6b7280;
+  color:var(--color-text-muted);
   font-size:17px;
   line-height:1.75;
 }
 
 .imageFontSearch__hero strong{
-  color:#1d4ed8;
+  color:var(--color-primary-hover);
 }
 
 .imageFontSearch__process{
-  border:1px solid #e5e7eb;
+  border:1px solid var(--color-border);
   border-radius:28px;
-  background:linear-gradient(180deg,#fafafa,#f8fafc);
+  background:linear-gradient(180deg,#fafafa,var(--color-bg-subtle));
   padding:34px 36px 30px;
 }
 
 .imageFontSearch__process h2{
   margin:0 0 34px;
-  color:#1d4ed8;
+  color:var(--color-primary-hover);
   font-size:28px;
   line-height:1.2;
   text-align:center;
@@ -76,8 +76,8 @@
   width:74px;
   height:74px;
   border-radius:999px;
-  border:1px solid #e5e7eb;
-  background:#fff;
+  border:1px solid var(--color-border);
+  background:var(--color-bg);
   box-shadow:0 12px 26px rgba(15,23,42,.06);
   display:grid;
   place-items:center;
@@ -87,14 +87,14 @@
   width:28px;
   height:28px;
   fill:none;
-  stroke:#1d4ed8;
+  stroke:var(--color-primary-hover);
   stroke-width:1.8;
   stroke-linecap:round;
   stroke-linejoin:round;
 }
 
 .imageFontSearch__processItem strong{
-  color:#111827;
+  color:var(--color-text);
   font-size:18px;
   line-height:1.4;
   font-weight:800;
@@ -102,7 +102,7 @@
 
 .imageFontSearch__processItem p{
   margin:0;
-  color:#6b7280;
+  color:var(--color-text-muted);
   font-size:14px;
   line-height:1.65;
 }
@@ -111,7 +111,7 @@
   position:absolute;
   top:32px;
   right:-13px;
-  color:#cbd5e1;
+  color:var(--color-border-strong);
   font-size:30px;
   line-height:1;
 }
@@ -124,7 +124,7 @@
   min-height:420px;
   border:2px dashed #d1d5db;
   border-radius:30px;
-  background:#fff;
+  background:var(--color-bg);
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -138,7 +138,7 @@
   width:92px;
   height:92px;
   border-radius:24px;
-  background:#fff;
+  background:var(--color-bg);
   box-shadow:0 20px 36px rgba(15,23,42,.06);
   display:grid;
   place-items:center;
@@ -148,7 +148,7 @@
   width:36px;
   height:36px;
   fill:none;
-  stroke:#1d4ed8;
+  stroke:var(--color-primary-hover);
   stroke-width:1.8;
   stroke-linecap:round;
   stroke-linejoin:round;
@@ -156,7 +156,7 @@
 
 .imageFontSearch__uploadPanel h2{
   margin:12px 0 0;
-  color:#111827;
+  color:var(--color-text);
   font-size:44px;
   line-height:1.18;
   letter-spacing:-.04em;
@@ -165,7 +165,7 @@
 
 .imageFontSearch__uploadPanel p{
   margin:0;
-  color:#94a3b8;
+  color:var(--color-text-soft);
   font-size:18px;
   line-height:1.5;
 }
@@ -176,8 +176,8 @@
   min-height:54px;
   border:0;
   border-radius:16px;
-  background:#1d4ed8;
-  color:#fff;
+  background:var(--color-primary-hover);
+  color:var(--color-bg);
   font-size:20px;
   font-weight:700;
   cursor:pointer;
@@ -191,14 +191,14 @@
   gap:12px;
   flex-wrap:wrap;
   justify-content:center;
-  color:#475569;
+  color:var(--color-text-muted);
   font-size:14px;
 }
 
 .imageFontSearch__selectedFile button{
   border:0;
   background:transparent;
-  color:#1d4ed8;
+  color:var(--color-primary-hover);
   font-weight:700;
   cursor:pointer;
 }
@@ -218,7 +218,7 @@
 
 .imageFontSearch__resultsHead h2{
   margin:0 0 10px;
-  color:#111827;
+  color:var(--color-text);
   font-size:42px;
   line-height:1.14;
   letter-spacing:-.04em;
@@ -227,7 +227,7 @@
 
 .imageFontSearch__resultsHead p{
   margin:0;
-  color:#64748b;
+  color:var(--color-text-muted);
   font-size:16px;
   line-height:1.6;
 }
@@ -236,7 +236,7 @@
   display:flex;
   align-items:center;
   gap:10px;
-  color:#94a3b8;
+  color:var(--color-text-soft);
   font-size:14px;
   white-space:nowrap;
 }
@@ -244,10 +244,10 @@
 .imageFontSearch__sort button{
   min-height:34px;
   padding:0 14px;
-  border:1px solid #e5e7eb;
+  border:1px solid var(--color-border);
   border-radius:999px;
-  background:#f8fafc;
-  color:#475569;
+  background:var(--color-bg-subtle);
+  color:var(--color-text-muted);
   font-weight:700;
 }
 
@@ -263,9 +263,9 @@
   gap:34px;
   align-items:center;
   padding:34px;
-  border:1px solid #e5e7eb;
+  border:1px solid var(--color-border);
   border-radius:24px;
-  background:#fff;
+  background:var(--color-bg);
   box-shadow:0 12px 30px rgba(15,23,42,.04);
 }
 
@@ -276,7 +276,7 @@
 }
 
 .imageFontSearch__thumbLabel{
-  color:#9ca3af;
+  color:var(--color-text-soft);
   font-size:13px;
   line-height:1.4;
   font-weight:700;
@@ -286,7 +286,7 @@
   aspect-ratio:1.54;
   border:1px solid #eef2f7;
   border-radius:16px;
-  background:linear-gradient(180deg,#fbfdff,#f8fafc);
+  background:linear-gradient(180deg,#fbfdff,var(--color-bg-subtle));
   display:flex;
   align-items:center;
   justify-content:center;
@@ -300,7 +300,7 @@
 }
 
 .imageFontSearch__thumbFallback{
-  color:#94a3b8;
+  color:var(--color-text-soft);
   font-size:52px;
   line-height:1;
 }
@@ -328,7 +328,7 @@
 
 .imageFontSearch__fontTitleRow h3{
   margin:0;
-  color:#111827;
+  color:var(--color-text);
   font-size:24px;
   line-height:1.2;
   font-weight:800;
@@ -340,15 +340,15 @@
   min-height:26px;
   padding:0 10px;
   border-radius:999px;
-  background:#dbeafe;
-  color:#2563eb;
+  background:var(--color-primary-border);
+  color:var(--color-primary);
   font-size:12px;
   font-weight:800;
 }
 
 .imageFontSearch__resultMeta p{
   margin:8px 0 0;
-  color:#6b7280;
+  color:var(--color-text-muted);
   font-size:15px;
   line-height:1.5;
 }
@@ -367,14 +367,14 @@
 }
 
 .imageFontSearch__stats dt{
-  color:#94a3b8;
+  color:var(--color-text-soft);
   font-size:13px;
   line-height:1.4;
 }
 
 .imageFontSearch__stats dd{
   margin:0;
-  color:#111827;
+  color:var(--color-text);
   font-size:18px;
   line-height:1.4;
   font-weight:800;
@@ -384,11 +384,11 @@
   min-height:96px;
   border:1px dashed #dbe2ea;
   border-radius:18px;
-  background:#fff;
+  background:var(--color-bg);
   display:flex;
   align-items:center;
   padding:20px 24px;
-  color:#111827;
+  color:var(--color-text);
   font-size:34px;
   line-height:1.2;
   overflow:hidden;
@@ -404,7 +404,7 @@
   min-height:56px;
   padding:0 18px;
   border-radius:14px;
-  border:1px solid #1d4ed8;
+  border:1px solid var(--color-primary-hover);
   display:inline-flex;
   align-items:center;
   justify-content:center;
@@ -428,13 +428,13 @@
 }
 
 .imageFontSearch__actionButton--ghost{
-  background:#fff;
-  color:#1d4ed8;
+  background:var(--color-bg);
+  color:var(--color-primary-hover);
 }
 
 .imageFontSearch__actionButton--primary{
-  background:#1d4ed8;
-  color:#fff;
+  background:var(--color-primary-hover);
+  color:var(--color-bg);
   box-shadow:0 16px 28px rgba(37,99,235,.18);
 }
 
@@ -449,8 +449,8 @@
   padding:0 28px;
   border:1px solid #d1d5db;
   border-radius:999px;
-  background:#fff;
-  color:#475569;
+  background:var(--color-bg);
+  color:var(--color-text-muted);
   font-size:18px;
   font-weight:700;
   cursor:pointer;

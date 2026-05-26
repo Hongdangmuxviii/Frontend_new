@@ -7,6 +7,7 @@ import type { ApiGeneratedFontItem } from '../api/backendTypes';
 import { fontifyApi } from '../api/fontifyApi';
 
 type SelectedRouteParams = {
+  jobId: string;
   generatedFontId: string;
   sourceFontId: string;
   family: string;
@@ -15,10 +16,11 @@ type SelectedRouteParams = {
 function readSelectedParamsFromHash(): SelectedRouteParams {
   const hash = window.location.hash || '';
   const queryIndex = hash.indexOf('?');
-  if (queryIndex < 0) return { generatedFontId: '', sourceFontId: '', family: '' };
+  if (queryIndex < 0) return { jobId: '', generatedFontId: '', sourceFontId: '', family: '' };
   const params = new URLSearchParams(hash.slice(queryIndex + 1));
 
   return {
+    jobId: params.get('jobId') ?? params.get('job_id') ?? '',
     generatedFontId:
       params.get('generatedFontId') ?? params.get('generated_font_id') ?? params.get('id') ?? '',
     sourceFontId: params.get('sourceFontId') ?? params.get('originalFontId') ?? params.get('fontId') ?? '',
@@ -72,6 +74,7 @@ export default function SelectedPage() {
   const [fontSize, setFontSize] = useState(34);
   const [params, setParams] = useState<SelectedRouteParams>(() => readSelectedParamsFromHash());
   const [generatedFont, setGeneratedFont] = useState<ApiGeneratedFontItem | null>(null);
+  const [generatedFontUrlFromJob, setGeneratedFontUrlFromJob] = useState('');
   const [loadedFontFamily, setLoadedFontFamily] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
@@ -95,9 +98,24 @@ export default function SelectedPage() {
       setLoadError('');
 
       try {
+        setGeneratedFontUrlFromJob('');
+
         if (params.generatedFontId) {
-          const font = await fontifyApi.getGeneratedFont(params.generatedFontId);
-          if (!cancelled) setGeneratedFont(font);
+          try {
+            const font = await fontifyApi.getGeneratedFont(params.generatedFontId);
+            if (!cancelled) setGeneratedFont(font);
+            return;
+          } catch (generatedFontError) {
+            if (!params.jobId) throw generatedFontError;
+          }
+        }
+
+        if (params.jobId) {
+          const status = await fontifyApi.getGenerationStatus(params.jobId);
+          if (!cancelled) {
+            setGeneratedFontUrlFromJob(resolveApiAssetUrl(status.generated_font_url) ?? '');
+            setGeneratedFont(null);
+          }
           return;
         }
 
@@ -118,12 +136,12 @@ export default function SelectedPage() {
     return () => {
       cancelled = true;
     };
-  }, [params.generatedFontId]);
+  }, [params.generatedFontId, params.jobId]);
 
   useEffect(() => {
     setLoadedFontFamily('');
 
-    const sourceUrl = resolveApiAssetUrl(generatedFont?.file_url);
+    const sourceUrl = resolveApiAssetUrl(generatedFont?.file_url) ?? generatedFontUrlFromJob;
     if (!sourceUrl || typeof FontFace === 'undefined' || !document.fonts) return;
 
     let cancelled = false;
@@ -149,10 +167,10 @@ export default function SelectedPage() {
         // Ignore cleanup failures from browsers that keep the face internally.
       }
     };
-  }, [generatedFont]);
+  }, [generatedFont, generatedFontUrlFromJob]);
 
   const fontTitle = getGeneratedFontTitle(generatedFont);
-  const generatedFontUrl = resolveApiAssetUrl(generatedFont?.file_url);
+  const generatedFontUrl = resolveApiAssetUrl(generatedFont?.file_url) ?? generatedFontUrlFromJob;
   const originalFontHref = params.sourceFontId
     ? `#/english-detail?fontId=${encodeURIComponent(params.sourceFontId)}`
     : params.family
@@ -173,14 +191,16 @@ export default function SelectedPage() {
   }, [fontSize]);
 
   const handleDownload = async () => {
-    if (!generatedFont) {
-      window.alert('다운로드할 폰트 파일 URL이 없습니다.');
+    if (!params.jobId && !generatedFont) {
+      window.alert('다운로드할 작업 정보가 없습니다.');
       return;
     }
 
     try {
       setIsDownloading(true);
-      const download = await fontifyApi.downloadGeneratedFont(generatedFont.generated_font_id);
+      const download = params.jobId
+        ? await fontifyApi.downloadGenerationJob(params.jobId)
+        : await fontifyApi.downloadGeneratedFont(generatedFont!.generated_font_id);
       const downloadUrl = resolveApiAssetUrl(download.file_url) ?? generatedFontUrl;
       if (!downloadUrl) throw new Error('download url missing');
 
@@ -221,7 +241,7 @@ export default function SelectedPage() {
               className="btn btn--sm detail__downloadBtn"
               type="button"
               onClick={handleDownload}
-              disabled={!generatedFont || isDownloading}
+              disabled={(!params.jobId && !generatedFont) || isDownloading}
             >
               {isDownloading ? '다운로드 중...' : '한글 폰트 다운로드'}
             </button>
@@ -231,7 +251,7 @@ export default function SelectedPage() {
           </div>
 
           {loadError ? <p className="detail__status">{loadError}</p> : null}
-          {!loadError && !generatedFont && !isLoading ? (
+          {!loadError && !generatedFont && !generatedFontUrlFromJob && !params.jobId && !isLoading ? (
             <p className="detail__status">아직 표시할 완성 폰트가 없습니다.</p>
           ) : null}
 

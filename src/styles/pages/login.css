@@ -1,5 +1,5 @@
 .figmaLogin {
-  background: #ffffff;
+  background: var(--color-bg);
   min-height: 100svh;
   display: flex;
   flex-direction: column;
@@ -20,15 +20,15 @@
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.01em;
-  color: #94a3b8;
+  color: var(--color-text-soft);
   background: rgba(255, 255, 255, 0.7);
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--color-border);
   transition: color 0.15s ease, border-color 0.15s ease;
 }
 
 .figmaLogin__backHome:hover {
-  color: #64748b;
-  border-color: #cbd5e1;
+  color: var(--color-text-muted);
+  border-color: var(--color-border-strong);
 }
 
 .figmaLogin__main {
@@ -43,13 +43,13 @@
   background:
     radial-gradient(circle at 14% 26%, rgba(26, 115, 232, 0.04) 0, rgba(26, 115, 232, 0) 32%),
     radial-gradient(circle at 88% 80%, rgba(26, 115, 232, 0.03) 0, rgba(26, 115, 232, 0) 40%),
-    #fff;
+    var(--color-bg);
 }
 
 .figmaLogin__eyebrow {
   display: inline-flex;
-  background: #eff6ff;
-  color: #1d4ed8;
+  background: var(--color-primary-soft);
+  color: var(--color-primary-hover);
   border-radius: 12px;
   padding: 6px 16px;
   font-size: 11.2px;
@@ -59,7 +59,7 @@
 
 .figmaLogin__title {
   margin: 34px 0 0;
-  color: #2563eb;
+  color: var(--color-primary);
   font-size: 112px;
   line-height: 0.92;
   letter-spacing: -0.05em;
@@ -81,14 +81,14 @@
   position: absolute;
   inset: 0;
   display: block;
-  color: #2563eb;
+  color: var(--color-primary);
   background: linear-gradient(
     108deg,
-    #1d4ed8 0%,
-    #2563eb 24%,
+    var(--color-primary-hover) 0%,
+    var(--color-primary) 24%,
     #8ac4ff 46%,
-    #1d4ed8 62%,
-    #2563eb 100%
+    var(--color-primary-hover) 62%,
+    var(--color-primary) 100%
   );
   background-size: 250% 100%;
   -webkit-background-clip: text;
@@ -135,7 +135,7 @@
 
 .figmaLogin__desc {
   margin: 20px 0 0;
-  color: #64748b;
+  color: var(--color-text-muted);
   font-size: 18px;
   line-height: 1.625;
   font-weight: 500;
@@ -152,16 +152,16 @@
   width: 16px;
   height: 6px;
   border-radius: 999px;
-  background: #dbeafe;
+  background: var(--color-primary-border);
 }
 
 .figmaLogin__dots span:nth-child(2) {
-  background: #bfdbfe;
+  background: var(--fontify-blue-200);
 }
 
 .figmaLogin__dots span.is-active {
   width: 48px;
-  background: #2563eb;
+  background: var(--color-primary);
 }
 
 .figmaLogin__right {
@@ -172,7 +172,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #fff;
+  background: var(--color-bg);
 }
 
 .figmaLogin__texture {
@@ -227,7 +227,7 @@
   width: 100%;
   max-width: 480px;
   border-radius: 32px;
-  border: 1px solid #f8fafc;
+  border: 1px solid var(--color-bg-subtle);
   background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 32px 64px -12px rgba(0, 0, 0, 0.08);
   backdrop-filter: blur(2px);
@@ -238,7 +238,7 @@
 
 .figmaLogin__card h2 {
   margin: 0;
-  color: #001b3d;
+  color: var(--color-text-brand);
   font-size: 44px;
   line-height: 1.2;
   font-weight: 700;
@@ -246,7 +246,7 @@
 
 .figmaLogin__card p {
   margin: 12px 0 0;
-  color: #94a3b8;
+  color: var(--color-text-soft);
   font-size: 14px;
   line-height: 1.45;
 }
@@ -255,9 +255,9 @@
   margin-top: 40px;
   width: 100%;
   height: 60px;
-  border: 1px solid #f1f5f9;
+  border: 1px solid var(--color-border-soft);
   border-radius: 12px;
-  background: #fff;
+  background: var(--color-bg);
   color: #334155;
   font-size: 16px;
   font-weight: 700;
@@ -289,7 +289,7 @@
 }
 
 .figmaLogin__newsletter label {
-  color: #64748b;
+  color: var(--color-text-muted);
   font-size: 13px;
   line-height: 18px;
   font-weight: 700;
@@ -298,10 +298,10 @@
 .figmaLogin__newsletter input {
   width: 100%;
   height: 52px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--color-border);
   border-radius: 12px;
   background: rgba(248, 250, 252, 0.85);
-  color: #0f172a;
+  color: var(--color-text-strong);
   font-size: 14px;
   font-weight: 600;
   padding: 0 16px;
@@ -310,13 +310,13 @@
 }
 
 .figmaLogin__newsletter input::placeholder {
-  color: #cbd5e1;
+  color: var(--color-border-strong);
   font-weight: 500;
 }
 
 .figmaLogin__newsletter input:focus {
-  border-color: #93c5fd;
-  background: #fff;
+  border-color: var(--fontify-blue-300);
+  background: var(--color-bg);
   box-shadow: 0 0 0 4px rgba(147, 197, 253, 0.18);
 }
 
@@ -325,8 +325,8 @@
   height: 54px;
   border: 0;
   border-radius: 12px;
-  background: #2563eb;
-  color: #fff;
+  background: var(--color-primary);
+  color: var(--color-bg);
   font-size: 15px;
   font-weight: 800;
   display: inline-flex;
@@ -346,7 +346,7 @@
 .figmaLogin__terms {
   margin: 127px 0 0;
   text-align: center;
-  color: #94a3b8;
+  color: var(--color-text-soft);
   font-size: 11px;
   line-height: 1.62;
   letter-spacing: 0.05em;
@@ -356,7 +356,7 @@
 
 .figmaLogin__footer {
   min-height: 108px;
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid var(--color-border-soft);
   padding: 28px 40px;
   display: flex;
   justify-content: space-between;
@@ -366,7 +366,7 @@
 
 .figmaLogin__footer strong {
   display: block;
-  color: #0f172a;
+  color: var(--color-text-strong);
   font-size: 29px;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -374,7 +374,7 @@
 
 .figmaLogin__footer p {
   margin: 7px 0 0;
-  color: #94a3b8;
+  color: var(--color-text-soft);
   font-size: 12px;
 }
 
@@ -384,7 +384,7 @@
 }
 
 .figmaLogin__footer nav a {
-  color: #94a3b8;
+  color: var(--color-text-soft);
   text-decoration: none;
   font-size: 12px;
   letter-spacing: 0.05em;

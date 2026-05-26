@@ -173,6 +173,7 @@ export function mapGenerationStatusToWorkItem(
     previewLetters: hasPreview ? mapPreviewUrlsToLetters(status.preview_image_urls) : undefined,
     previewImageUrls: hasPreview ? status.preview_image_urls.map((url) => resolveApiAssetUrl(url) ?? url) : undefined,
     downloadUrl: resolveApiAssetUrl(status.generated_font_url),
+    jobId: status.job_id,
     generatedFontId: status.generated_font_id,
     sourceFontId: storedJob.fontFileId || null,
     sourceFontName: storedJob.fontName,

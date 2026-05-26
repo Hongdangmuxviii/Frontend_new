@@ -162,9 +162,11 @@ function isPreviewAvailable(work: WorkItem) {
 }
 
 function buildSelectedUrl(work: WorkItem) {
-  if (work.phase !== 'completed' || !work.generatedFontId) return '';
+  if (work.phase !== 'completed' || (!work.jobId && !work.generatedFontId)) return '';
 
-  const params = new URLSearchParams({ generatedFontId: String(work.generatedFontId) });
+  const params = new URLSearchParams();
+  if (work.jobId) params.set('jobId', String(work.jobId));
+  if (work.generatedFontId) params.set('generatedFontId', String(work.generatedFontId));
   if (work.sourceFontId) params.set('sourceFontId', String(work.sourceFontId));
   if (work.sourceFontName) params.set('family', work.sourceFontName);
 

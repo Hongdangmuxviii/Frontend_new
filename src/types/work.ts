@@ -30,6 +30,7 @@ export type WorkItem = {
   previewLetters?: string[];
   previewImageUrls?: string[];
   downloadUrl?: string;
+  jobId?: number | null;
   generatedFontId?: number | null;
   sourceFontId?: number | null;
   sourceFontName?: string;

@@ -77,6 +77,9 @@ export const fontifyApi = {
   downloadGeneratedFont(fontId: number | string) {
     return apiRequest<ApiDownloadResponse>(`/fonts/${fontId}/download`, { method: 'POST' });
   },
+  downloadGenerationJob(jobId: number | string) {
+    return apiRequest<ApiDownloadResponse>(`/jobs/${jobId}/download`, { method: 'POST' });
+  },
   tagFont(fontId: number | string) {
     return apiRequest<{ message: string }>(`/fonts/${fontId}/tag`, { method: 'POST' });
   },
