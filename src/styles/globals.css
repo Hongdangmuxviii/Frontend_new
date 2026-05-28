@@ -16,39 +16,115 @@
 @import './pages/image-font-search.css';
 
 :root{
-  --fontify-blue-50:#eff6ff;
-  --fontify-blue-100:#dbeafe;
-  --fontify-blue-200:#bfdbfe;
-  --fontify-blue-300:#93c5fd;
-  --fontify-blue-500:#2563eb;
-  --fontify-blue-600:#1d4ed8;
-  --fontify-blue-700:#1e40af;
-  --fontify-blue-900:#001b3d;
+  --primary:#1832ff;
+  --primary-hover:#1d4ed8;
+  --primary-strong:#0619df;
+  --primary-soft:#eff6ff;
+  --primary-soft-alt:#eef2ff;
+  --primary-soft-border:#dbeafe;
 
-  --color-primary:var(--fontify-blue-500);
-  --color-primary-hover:var(--fontify-blue-600);
-  --color-primary-strong:var(--fontify-blue-700);
-  --color-primary-soft:var(--fontify-blue-50);
-  --color-primary-muted:#dfe8ff;
-  --color-primary-border:var(--fontify-blue-100);
-  --color-primary-ring:rgba(37,99,235,.14);
+  --accent-pink:#ec4899;
+  --accent-pink-strong:#db2777;
+  --accent-purple:#9333ea;
+  --accent-purple-strong:#7e22ce;
+  --accent-green:#16a34a;
+  --accent-green-strong:#10b981;
+  --accent-orange:#ea580c;
+  --accent-yellow-strong:#854d0e;
+  --accent-indigo:#4f46e5;
+  --accent-indigo-soft:#e0e7ff;
+  --accent-handwriting-pink:#e91e63;
+  --accent-handwriting-purple:#8e44ad;
+  --accent-google-red:#ea4335;
 
-  --color-bg:#ffffff;
-  --color-bg-subtle:#f8fafc;
-  --color-bg-page:#f8fbff;
-  --color-bg-panel:#f1f5f9;
-  --color-text:#111827;
-  --color-text-strong:#0f172a;
-  --color-text-brand:var(--fontify-blue-900);
-  --color-text-muted:#64748b;
-  --color-text-soft:#94a3b8;
-  --color-border:#e2e8f0;
-  --color-border-soft:#f1f5f9;
-  --color-border-strong:#cbd5e1;
+  --text:#111827;
+  --text-strong:#111827;
+  --text-heading:#001b3d;
+  --text-body:#414754;
+  --text-body-2:#475569;
+  --text-body-strong:#1f2937;
+  --text-dim:#6e6e6e;
+  --text-soft:#727785;
+  --text-warm:#2a2828;
+  --text-plum:#4a444e;
+  --title:#0f172a;
+  --muted:#6b7280;
+  --muted-2:#9ca3af;
+  --muted-3:#64748b;
+  --muted-4:#94a3b8;
+  --ink:#000000;
 
-  --color-danger:#dc2626;
-  --color-success:#10b981;
-  --color-pink:#ec4899;
-  --shadow-sm:0 1px 2px rgba(15,23,42,.05);
-  --shadow-card:0 8px 16px rgba(15,23,42,.06);
+  --bg:#ffffff;
+  --surface-base:#ffffff;
+  --surface-muted:#f3f4f6;
+  --surface-subtle:#f8fafc;
+  --surface-soft:#f9fafb;
+  --surface-tint:#f9f9ff;
+  --surface-hero:#fafafa;
+  --surface-blue-soft:#f0f3ff;
+  --surface-blue-soft-2:#f8fbff;
+  --surface-blue-soft-3:#e9efff;
+  --surface-blue-soft-4:#d6e3ff;
+  --surface-blue-soft-5:#d8e2ff;
+  --surface-line:#eef2f7;
+  --surface-line-2:#dbe2ea;
+  --bg-soft:#f3f4f6;
+  --bg-softer:#f9fafb;
+  --pill-bg:#eff6ff;
+
+  --border:#e5e7eb;
+  --border-soft:#e2e8f0;
+  --border-subtle:#f1f5f9;
+  --border-strong:#cbd5e1;
+  --border-emphasis:#d9d9d9;
+  --border-2:#e3e3e3;
+  --card-border:#f3f4f6;
+  --border-faint:#e5e5e5;
+
+  --tag-blue-bg:#eff6ff;
+  --tag-purple-bg:#faf5ff;
+  --tag-green-bg:#f0fdf4;
+  --tag-orange-bg:#fff7ed;
+  --tag-pink-bg:#fdf2f8;
+  --tag-indigo-bg:#eef2ff;
+  --tag-yellow-bg:#fef3c7;
+  --tag-gray-bg:#f3f4f6;
+
+  --info-soft:#bfdbfe;
+  --info-soft-2:#93c5fd;
+  --info-soft-3:#8ac4ff;
+  --danger:#dc2626;
+  --danger-soft:#f87171;
+  --warning:#f59e0b;
+  --focus-ring-soft:#eef4ff;
+  --texture-line:#c1c6d6;
+  --texture-stripe:#98a2b3;
+
+  --r-6:6px;
+  --r-8:8px;
+  --r-12:12px;
+  --r-16:16px;
+  --r-20:20px;
+  --r-24:24px;
+  --r-28:28px;
+  --r-32:32px;
+  --r-full:9999px;
+
+  --shadow-1:0 1px 2px rgba(0,0,0,.05);
+  --shadow-2:0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -2px rgba(0,0,0,.1);
+  --shadow-3:0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -4px rgba(0,0,0,.1);
+
+  --max:1280px;
 }
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:"Pretendard",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--text);
+  background:var(--bg);
+}
+
+a{color:inherit}
+button,input,textarea,select{font:inherit}
