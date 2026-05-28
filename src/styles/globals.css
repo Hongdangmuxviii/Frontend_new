@@ -1,4 +1,4 @@
-@import url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard@latest/dist/pretendard.css');
+@import url('https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/static/pretendard.min.css');
 @import url('https://fonts.googleapis.com/css2?family=Black+And+White+Picture&family=Black+Han+Sans&family=Nanum+Brush+Script&family=Nanum+Myeongjo:wght@400;700;800&family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@400;500;700;800&display=swap');
 
 /* Keep same import order as the original Next.js globals.css */
@@ -127,4 +127,3 @@ body{
 }
 
 a{color:inherit}
-button,input,textarea,select{font:inherit}
