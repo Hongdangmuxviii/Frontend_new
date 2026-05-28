@@ -1,4 +1,4 @@
-.container{
+﻿.container{
   width:min(var(--max), 100% - 48px);
   margin-inline:auto;
 }
@@ -143,9 +143,13 @@
   color:var(--text-body-2);
   display:inline-flex;
   align-items:center;
+  justify-content:center;
   gap:8px;
   white-space:nowrap;
   text-decoration:none;
+  appearance:none;
+  -webkit-appearance:none;
+  overflow:hidden;
 }
 .btn:hover,
 .btn:focus,
@@ -212,7 +216,7 @@
   color:var(--muted);
 }
 
-/* Hero (메인 배너 공통 ?�이?�웃) */
+/* Hero (硫붿씤 諛곕꼫 怨듯넻 ?덉씠?꾩썐) */
 .hero{
   position:relative;
   background:var(--bg-soft);
@@ -270,19 +274,19 @@
 .hero__grid{
   position:relative;
   display:flex;
-  /* 좌우 블록 간격(?�스?��? ?�측 카드 ?�이 ?�백) */
+  /* 醫뚯슦 釉붾줉 媛꾧꺽(?띿뒪?몄? ?곗륫 移대뱶 ?ъ씠 ?щ갚) */
   gap:24px;
-  /* 가?�드 ?�른�?기본 ?�백 */
+  /* 媛?대뱶 ?ㅻⅨ履?湲곕낯 ?щ갚 */
   padding-right:10px;
   box-sizing:border-box;
   align-items:center;
 }
 .hero__grid--existing{
   display:block;
-  /* 1�?배너 최소 ?�이 */
+  /* 1踰?諛곕꼫 理쒖냼 ?믪씠 */
   min-height:420px;
-  /* absolute ?�측 카드 공간 ?�보 ??*/
-  padding-right:490px;
+  /* absolute ?곗륫 移대뱶 怨듦컙 ?뺣낫 ??*/
+  padding-right:530px;
 }
 .hero__copy{
   flex:1 1 auto;
@@ -328,15 +332,15 @@
   white-space:nowrap;
 }
 .hero__titleTwoLine > span:first-child{
-  /* 1�?배너 �?�??�목 ?�기 */
+  /* 1踰?諛곕꼫 泥?以??쒕ぉ ?ш린 */
   font-size:68px;
-  /* 1�?배너 �?�?줄높??*/
+  /* 1踰?諛곕꼫 泥?以?以꾨넂??*/
   line-height:72px;
 }
 .hero__titleTwoLine > span:last-child{
-  /* 1�?배너 ?�째 �??�목 ?�기 */
+  /* 1踰?諛곕꼫 ?섏㎏ 以??쒕ぉ ?ш린 */
   font-size:47px;
-  /* 1�?배너 ?�째 �?줄높??*/
+  /* 1踰?諛곕꼫 ?섏㎏ 以?以꾨넂??*/
   line-height:52px;
 }
 .hero__accentLine{
@@ -346,11 +350,11 @@
 .hero__desc{
   margin:0;
   color:var(--text-body-2);
-  /* 1�?배너 보조 ?�명 글???�기 */
+  /* 1踰?諛곕꼫 蹂댁“ ?ㅻ챸 湲???ш린 */
   font-size:20px;
-  /* 1�?배너 보조 ?�명 줄간�?*/
+  /* 1踰?諛곕꼫 蹂댁“ ?ㅻ챸 以꾧컙寃?*/
   line-height:1.4;
-  /* 줄바�???*/
+  /* 以꾨컮轅???*/
   max-width:620px;
 }
 .hero__actions{display:flex; gap:16px; padding-top:0}
@@ -358,7 +362,7 @@
   padding-top:0;
 }
 
-/* Main banner slider (1�?2�??�라?�드 컨테?�너) */
+/* Main banner slider (1踰?2踰??щ씪?대뱶 而⑦뀒?대꼫) */
 .hero--banner{
   min-height:584px;
   display:flex;
@@ -366,10 +370,89 @@
   justify-content:space-between;
 }
 .heroSlideFrame{
+  position:relative;
   width:100%;
   min-height:468px;
   display:flex;
   align-items:center;
+  overflow:visible;
+}
+.heroSlideStack{
+  position:relative;
+  width:100%;
+  min-height:468px;
+}
+.heroSlideMotion{
+  width:100%;
+}
+.heroSlideMotion--layer{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  width:100%;
+}
+.heroSlideMotion--layer > *{
+  width:100%;
+}
+.heroSlideMotion--current{
+  opacity:1;
+  transform:none;
+}
+.heroSlideMotion--in.heroSlideMotion--next{
+  animation:heroSlideLayerInNext 1.02s cubic-bezier(.16,1,.3,1) both;
+}
+.heroSlideMotion--in.heroSlideMotion--prev{
+  animation:heroSlideLayerInPrev 1.02s cubic-bezier(.16,1,.3,1) both;
+}
+.heroSlideMotion--out{
+  pointer-events:none;
+}
+.heroSlideMotion--out.heroSlideMotion--next{
+  animation:heroSlideLayerOutNext 1.02s cubic-bezier(.16,1,.3,1) both;
+}
+.heroSlideMotion--out.heroSlideMotion--prev{
+  animation:heroSlideLayerOutPrev 1.02s cubic-bezier(.16,1,.3,1) both;
+}
+@keyframes heroSlideLayerInNext{
+  0%{
+    opacity:0;
+    transform:translate3d(28px,0,0);
+  }
+  100%{
+    opacity:1;
+    transform:translate3d(0,0,0);
+  }
+}
+@keyframes heroSlideLayerInPrev{
+  0%{
+    opacity:0;
+    transform:translate3d(-28px,0,0);
+  }
+  100%{
+    opacity:1;
+    transform:translate3d(0,0,0);
+  }
+}
+@keyframes heroSlideLayerOutNext{
+  0%{
+    opacity:1;
+    transform:translate3d(0,0,0);
+  }
+  100%{
+    opacity:0;
+    transform:translate3d(-22px,0,0);
+  }
+}
+@keyframes heroSlideLayerOutPrev{
+  0%{
+    opacity:1;
+    transform:translate3d(0,0,0);
+  }
+  100%{
+    opacity:0;
+    transform:translate3d(22px,0,0);
+  }
 }
 .heroPromo{
   position:relative;
@@ -410,9 +493,9 @@
 }
 .heroPromo__title{
   margin:0;
-  /* 2�?배너 ?�목 ?�기 */
+  /* 2踰?諛곕꼫 ?쒕ぉ ?ш린 */
   font-size:62px;
-  /* 2�?배너 ?�목 줄높??*/
+  /* 2踰?諛곕꼫 ?쒕ぉ 以꾨넂??*/
   line-height:1.08;
   letter-spacing:-.05em;
   color:var(--title);
@@ -443,9 +526,9 @@
   margin:0;
   max-width:760px;
   color:var(--text-body);
-  /* 2�?배너 보조 ?�명 ?�기 */
+  /* 2踰?諛곕꼫 蹂댁“ ?ㅻ챸 ?ш린 */
   font-size:20px;
-  /* 2�?배너 보조 ?�명 줄간�?*/
+  /* 2踰?諛곕꼫 蹂댁“ ?ㅻ챸 以꾧컙寃?*/
   line-height:1.4;
 }
 .heroPromo__desc--scan{
@@ -465,13 +548,17 @@
   align-items:center;
   justify-content:center;
   border-radius:24px;
-  /* 1�?2�?배너 버튼 공통 ?�기 */
+  /* 1踰?2踰?諛곕꼫 踰꾪듉 怨듯넻 ?ш린 */
   padding:18px 28px;
   font-size:16px;
   font-weight:700;
-  border:1px solid transparent;
+  border:0;
   cursor:pointer;
   min-width:220px;
+  appearance:none;
+  -webkit-appearance:none;
+  overflow:hidden;
+  box-sizing:border-box;
 }
 .heroPromo__btn--primary{
   color:var(--surface-base);
@@ -485,7 +572,7 @@
 .heroPromo__btn--ghost{
   background:var(--surface-base);
   color:var(--text-body);
-  border-color:var(--border-soft);
+  box-shadow:inset 0 0 0 1px var(--border-soft);
 }
 .heroPromo__social{
   display:flex;
@@ -545,7 +632,7 @@
   position:relative;
   width:min(100%, 560px);
   min-height:418px;
-  transform:translate(70px, 18px);
+  transform:translate(26px, 10px);
 }
 
 .scanScene__glyphWrap{
@@ -664,7 +751,7 @@
 
 .scanScene__card--processing{
   top:-8px;
-  right:8px;
+  right:28px;
   min-width:116px;
   padding:12px 14px;
   background:linear-gradient(180deg,var(--primary),#3b82f6);
@@ -719,7 +806,7 @@
 }
 
 .scanScene__card--probability{
-  right:2px;
+  right:24px;
   bottom:74px;
   min-width:132px;
   padding:14px 16px;
@@ -907,21 +994,20 @@
   background:var(--accent-purple);
 }
 
-/* Preview cards (1�??�라?�드 ?�측 카드) */
+/* Preview cards (1踰??щ씪?대뱶 ?곗륫 移대뱶) */
 .hero__cards{
-  flex:0 0 480px;
-  display:grid;
-  grid-template-columns:repeat(2, minmax(0,1fr));
-  gap:12px;
-  width:480px;
-  max-width:480px;
+  position:relative;
+  flex:0 0 470px;
+  width:470px;
+  max-width:470px;
+  height:440px;
   margin-left:auto;
   transform:none;
 }
 .hero__grid--existing .hero__cards{
   position:absolute;
-  /* ?�측 카드 묶음 ?�치 ?�심�? ?�수?�수�????�른�??�동 */
-  right:-90px;
+  /* ?곗륫 移대뱶 臾띠쓬 ?꾩튂 ?듭떖媛? ?뚯닔?쇱닔濡????ㅻⅨ履??대룞 */
+  right:-12px;
   top:50%;
   transform:translateY(-50%);
   margin-left:0;
@@ -937,17 +1023,130 @@
   flex-direction:column;
   gap:12px;
   min-height:126px;
+  transition:
+    transform .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease,
+    background .2s ease;
 }
 .pv__top{display:flex; align-items:center; justify-content:space-between; gap:12px}
 .pv__name{font-size:18px; color:var(--text-body-2); font-weight:600}
 .pv__tag{font-size:12px; color:var(--muted-2)}
 .pv__sample{
-  font-size:28px;
-  line-height:36px;
+  font-size:14px;
+  line-height:20px;
   color:var(--text);
 }
 .pv--dim{opacity:.5}
 .pv__skeleton{height:24px; background:var(--bg-soft); border-radius:8px; width:145px}
+.pv--glass{
+  position:relative;
+  width:300px;
+  min-height:114px;
+  padding:18px 22px;
+  flex:0 0 auto;
+  border-radius:8px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.56), rgba(255,255,255,.2)),
+    linear-gradient(135deg, rgba(255,255,255,.34), rgba(255,255,255,.08));
+  border-color:rgba(255,255,255,.72);
+  box-shadow:
+    0 18px 38px rgba(15,23,42,.13),
+    inset 0 1px 0 rgba(255,255,255,.72),
+    inset 0 -1px 0 rgba(255,255,255,.28);
+  backdrop-filter:blur(18px) saturate(160%);
+  -webkit-backdrop-filter:blur(18px) saturate(160%);
+  transition:
+    transform .18s ease-out,
+    opacity .18s ease-out,
+    border-color .2s ease,
+    box-shadow .2s ease,
+    background .2s ease;
+  will-change:transform;
+  transform-origin:center center;
+  scroll-snap-align:center;
+}
+.pv--glass::after{
+  content:'';
+  position:absolute;
+  left:18px;
+  right:42px;
+  bottom:18px;
+  height:15px;
+  border-radius:999px;
+  background:rgba(22,42,68,.22);
+  filter:blur(5px);
+  opacity:.7;
+  pointer-events:none;
+}
+.pv--glass:hover{
+  border-color:rgba(255,255,255,.9);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.56), rgba(255,255,255,.24)),
+    linear-gradient(135deg, rgba(255,255,255,.38), rgba(255,255,255,.12));
+  box-shadow:
+    0 22px 44px rgba(15,23,42,.16),
+    inset 0 1px 0 rgba(255,255,255,.78),
+    inset 0 -1px 0 rgba(255,255,255,.3);
+}
+.pv--glass .pv__name{
+  color:#0f172a;
+  font-size:25px;
+  line-height:31px;
+  font-weight:500;
+}
+.pv--glass .pv__sample{
+  position:relative;
+  z-index:1;
+  max-width:210px;
+  color:rgba(15,23,42,.7);
+  font-size:14px;
+  line-height:19px;
+  filter:blur(1.2px);
+  transition:filter .18s ease, color .18s ease;
+}
+.pv--focus{
+  border-color:rgba(255,255,255,.92);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.68), rgba(255,255,255,.26)),
+    linear-gradient(135deg, rgba(255,255,255,.44), rgba(255,255,255,.12));
+  box-shadow:
+    0 34px 66px rgba(15,23,42,.22),
+    0 8px 20px rgba(37,99,235,.12),
+    inset 0 1px 0 rgba(255,255,255,.86),
+    inset 0 -1px 0 rgba(255,255,255,.36);
+}
+.pv--focus .pv__sample{
+  color:rgba(15,23,42,.78);
+  filter:none;
+}
+.heroPreviewScroller{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  scroll-snap-type:y mandatory;
+  scroll-behavior:smooth;
+  padding:92px 24px 192px 96px;
+  perspective:760px;
+  outline:none;
+  scrollbar-width:none;
+  -webkit-mask-image:linear-gradient(180deg, transparent 0, #000 8%, #000 88%, transparent 100%);
+  mask-image:linear-gradient(180deg, transparent 0, #000 8%, #000 88%, transparent 100%);
+}
+.heroPreviewScroller::-webkit-scrollbar{
+  display:none;
+}
+.heroPreviewScroller:focus-visible .pv--glass:first-child{
+  box-shadow:
+    0 22px 44px rgba(15,23,42,.16),
+    0 0 0 3px rgba(96,165,250,.18),
+    inset 0 1px 0 rgba(255,255,255,.78),
+    inset 0 -1px 0 rgba(255,255,255,.3);
+}
 
 /* Pills */
 .pill{
@@ -1708,7 +1907,7 @@
 }
 .step--active h3{color:var(--primary)}
 
-/* Community (커�??�티/리뷰 ?�션) */
+/* Community (而ㅻ??덊떚/由щ럭 ?뱀뀡) */
 .community{padding-top:48px; padding-bottom:48px}
 .community__title{
   margin:0 0 4px;
@@ -1990,24 +2189,23 @@
   }
   .hero__grid{
     display:flex;
-    /* ?�블�?구간 좌우 블록 간격 */
+    /* ?쒕툝由?援ш컙 醫뚯슦 釉붾줉 媛꾧꺽 */
     gap:20px;
     padding-right:10px;
   }
   .hero__grid--existing{
     display:block;
     min-height:400px;
-    padding-right:470px;
+    padding-right:486px;
   }
   .hero__cards{
-    flex:0 0 460px;
-    transform:none;
-    width:460px;
-    max-width:460px;
+    flex:0 0 456px;
+    width:456px;
+    max-width:456px;
     margin-left:auto;
   }
   .hero__grid--existing .hero__cards{
-    /* ?�블릿에?�도 ?�측 카드 ?�동�??��? */
+    /* ?쒕툝由우뿉?쒕룄 ?곗륫 移대뱶 ?대룞媛??좎? */
     right:-90px;
   }
   .hero__copy h1{
@@ -2019,17 +2217,17 @@
     line-height:48px;
   }
   .hero__titleTwoLine > span:first-child{
-    /* ?�블�? 1�?배너 �?�??�목 ?�기 */
+    /* ?쒕툝由? 1踰?諛곕꼫 泥?以??쒕ぉ ?ш린 */
     font-size:50px;
     line-height:54px;
   }
   .hero__titleTwoLine > span:last-child{
-    /* ?�블�? 1�?배너 ?�째 �??�목 ?�기 */
+    /* ?쒕툝由? 1踰?諛곕꼫 ?섏㎏ 以??쒕ぉ ?ш린 */
     font-size:35px;
     line-height:40px;
   }
   .hero__desc{
-    /* ?�블�? 1�?배너 보조 ?�명 ?�기/줄간�?*/
+    /* ?쒕툝由? 1踰?諛곕꼫 蹂댁“ ?ㅻ챸 ?ш린/以꾧컙寃?*/
     font-size:20px;
     line-height:1.4;
   }
@@ -2088,6 +2286,7 @@
     justify-self:stretch;
     width:100%;
     max-width:none;
+    min-height:unset;
     margin-left:0;
   }
   .hero__grid--existing .hero__cards{
@@ -2176,6 +2375,15 @@
     white-space:normal;
     font-size:22px;
   }
+  .hero__cards{
+    height:370px;
+  }
+  .pv--glass{
+    width:min(300px, calc(100% - 52px));
+  }
+  .heroPreviewScroller{
+    padding:84px 18px 172px 82px;
+  }
   .nav{gap:16px}
   .cards--4{grid-template-columns:1fr}
   .featureFontsGrid{grid-template-columns:1fr}
@@ -2196,6 +2404,10 @@
   .footer__bottom{flex-direction:column}
   .footer__copy{text-align:left; white-space:normal}
 }
+
+
+
+
 
 
 

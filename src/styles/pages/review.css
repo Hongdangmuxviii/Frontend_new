@@ -1,4 +1,4 @@
-.reviewPage{
+﻿.reviewPage{
   background:var(--surface-muted);
   padding:96px 0 80px;
 }
@@ -112,6 +112,9 @@
   line-height:16px;
   font-weight:800;
   cursor:pointer;
+  appearance:none;
+  -webkit-appearance:none;
+  overflow:hidden;
 }
 
 .pendingCard__button--primary{
@@ -377,6 +380,9 @@
   line-height:16px;
   font-weight:800;
   cursor:pointer;
+  appearance:none;
+  -webkit-appearance:none;
+  overflow:hidden;
 }
 
 .reviewCard__actions .is-danger{
@@ -538,5 +544,8 @@
     line-height:34px;
   }
 }
+
+
+
 
 

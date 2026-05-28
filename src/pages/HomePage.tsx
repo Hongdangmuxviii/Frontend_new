@@ -1,4 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import {
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type UIEvent as ReactUIEvent,
+} from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { featuredFonts } from '../mocks/home';
@@ -6,12 +12,59 @@ import type { HomeFontCardData } from '../types/font';
 
 const heroSlides = ['existing', 'figma', 'scan'] as const;
 const heroSlideCount = heroSlides.length;
+type HeroSlideKind = (typeof heroSlides)[number];
 const COMMUNITY_BATCH_SIZE = 3;
 const COMMUNITY_TILE_COUNT = 10;
 const FEATURED_FONT_LIKES_STORAGE_KEY = 'fontify-featured-font-likes';
 
 const bannerAvatar1 = '/images/my-page/activity-like-icon.svg';
 const bannerAvatar2 = '/images/my-page/activity-owned-font-icon.svg';
+const DEFAULT_FONT_PAGE_HASH = '#/english-fonts';
+
+const heroPreviewCards = [
+  {
+    id: 'ubuntu',
+    name: 'Ubuntu',
+    sample: 'Sample text elementum',
+    fontFamily: 'Ubuntu, sans-serif',
+  },
+  {
+    id: 'merriweather',
+    name: 'Merriweather',
+    sample: 'Sample text ullamcorper',
+    fontFamily: 'Merriweather, serif',
+  },
+  {
+    id: 'playfair',
+    name: 'Playfair Display',
+    sample: 'Sample text condimentum',
+    fontFamily: "'Playfair Display', serif",
+  },
+  {
+    id: 'lato',
+    name: 'Lato',
+    sample: 'Sample text dignissim',
+    fontFamily: 'Lato, sans-serif',
+  },
+  {
+    id: 'montserrat',
+    name: 'Montserrat',
+    sample: 'Sample text dolor sit amet',
+    fontFamily: 'Montserrat, sans-serif',
+  },
+  {
+    id: 'nanum-myeongjo',
+    name: 'Nanum Myeongjo',
+    sample: 'Sample text structure',
+    fontFamily: '"Nanum Myeongjo", serif',
+  },
+  {
+    id: 'nanum-pen-script',
+    name: 'Nanum Pen Script',
+    sample: 'Sample text handwriting',
+    fontFamily: '"Nanum Pen Script", cursive',
+  },
+] as const;
 
 type LikedFeaturedFont = Pick<
   HomeFontCardData,
@@ -182,6 +235,9 @@ function StepIcon({ type }: { type: 'select' | 'convert' | 'download' }) {
 
 export default function HomePage() {
   const [slideIndex, setSlideIndex] = useState(0);
+  const [slideDirection, setSlideDirection] = useState<'next' | 'prev'>('next');
+  const [slidePhase, setSlidePhase] = useState<'idle' | 'enter'>('idle');
+  const [previousSlideIndex, setPreviousSlideIndex] = useState<number | null>(null);
   const [featuredPage, setFeaturedPage] = useState(0);
   const [featuredDirection, setFeaturedDirection] = useState<'next' | 'prev'>('next');
   const [visibleCommunityCount, setVisibleCommunityCount] = useState(0);
@@ -189,19 +245,48 @@ export default function HomePage() {
     () => readLikedFeaturedFonts().map((font) => font.id),
   );
   const communityRef = useRef<HTMLElement | null>(null);
+  const heroSlideEnterTimerRef = useRef<number | null>(null);
+  const heroPreviewScrollerRef = useRef<HTMLDivElement | null>(null);
+  const heroPreviewScrollRafRef = useRef<number | null>(null);
+  const heroPreviewInitialScrollRef = useRef(false);
+  const [heroPreviewScrollProgress, setHeroPreviewScrollProgress] = useState(0);
   const featuredPageSize = 3;
+  const HERO_SLIDE_ENTER_MS = 1080;
   const featuredPages = Array.from(
     { length: Math.ceil(featuredFonts.length / featuredPageSize) },
     (_, pageIndex) =>
       featuredFonts.slice(pageIndex * featuredPageSize, pageIndex * featuredPageSize + featuredPageSize),
   );
 
+  const clearHeroSlideTimers = () => {
+    if (heroSlideEnterTimerRef.current !== null) {
+      window.clearTimeout(heroSlideEnterTimerRef.current);
+      heroSlideEnterTimerRef.current = null;
+    }
+  };
+
+  const startHeroSlideEnter = (nextIndex: number, direction: 'next' | 'prev') => {
+    if (nextIndex === slideIndex && slidePhase === 'idle') return;
+
+    clearHeroSlideTimers();
+    setSlideDirection(direction);
+    setPreviousSlideIndex(slideIndex);
+    setSlideIndex(nextIndex);
+    setSlidePhase('enter');
+
+    heroSlideEnterTimerRef.current = window.setTimeout(() => {
+      setSlidePhase('idle');
+      setPreviousSlideIndex(null);
+      heroSlideEnterTimerRef.current = null;
+    }, HERO_SLIDE_ENTER_MS);
+  };
+
   const goToPrevSlide = () => {
-    setSlideIndex((prev) => (prev - 1 + heroSlideCount) % heroSlideCount);
+    startHeroSlideEnter((slideIndex - 1 + heroSlideCount) % heroSlideCount, 'prev');
   };
 
   const goToNextSlide = () => {
-    setSlideIndex((prev) => (prev + 1) % heroSlideCount);
+    startHeroSlideEnter((slideIndex + 1) % heroSlideCount, 'next');
   };
 
   const goToImageFontSearch = () => {
@@ -248,9 +333,72 @@ export default function HomePage() {
 
   useEffect(() => {
     const timer = window.setInterval(() => {
-      setSlideIndex((prev) => (prev + 1) % heroSlideCount);
+      startHeroSlideEnter((slideIndex + 1) % heroSlideCount, 'next');
     }, 8000);
     return () => window.clearInterval(timer);
+  }, [slideIndex, slidePhase]);
+
+  const getHeroDotDirection = (targetIndex: number): 'next' | 'prev' => {
+    const forwardDistance = (targetIndex - slideIndex + heroSlideCount) % heroSlideCount;
+    const backwardDistance = (slideIndex - targetIndex + heroSlideCount) % heroSlideCount;
+    return forwardDistance <= backwardDistance ? 'next' : 'prev';
+  };
+
+  const updateHeroPreviewScrollProgress = (scroller: HTMLDivElement) => {
+    const firstCard = scroller.querySelector<HTMLElement>('.pv--glass');
+    const secondCard = firstCard?.nextElementSibling as HTMLElement | null;
+    const itemStep = firstCard && secondCard
+      ? Math.max(1, secondCard.offsetTop - firstCard.offsetTop)
+      : 122;
+
+    if (!firstCard) return;
+
+    const scrollerCenter = scroller.scrollTop + scroller.clientHeight / 2;
+    const firstCardCenter = firstCard.offsetTop + firstCard.offsetHeight / 2;
+    setHeroPreviewScrollProgress((scrollerCenter - firstCardCenter) / itemStep);
+  };
+
+  const handleHeroPreviewScroll = (event: ReactUIEvent<HTMLDivElement>) => {
+    const scroller = event.currentTarget;
+    if (heroPreviewScrollRafRef.current !== null) {
+      window.cancelAnimationFrame(heroPreviewScrollRafRef.current);
+    }
+
+    heroPreviewScrollRafRef.current = window.requestAnimationFrame(() => {
+      updateHeroPreviewScrollProgress(scroller);
+      heroPreviewScrollRafRef.current = null;
+    });
+  };
+
+  useEffect(() => {
+    const scroller = heroPreviewScrollerRef.current;
+    if (!scroller || heroPreviewInitialScrollRef.current) return;
+
+    const frame = window.requestAnimationFrame(() => {
+      const firstCard = scroller.querySelector<HTMLElement>('.pv--glass');
+      const secondCard = firstCard?.nextElementSibling as HTMLElement | null;
+      const itemStep = firstCard && secondCard
+        ? Math.max(1, secondCard.offsetTop - firstCard.offsetTop)
+        : 130;
+
+      const firstCardCenter = firstCard
+        ? firstCard.offsetTop + firstCard.offsetHeight / 2
+        : 0;
+      scroller.scrollTop = Math.max(0, firstCardCenter + itemStep - scroller.clientHeight / 2);
+      setHeroPreviewScrollProgress(1);
+      heroPreviewInitialScrollRef.current = true;
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      clearHeroSlideTimers();
+      if (heroPreviewScrollRafRef.current !== null) {
+        window.cancelAnimationFrame(heroPreviewScrollRafRef.current);
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -285,6 +433,234 @@ export default function HomePage() {
   }, []);
 
   const currentSlide = heroSlides[slideIndex];
+  const previousSlide = previousSlideIndex !== null ? heroSlides[previousSlideIndex] : null;
+  const themeSlide = currentSlide;
+
+  const renderHeroSlideContent = (slide: HeroSlideKind) => {
+    if (slide === 'existing') {
+      return (
+        <div className="hero__grid hero__grid--existing">
+          <div className="hero__copy">
+            <span className="hero__tag">GOOGLE FONTS CONVERT</span>
+            <h1 className="hero__titleTwoLine">
+              <span>A에서 ㅎ까지,</span>
+              <span className="hero__accentLine">디자인은 끊기지 않아야 하니까.</span>
+            </h1>
+
+            <p className="hero__desc">
+              한글 생성 가능한 영어 폰트를 탐색하고,
+              <br />
+              <span className="nowrap">당신의 프로젝트에 딱 맞는 스타일을 찾아보세요.</span>
+              <br />
+            </p>
+
+            <div className="hero__actions">
+              <button
+                className="heroPromo__btn heroPromo__btn--primary heroPromo__btn--primaryBlue"
+                type="button"
+              >
+                구글 폰트에서 시작하기
+              </button>
+            </div>
+
+            <div className="heroPromo__social">
+              <div className="heroPromo__avatars">
+                <img src={bannerAvatar1} alt="" />
+                <img src={bannerAvatar2} alt="" />
+                <div className="heroPromo__avatarsMore">+2k</div>
+              </div>
+              <p>12,400+ 명의 작가가 이미 폰트를 만들었습니다.</p>
+            </div>
+          </div>
+
+          <div className="hero__cards" aria-label="스크롤 가능한 폰트 미리보기">
+            <div
+              ref={heroPreviewScrollerRef}
+              className="heroPreviewScroller"
+              tabIndex={0}
+              onScroll={handleHeroPreviewScroll}
+            >
+              {heroPreviewCards.map((card, index) => {
+                const distance = index - heroPreviewScrollProgress;
+                const depth = Math.min(3, Math.abs(distance));
+                const scale = 1.14 - depth * 0.14;
+                const x = -depth * 46;
+                const y = distance * -8;
+                const rotate = Math.max(-7, Math.min(7, distance * -3.2));
+                const opacity = 1 - Math.min(0.42, depth * 0.15);
+
+                return (
+                  <a
+                    key={card.id}
+                    className={`pv pv--glass ${depth < 0.48 ? 'pv--focus' : ''}`}
+                    href={DEFAULT_FONT_PAGE_HASH}
+                    style={
+                      {
+                        opacity,
+                        transform: `translate(${x}px, ${y}px) scale(${scale}) rotate(${rotate}deg)`,
+                        zIndex: 20 - Math.round(depth * 4),
+                      } as CSSProperties
+                    }
+                  >
+                    <header className="pv__top">
+                      <span className="pv__name">{card.name}</span>
+                    </header>
+                    <div className="pv__sample" style={{ fontFamily: card.fontFamily }}>
+                      {card.sample}
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (slide === 'figma') {
+      return (
+        <div className="heroPromo">
+          <div className="heroPromo__left">
+            <span className="heroPromo__tag">INK &amp; PIXEL EDITORIAL</span>
+
+            <h1 className="heroPromo__title">
+              당신의 손글씨가
+              <br />
+              <span className="heroPromo__line">
+                <span className="heroPromo__accent">영원한 폰트</span>가 되는 순간
+              </span>
+            </h1>
+
+            <p className="heroPromo__desc">
+              세상에 단 하나뿐인 당신의 기록을 디지털로 숨 쉬게 하세요.
+              <br />
+              가장 따뜻한 기술로 완성하는 나만의 서체 라이브러리.
+            </p>
+
+            <div className="heroPromo__actions">
+              <button
+                className="heroPromo__btn heroPromo__btn--primary"
+                type="button"
+                onClick={() => {
+                  window.location.hash = '#/handwriting';
+                }}
+              >
+                나만의 폰트 만들기
+              </button>
+              <button className="heroPromo__btn heroPromo__btn--ghost" type="button">
+                샘플 둘러보기
+              </button>
+            </div>
+
+            <div className="heroPromo__social">
+              <div className="heroPromo__avatars">
+                <img src={bannerAvatar1} alt="" />
+                <img src={bannerAvatar2} alt="" />
+                <div className="heroPromo__avatarsMore">+2k</div>
+              </div>
+              <p>12,400+ 명의 작가가 이미 폰트를 만들었습니다.</p>
+            </div>
+          </div>
+
+          <div className="heroPromo__right">
+            <div className="heroPromo__card">
+              <p className="heroPromo__cardEyebrow">PREVIEW MODE</p>
+              <h3 className="heroPromo__cardTitle">Digital Ink Engine</h3>
+              <div className="heroPromo__handword">사랑</div>
+              <div className="heroPromo__cardFooter">
+                <span className="heroPromo__cardDot" />
+                <span>Editorial Choice</span>
+                <span className="heroPromo__version">VER. 2.0</span>
+              </div>
+            </div>
+
+            <div className="heroPromo__floating heroPromo__floating--badge">AI ACCURACY 99.8%</div>
+            <div className="heroPromo__floating heroPromo__floating--chip">Real-time Rendering</div>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="heroPromo heroPromo--scan">
+        <div className="heroPromo__left heroPromo__left--scan">
+          <span className="heroPromo__tag heroPromo__tag--scan">FONT SEARCH EDITORIAL</span>
+
+          <h1 className="heroPromo__title heroPromo__title--scan">
+            당신이 마주친
+            <br />
+            <span className="heroPromo__accent heroPromo__accent--blue">모든 폰트</span>
+          </h1>
+
+          <p className="heroPromo__desc heroPromo__desc--scan">
+            마음에 들던 그 폰트, 캡처한 이미지 한장으로
+            <br />
+            비슷한 폰트나 해당 폰트를 찾아드려요.
+          </p>
+
+          <div className="heroPromo__actions heroPromo__actions--scan">
+            <button
+              className="heroPromo__btn heroPromo__btn--primary heroPromo__btn--primaryBlue"
+              type="button"
+              onClick={goToImageFontSearch}
+            >
+              이미지 업로드하기
+            </button>
+            <button className="heroPromo__btn heroPromo__btn--ghost" type="button" onClick={goToImageFontSearch}>
+              사용 방법 보기
+            </button>
+          </div>
+
+          <div className="heroPromo__social heroPromo__social--scan">
+            <div className="heroPromo__avatars">
+              <img src={bannerAvatar1} alt="" />
+              <img src={bannerAvatar2} alt="" />
+              <div className="heroPromo__avatarsMore">+12k</div>
+            </div>
+            <p>12,400+ 명의 사용자가 이미 폰트를 찾았습니다.</p>
+          </div>
+        </div>
+
+        <div className="heroPromo__right heroPromo__right--scan">
+          <div className="scanScene" aria-hidden="true">
+            <div className="scanScene__card scanScene__card--engine">
+              <span>ANALYSIS ENGINE</span>
+              <strong>OCR_SCAN_085</strong>
+            </div>
+
+            <div className="scanScene__card scanScene__card--processing">
+              <span>• PROCESSING</span>
+              <strong>Vectorizing glyphs...</strong>
+            </div>
+
+            <div className="scanScene__glyphWrap">
+              <div className="scanScene__gridLine scanScene__gridLine--verticalLeft" />
+              <div className="scanScene__gridLine scanScene__gridLine--verticalRight" />
+              <div className="scanScene__gridLine scanScene__gridLine--mid" />
+              <div className="scanScene__glyph">가</div>
+              <div className="scanScene__laser" />
+            </div>
+
+            <div className="scanScene__card scanScene__card--match">
+              <span>MATCH FOUND</span>
+              <strong>High Confidence</strong>
+            </div>
+
+            <div className="scanScene__card scanScene__card--probability">
+              <div className="scanScene__metricRow">
+                <span>PROBABILITY</span>
+                <strong>99.82%</strong>
+              </div>
+              <div className="scanScene__metricRow scanScene__metricRow--family">
+                <span>FONT FAMILY</span>
+                <strong>Pretendard Bold</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <>
@@ -293,9 +669,9 @@ export default function HomePage() {
       <main className="main">
         <section
           className={`hero hero--banner container ${
-            currentSlide === 'figma'
+            themeSlide === 'figma'
               ? 'hero--bannerAlt'
-              : currentSlide === 'scan'
+              : themeSlide === 'scan'
                 ? 'hero--bannerScan'
                 : ''
           }`}
@@ -307,7 +683,23 @@ export default function HomePage() {
           </div>
 
           <div className="heroSlideFrame">
-            {currentSlide === 'existing' ? (
+            <div className="heroSlideStack">
+            {previousSlide !== null ? (
+              <>
+                <div className={`heroSlideMotion heroSlideMotion--layer heroSlideMotion--out heroSlideMotion--${slideDirection}`}>
+                  {renderHeroSlideContent(previousSlide)}
+                </div>
+                <div className={`heroSlideMotion heroSlideMotion--layer heroSlideMotion--in heroSlideMotion--${slideDirection}`}>
+                  {renderHeroSlideContent(currentSlide)}
+                </div>
+              </>
+            ) : (
+              <div className="heroSlideMotion heroSlideMotion--layer heroSlideMotion--current">
+                {renderHeroSlideContent(currentSlide)}
+              </div>
+            )}
+            {false && (
+            currentSlide === 'existing' ? (
               <div className="hero__grid hero__grid--existing">
                 <div className="hero__copy">
                   <span className="hero__tag">GOOGLE FONTS CONVERT</span>
@@ -542,7 +934,9 @@ export default function HomePage() {
                   </div>
                 </div>
               </div>
+            )
             )}
+            </div>
           </div>
 
           <div className="heroBanner__dots" aria-label="메인 광고 슬라이드 인디케이터">
@@ -559,7 +953,10 @@ export default function HomePage() {
                 key={slide}
                 type="button"
                 className={`heroBanner__dot ${idx === slideIndex ? 'heroBanner__dot--active' : ''}`}
-                onClick={() => setSlideIndex(idx)}
+                onClick={() => {
+                  if (idx === slideIndex) return;
+                  startHeroSlideEnter(idx, getHeroDotDirection(idx));
+                }}
                 aria-label={`${idx + 1}번 슬라이드`}
               />
             ))}

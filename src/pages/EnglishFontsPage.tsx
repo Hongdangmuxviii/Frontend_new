@@ -16,8 +16,7 @@ import { useApiResource } from '../hooks/useApiResource';
 import { fontFilters, mockEnglishFonts } from '../mocks/englishFonts';
 import type { FontFilterKey, FontSortKey, FontViewMode } from '../types/font';
 
-const planeIcon =
-  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%2323c3e6' d='M0 185c0-21 14-40 35-46L471 1c27-8 52 17 44 44L377 477c-6 21-25 35-46 35-24 0-45-16-51-39l-59-189L32 236C13 231 0 214 0 193v-8z'/%3E%3Cpath fill='%2336a2e6' d='M221 284l294-239-138 432c-6 21-25 35-46 35-24 0-45-16-51-39l-59-189z'/%3E%3C/svg%3E";
+const LIKED_ENGLISH_FONTS_STORAGE_KEY = 'fontify-liked-english-families';
 
 type EnglishFontFamilyCard = {
   id: string;
@@ -30,6 +29,28 @@ type EnglishFontFamilyCard = {
   representativeFont: ApiFontFileItem;
   variants: ApiFontFileItem[];
 };
+
+function canUseStorage() {
+  return typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
+}
+
+function readLikedEnglishFamilies() {
+  if (!canUseStorage()) return [];
+
+  try {
+    const raw = window.localStorage.getItem(LIKED_ENGLISH_FONTS_STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as string[];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeLikedEnglishFamilies(families: string[]) {
+  if (!canUseStorage()) return;
+  window.localStorage.setItem(LIKED_ENGLISH_FONTS_STORAGE_KEY, JSON.stringify(families));
+}
 
 function sortVariants(items: ApiFontFileItem[]) {
   const preferredOrder = ['Regular', 'Medium', 'Book', 'Roman'];
@@ -134,6 +155,7 @@ export default function EnglishFontsPage() {
   const [viewMode, setViewMode] = useState<FontViewMode>('grid');
   const [creatingFontId, setCreatingFontId] = useState<string>('');
   const [loadedPreviewFamilies, setLoadedPreviewFamilies] = useState<Record<string, string>>({});
+  const [likedFamilies, setLikedFamilies] = useState<string[]>(() => readLikedEnglishFamilies());
   const pageSize = 15;
 
   const familyCards = useMemo(
@@ -169,6 +191,20 @@ export default function EnglishFontsPage() {
     (_, index) => pageGroupStart + index,
   );
   const previewText = previewInput.trim() || 'Font Preview';
+
+  const goToFamilyDetail = (familyKey: string) => {
+    window.location.hash = `#/english-detail?family=${encodeURIComponent(familyKey)}`;
+  };
+
+  const toggleLikedFamily = (familyKey: string) => {
+    setLikedFamilies((current) => {
+      const next = current.includes(familyKey)
+        ? current.filter((item) => item !== familyKey)
+        : [...current, familyKey];
+      writeLikedEnglishFamilies(next);
+      return next;
+    });
+  };
 
   useEffect(() => {
     setLoadedPreviewFamilies({});
@@ -351,10 +387,18 @@ export default function EnglishFontsPage() {
               {viewMode === 'grid' ? (
                 <div className="englishFonts__grid">
                   {visibleFonts.map((font) => (
-                    <a
+                    <article
                       key={font.id}
                       className="englishFonts__card"
-                      href={`#/english-detail?family=${encodeURIComponent(font.familyKey)}`}
+                      role="link"
+                      tabIndex={0}
+                      onClick={() => goToFamilyDetail(font.familyKey)}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter' || event.key === ' ') {
+                          event.preventDefault();
+                          goToFamilyDetail(font.familyKey);
+                        }
+                      }}
                     >
                       <div
                         className="englishFonts__preview"
@@ -373,14 +417,43 @@ export default function EnglishFontsPage() {
                           <strong className="englishFonts__fontName">{font.familyName}</strong>
                           <p className="englishFonts__fontMeta">{font.variants.length} variants</p>
                         </div>
-                        <img
-                          className="englishFonts__planeIcon"
-                          src={planeIcon}
-                          alt=""
-                          aria-hidden="true"
-                        />
+                        <button
+                          type="button"
+                          className={
+                            likedFamilies.includes(font.familyKey)
+                              ? 'englishFonts__favoriteBtn is-active'
+                              : 'englishFonts__favoriteBtn'
+                          }
+                          aria-label={
+                            likedFamilies.includes(font.familyKey)
+                              ? `${font.familyName} 좋아요 취소`
+                              : `${font.familyName} 좋아요`
+                          }
+                          aria-pressed={likedFamilies.includes(font.familyKey)}
+                          onClick={(event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            toggleLikedFamily(font.familyKey);
+                          }}
+                        >
+                          <svg
+                            className="englishFonts__heartIcon"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                            focusable="false"
+                          >
+                            <path
+                              d="M12 21s-6.716-4.31-9.193-8.145C1.094 10.21 1.5 6.72 4.433 5.14A5.35 5.35 0 0 1 12 7.186 5.35 5.35 0 0 1 19.567 5.14c2.933 1.58 3.34 5.07 1.626 7.715C18.716 16.69 12 21 12 21Z"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="1.8"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </button>
                       </div>
-                    </a>
+                    </article>
                   ))}
                 </div>
               ) : (
