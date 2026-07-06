@@ -15,6 +15,11 @@ const rawApiBaseUrl =
 const fallbackApiBaseUrl = env.DEV ? '/api/v1' : 'http://localhost:8000/api/v1';
 const rawProxyTarget =
   typeof env.VITE_API_PROXY_TARGET === 'string' ? env.VITE_API_PROXY_TARGET : undefined;
+const rawUseMocks = env.VITE_USE_MOCKS;
+
+export const USE_MOCKS =
+  rawUseMocks === true ||
+  (typeof rawUseMocks === 'string' && ['1', 'true', 'yes', 'on'].includes(rawUseMocks.toLowerCase()));
 
 function normalizeApiBaseUrl(url: string) {
   const trimmedUrl = url.replace(/\/$/, '');

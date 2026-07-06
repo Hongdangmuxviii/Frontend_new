@@ -1,32 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type CSSProperties } from 'react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import { USE_MOCKS } from '../api/client';
 import { getStoredGenerationJobs, removeStoredGenerationJob } from '../api/generationStorage';
 import { fontifyApi } from '../api/fontifyApi';
 import { mapGenerationStatusToWorkItem } from '../api/mappers';
 import { mockWorkItems } from '../mocks/works';
 import type { WorkItem, WorkTimelineLog } from '../types/work';
 
-const progressSteps = ['영문 분석', '14자 시그니처 생성', 'AI 재학습', '2,350자 완성'] as const;
-
-const algorithmSteps = [
-  {
-    title: '영문 스타일 분석',
-    body: '선택한 영문 폰트의 곡선, 굵기, 기울기, 자간 특징을 분석해 한글 생성 기준을 만듭니다.',
-  },
-  {
-    title: '시그니처 14자 생성',
-    body: '분석한 스타일을 바탕으로 한글 조합을 대표하는 14자 미리보기를 먼저 생성합니다.',
-  },
-  {
-    title: 'AI 재학습',
-    body: '미리보기 결과를 기준으로 전체 한글 글리프의 형태와 일관성을 학습합니다.',
-  },
-  {
-    title: '최종 폰트 빌드',
-    body: '학습된 결과를 TTF/OTF 파일로 빌드해 다운로드 가능한 폰트로 정리합니다.',
-  },
-];
+const progressSteps = ['영문 분석', '14자 한글 생성', 'AI 재학습', '11,172자 완성'] as const;
+const fallbackPreviewLetters = ['가', '나', '다', '라', '마', '바', '사', '아', '자', '차', '카', '타', '파', '하'];
+const totalGlyphCount = 11172;
 
 function clampPercent(value: number) {
   return Math.min(100, Math.max(0, Math.round(value)));
@@ -35,13 +19,6 @@ function clampPercent(value: number) {
 function getStepProgress(totalProgress: number, index: number) {
   const stepStart = index * 25;
   return clampPercent(((totalProgress - stepStart) / 25) * 100);
-}
-
-function getStepState(totalProgress: number, index: number) {
-  const stepProgress = getStepProgress(totalProgress, index);
-  if (stepProgress >= 100) return 'done';
-  if (stepProgress > 0) return 'active';
-  return 'waiting';
 }
 
 function getFailedStageIndex(work: WorkItem) {
@@ -64,14 +41,8 @@ function getProcessStageState(work: WorkItem, index: number) {
   if (work.phase === 'queued') return 'waiting';
   if (work.phase === 'analyzing') return index === 0 ? 'active' : 'waiting';
   if (work.phase === 'preview_ready') return index < 2 ? 'done' : 'waiting';
-  if (work.phase === 'retraining') {
-    if (index < 2) return 'done';
-    return index === 2 ? 'active' : 'waiting';
-  }
-  if (work.phase === 'finalizing') {
-    if (index < 3) return 'done';
-    return 'active';
-  }
+  if (work.phase === 'retraining') return index < 2 ? 'done' : index === 2 ? 'active' : 'waiting';
+  if (work.phase === 'finalizing') return index < 3 ? 'done' : 'active';
   return 'done';
 }
 
@@ -82,17 +53,16 @@ function getProcessStageStatus(work: WorkItem, index: number) {
     return index === failedStageIndex ? '실패' : '대기';
   }
 
-  const stepProgress = getStepProgress(work.progressPercent, index);
   const state = getProcessStageState(work, index);
   if (state === 'done') return '완료';
-  if (state === 'active') return `진행 중 (${stepProgress}%)`;
+  if (state === 'active') return `진행 중 (${getStepProgress(work.progressPercent, index)}%)`;
   return '대기';
 }
 
 function getPhaseMessage(work: WorkItem) {
   if (work.phase === 'failed') {
     return {
-      title: '생성 요청 실패',
+      title: hasPreviewGeneratedBeforeFailure(work) ? '미리보기 생성 후 최종 생성 실패' : '생성 요청 실패',
       body:
         work.failReason ??
         '작업이 완료되기 전에 중단되었습니다. 백엔드 응답과 요청 로그를 확인해 주세요.',
@@ -102,21 +72,21 @@ function getPhaseMessage(work: WorkItem) {
   if (work.phase === 'queued') {
     return {
       title: '영문 분석 준비 중',
-      body: '아직 한글 미리보기 결과가 없습니다. 영문 분석이 끝나면 14자 미리보기가 생성됩니다.',
+      body: '이전 작업이 끝나면 스타일 분석과 한글 미리보기 생성이 자동으로 시작됩니다.',
     };
   }
 
   if (work.phase === 'analyzing') {
     return {
-      title: '영문 분석 중',
-      body: '영문 폰트의 곡선, 굵기, 기울기 특징을 분석하고 있습니다.',
+      title: '영문 스타일 추출 중',
+      body: '선택한 영문 폰트의 곡선, 굵기, 기울기, 자간 특징을 분석하고 있습니다.',
     };
   }
 
   if (work.phase === 'preview_ready') {
     return {
-      title: '14자 미리보기 생성 완료',
-      body: '기초 글자 14자 미리보기가 생성되었습니다. 곧 AI 재학습이 시작됩니다.',
+      title: '14자 한글 미리보기 생성 완료',
+      body: '스타일 확인용 14자가 생성되었습니다. 곧 전체 글자 재학습 단계로 넘어갑니다.',
     };
   }
 
@@ -129,35 +99,29 @@ function getPhaseMessage(work: WorkItem) {
 
   if (work.phase === 'finalizing') {
     return {
-      title: '2,350자 완성 중',
-      body: '전체 글리프를 폰트 파일로 빌드하고 있습니다. 완료되면 완성 폰트 보기가 활성화됩니다.',
+      title: '전체 글자 세트 빌드 중',
+      body: '학습된 글리프를 폰트 파일로 빌드하고 있습니다. 완료되면 다운로드가 활성화됩니다.',
     };
   }
 
   return {
-    title: '2,350자 완성',
-    body: '폰트 생성이 완료되었습니다. 완성 페이지에서 미리보기와 다운로드를 확인할 수 있습니다.',
+    title: '폰트 생성 완료',
+    body: '완성 페이지에서 미리보기와 다운로드를 확인할 수 있습니다.',
   };
 }
 
-function getDisplayPhaseMessage(work: WorkItem) {
-  if (work.phase === 'failed' && (work.previewImageUrls?.length || work.previewLetters?.length)) {
-    return {
-      title: '미리보기 생성 후 최종 생성 실패',
-      body:
-        work.failReason ??
-        '미리보기 이미지는 생성되었지만 최종 폰트 파일 생성이 완료되지 않았습니다.',
-    };
-  }
-
-  return getPhaseMessage(work);
-}
-
 function isPreviewAvailable(work: WorkItem) {
+  const phaseCanShowPreview =
+    work.phase === 'preview_ready' ||
+    work.phase === 'retraining' ||
+    work.phase === 'finalizing' ||
+    work.phase === 'completed';
+  const hasPreviewData = Boolean(work.previewImageUrls?.length || work.previewLetters?.length);
+
   return (
     work.phase !== 'queued' &&
     work.phase !== 'analyzing' &&
-    Boolean(work.previewImageUrls?.length || work.previewLetters?.length)
+    (hasPreviewData || (USE_MOCKS && phaseCanShowPreview))
   );
 }
 
@@ -171,6 +135,22 @@ function buildSelectedUrl(work: WorkItem) {
   if (work.sourceFontName) params.set('family', work.sourceFontName);
 
   return `#/selected?${params.toString()}`;
+}
+
+function getGeneratedPreviewCount(work: WorkItem) {
+  if (!isPreviewAvailable(work)) return 0;
+  if (!USE_MOCKS) {
+    return Math.min(14, Math.max(work.previewImageUrls?.length ?? 0, work.previewLetters?.length ?? 0));
+  }
+  if (work.phase === 'completed') return fallbackPreviewLetters.length;
+  return Math.min(fallbackPreviewLetters.length, Math.max(10, Math.ceil((clampPercent(work.progressPercent) / 100) * 14)));
+}
+
+function getPreviewScanDelay(index: number) {
+  if (index <= 2) return 0;
+  if (index <= 6) return 760;
+  if (index <= 9) return 1520;
+  return 0;
 }
 
 function ProgressStepper({ work }: { work: WorkItem }) {
@@ -204,14 +184,26 @@ function ProgressStepper({ work }: { work: WorkItem }) {
 
 function PreviewGrid({ work }: { work: WorkItem }) {
   const normalizedProgress = clampPercent(work.progressPercent);
-  const phaseMessage = getDisplayPhaseMessage(work);
+  const generatedCount = getGeneratedPreviewCount(work);
+  const previewLetters = work.previewLetters?.slice(0, 14) ?? [];
+  const previewImages = work.previewImageUrls?.slice(0, 14) ?? [];
+  const slotCount = USE_MOCKS ? fallbackPreviewLetters.length : Math.max(previewLetters.length, previewImages.length);
+  const letters = Array.from({ length: slotCount }, (_, index) =>
+    previewLetters[index] ?? (USE_MOCKS ? fallbackPreviewLetters[index] : ''),
+  );
 
   return (
     <section className="workPreview">
       <header className="workPreview__header">
-        <h3>14자 한글 폰트 미리보기</h3>
+        <div>
+          <h3>14자 한글 폰트 미리보기</h3>
+          <p>
+            <span aria-hidden="true" />
+            {isPreviewAvailable(work) ? '1차 자소 렌더링 중...' : '영문 스타일 분석 대기 중...'}
+          </p>
+        </div>
         <div className="workPreview__score">
-          <span>전체 작업 진행률</span>
+          <span>STYLE MATCHING INDEX</span>
           <div aria-hidden="true">
             <i style={{ width: `${normalizedProgress}%` }} />
           </div>
@@ -219,40 +211,24 @@ function PreviewGrid({ work }: { work: WorkItem }) {
         </div>
       </header>
 
-      {!isPreviewAvailable(work) ? (
-        <div className="workPreview__empty">
-          <strong>{work.phase === 'failed' ? '작업이 시작되지 않았습니다' : '미리보기 생성 전'}</strong>
-          <p>
-            {work.phase === 'failed'
-              ? work.failReason ?? '생성 요청이 실패하여 미리보기를 만들지 못했습니다.'
-              : '영문 분석이 완료되면 이 영역에 14자 한글 미리보기가 표시됩니다.'}
-          </p>
-        </div>
-      ) : work.previewImageUrls?.length ? (
-        <div className="workPreview__grid workPreview__grid--images">
-          {work.previewImageUrls.map((imageUrl, index) => (
-            <div className={`workPreview__imageCard ${index === 2 ? 'is-selected' : ''}`} key={imageUrl}>
-              <img src={imageUrl} alt={work.previewLetters?.[index] ?? `미리보기 ${index + 1}`} />
-              <span>{work.previewLetters?.[index] ?? `미리보기 ${index + 1}`}</span>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="workPreview__grid">
-          {work.previewLetters?.map((letter, index) => (
-            <div className={`workPreview__letter ${index === 2 ? 'is-selected' : ''}`} key={letter}>
-              {letter}
-            </div>
-          ))}
-        </div>
-      )}
+      <div className="workPreview__grid" aria-label="한글 미리보기 글자">
+        {letters.map((letter, index) => {
+          const imageUrl = previewImages[index];
+          const isGenerated = index < generatedCount;
+          const scanDelay = getPreviewScanDelay(index);
 
-      {work.phase !== 'completed' ? (
-        <div className="workPreview__notice" role="status">
-          <strong>{phaseMessage.title}</strong>
-          <p>{phaseMessage.body}</p>
-        </div>
-      ) : null}
+          return (
+            <div
+              className={`workPreview__letter ${isGenerated ? 'is-generated' : 'is-pending'}`}
+              key={`${letter}-${index}`}
+              style={isGenerated ? ({ '--scan-delay': `${scanDelay}ms` } as CSSProperties) : undefined}
+            >
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              {imageUrl && isGenerated ? <img src={imageUrl} alt={`${letter} 미리보기`} /> : <strong>{isGenerated ? letter : ''}</strong>}
+            </div>
+          );
+        })}
+      </div>
     </section>
   );
 }
@@ -279,15 +255,15 @@ function WorkTimeline({ logs }: { logs: WorkTimelineLog[] }) {
   );
 }
 
-function WorkCard({
+function WorkHeroCard({
   work,
-  expanded,
-  onToggle,
+  timelineOpen,
+  onToggleTimeline,
   onDelete,
 }: {
   work: WorkItem;
-  expanded: boolean;
-  onToggle: () => void;
+  timelineOpen: boolean;
+  onToggleTimeline: () => void;
   onDelete: () => void;
 }) {
   const selectedUrl = buildSelectedUrl(work);
@@ -297,11 +273,18 @@ function WorkCard({
   return (
     <article className="workActiveCard">
       <header className="workActiveCard__header">
-        <div>
+        <div className="workActiveCard__identity" aria-hidden="true">
+          <span>Aa</span>
+          <i>→</i>
+          <strong>가</strong>
+        </div>
+        <div className="workActiveCard__meta">
           <h2>{work.title}</h2>
           <p>{work.updatedAt}</p>
         </div>
-        <span className={work.phase === 'failed' ? 'is-failed' : ''}>{work.statusLabel}</span>
+        <span className={`workActiveCard__status ${work.phase === 'failed' ? 'is-failed' : ''}`}>
+          {work.statusLabel}
+        </span>
       </header>
 
       <ProgressStepper work={work} />
@@ -310,7 +293,7 @@ function WorkCard({
       <div className="workActiveCard__actions">
         {work.phase === 'completed' ? (
           <a
-            className="workDownloadButton"
+            className="is-primary"
             href={completedHref}
             aria-disabled={completedDisabled}
             onClick={(event) => {
@@ -319,24 +302,14 @@ function WorkCard({
           >
             완성 폰트 보기
           </a>
-        ) : work.phase === 'failed' ? (
-          <button className="is-primary" type="button" onClick={onToggle} aria-expanded={expanded}>
-            {expanded
-              ? '실패 내역 닫기'
-              : hasPreviewGeneratedBeforeFailure(work)
-                ? '최종 생성 실패 내역 보기'
-                : '실패 내역 보기'}
-          </button>
         ) : (
-          <button className="is-primary" type="button" onClick={onToggle} aria-expanded={expanded}>
-            {expanded ? '상세 타임라인 닫기' : '진행 상황 자세히 보기'}
+          <button className="is-primary" type="button" onClick={onToggleTimeline} aria-expanded={timelineOpen}>
+            {timelineOpen ? '진행 현황 닫기' : '진행 현황 상세 보기'}
           </button>
         )}
 
         {work.phase === 'failed' ? (
-          <a className="workRetryButton" href="#/english-fonts">
-            다시 시도
-          </a>
+          <a href="#/english-fonts">다시 시도</a>
         ) : work.phase === 'completed' ? (
           <button type="button" onClick={onDelete}>
             내역 삭제
@@ -344,55 +317,83 @@ function WorkCard({
         ) : (
           <button type="button">{work.statusLabel === 'QUEUED' ? '작업 취소' : '학습 중단'}</button>
         )}
-
-        {work.phase === 'failed' ? (
-          <button type="button" onClick={onDelete}>
-            실패 내역 삭제
-          </button>
-        ) : null}
       </div>
 
-      {expanded ? <WorkTimeline logs={work.logs} /> : null}
+      {timelineOpen ? <WorkTimeline logs={work.logs} /> : null}
     </article>
   );
 }
 
-function AlgorithmPanel({ progressPercent }: { progressPercent: number }) {
-  const normalizedProgress = clampPercent(progressPercent);
+function FullSetCard({ work }: { work: WorkItem }) {
+  const normalizedProgress = clampPercent(work.progressPercent);
+  const generatedGlyphs = Math.max(14, Math.round((normalizedProgress / 100) * totalGlyphCount));
+  const phaseMessage = getPhaseMessage(work);
 
   return (
-    <aside className="worksSide">
-      <section className="worksPanel">
-        <h3>
-          <span aria-hidden="true">AI</span>
-          Fontify 알고리즘
-        </h3>
-        <ol className="worksAlgoList">
-          {algorithmSteps.map((step, index) => (
-            <li className={`is-${getStepState(normalizedProgress, index)}`} key={step.title}>
-              <span>{index + 1}</span>
-              <div>
-                <strong>{step.title}</strong>
-                <p>{step.body}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <section className="worksInsight">
-        <div>
-          <span>AI INSIGHT</span>
-          <strong>실시간 스타일 학습 데이터</strong>
+    <section className="workFullSetCard">
+      <div className="workFullSetCard__copy">
+        <span>FULL SET</span>
+        <h2>전체 11,172자 한글 완성하기</h2>
+        <p>
+          지금은 스타일 확인용 기초 <strong>14자</strong>만 무료로 생성됩니다. 포인트를 사용하면 전체 한글 글자 세트로 완성하고
+          TTF/OTF로 내보낼 수 있어요.
+        </p>
+        <div className="workFullSetCard__progress">
+          <small>{generatedGlyphs.toLocaleString()} / 11,172자 생성됨</small>
+          <small>{Math.max(0.1, normalizedProgress / 100).toFixed(1)}%</small>
+          <i aria-hidden="true">
+            <b style={{ width: `${Math.max(1, normalizedProgress)}%` }} />
+          </i>
         </div>
-      </section>
+        <p className="workFullSetCard__note">{phaseMessage.title}</p>
+      </div>
+      <div className="workFullSetCard__points">
+        <strong>
+          5,000 <span>P</span>
+        </strong>
+        <p>보유 포인트 2,026 P</p>
+        <button type="button">포인트로 완성하기</button>
+        <a href="#/points">포인트 충전하기</a>
+      </div>
+    </section>
+  );
+}
 
-      <section className="worksAction">
-        <h3>새로운 작업 시작하기</h3>
-        <p>새로운 영문 폰트를 선택하고 한글 폰트 생성을 요청해 보세요.</p>
-        <a href="#/english-fonts">학습 요청</a>
-      </section>
-    </aside>
+function WaitingWorkList({
+  works,
+  activeWorkId,
+  onSelect,
+}: {
+  works: WorkItem[];
+  activeWorkId: string;
+  onSelect: (workId: string) => void;
+}) {
+  if (works.length === 0) return null;
+
+  return (
+    <section className="workWaitingList">
+      <h2>
+        대기 중인 작업 <span>{works.length}</span>
+      </h2>
+      <div className="workWaitingList__panel">
+        {works.map((work, index) => (
+          <button
+            className={`workQueueItem ${work.id === activeWorkId ? 'is-active' : ''}`}
+            type="button"
+            onClick={() => onSelect(work.id)}
+            key={work.id}
+          >
+            <span className="workQueueItem__sample">{work.sample}</span>
+            <span className="workQueueItem__copy">
+              <strong>{work.title}</strong>
+              <small>{work.phase === 'queued' ? work.updatedAt : getPhaseMessage(work).title}</small>
+            </span>
+            <span className="workQueueItem__stage">{work.queueLabel ?? `STAGE ${String(index + 1).padStart(2, '0')}`}</span>
+            <i aria-hidden="true">›</i>
+          </button>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -407,7 +408,8 @@ function WorkListStatus({ title, body }: { title: string; body: string }) {
 }
 
 export default function MyWorksPage() {
-  const [expandedWorkIds, setExpandedWorkIds] = useState<string[]>([]);
+  const [activeWorkId, setActiveWorkId] = useState('');
+  const [timelineOpen, setTimelineOpen] = useState(false);
   const [workItems, setWorkItems] = useState<WorkItem[]>(mockWorkItems);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
@@ -483,30 +485,37 @@ export default function MyWorksPage() {
     };
   }, []);
 
-  const selectedWork = workItems.find((work) => expandedWorkIds.includes(work.id)) ?? workItems[0];
-  const progressPercent = selectedWork ? clampPercent(selectedWork.progressPercent) : 0;
+  useEffect(() => {
+    if (workItems.length === 0) {
+      setActiveWorkId('');
+      return;
+    }
 
-  const toggleWork = (workId: string) => {
-    setExpandedWorkIds((current) =>
-      current.includes(workId) ? current.filter((id) => id !== workId) : [...current, workId],
-    );
-  };
+    setActiveWorkId((current) => {
+      if (current && workItems.some((work) => work.id === current)) return current;
+      return workItems.find((work) => work.phase !== 'queued')?.id ?? workItems[0].id;
+    });
+  }, [workItems]);
+
+  const activeWork = workItems.find((work) => work.id === activeWorkId) ?? workItems[0];
+  const waitingWorks = activeWork ? workItems.filter((work) => work.id !== activeWork.id) : [];
+  const activeCount = workItems.filter((work) => work.phase !== 'queued').length;
+  const queuedCount = workItems.filter((work) => work.phase === 'queued').length;
 
   const handleDeleteWork = (workId: string) => {
     removeStoredGenerationJob(Number(workId));
     setWorkItems((current) => current.filter((work) => work.id !== workId));
-    setExpandedWorkIds((current) => current.filter((id) => id !== workId));
+    setTimelineOpen(false);
   };
 
   return (
     <div className="myWorksPage">
-      <Header variant="home" activeNav="my" />
+      <Header variant="home" activeNav="english" />
       <main className="myWorksPage__main">
         <section className="myWorksPage__title">
           <h1>작업 중인 폰트</h1>
           <span>
-            <i />
-            총 {workItems.length}개 작업
+            진행 중 {activeCount} · 대기 {queuedCount}
           </span>
         </section>
 
@@ -514,26 +523,29 @@ export default function MyWorksPage() {
           <WorkListStatus title="작업을 불러오는 중" body="작업 목록과 진행 로그를 준비하고 있습니다." />
         ) : loadError && workItems.length === 0 ? (
           <WorkListStatus title="작업을 불러오지 못했습니다" body={loadError} />
-        ) : workItems.length === 0 ? (
+        ) : workItems.length === 0 || !activeWork ? (
           <WorkListStatus
             title="진행 중인 작업이 없습니다"
             body="새로운 영문 폰트를 선택해 한글 폰트 생성 작업을 시작해 보세요."
           />
         ) : (
-          <div className="myWorksPage__layout">
-            <div className="myWorksPage__left">
-              {loadError ? <WorkListStatus title="일부 작업만 표시 중입니다" body={loadError} /> : null}
-              {workItems.map((work) => (
-                <WorkCard
-                  key={work.id}
-                  work={work}
-                  expanded={expandedWorkIds.includes(work.id)}
-                  onToggle={() => toggleWork(work.id)}
-                  onDelete={() => handleDeleteWork(work.id)}
-                />
-              ))}
-            </div>
-            <AlgorithmPanel progressPercent={progressPercent} />
+          <div className="myWorksPage__stack">
+            {loadError ? <WorkListStatus title="일부 작업만 표시 중입니다" body={loadError} /> : null}
+            <WorkHeroCard
+              work={activeWork}
+              timelineOpen={timelineOpen}
+              onToggleTimeline={() => setTimelineOpen((current) => !current)}
+              onDelete={() => handleDeleteWork(activeWork.id)}
+            />
+            <FullSetCard work={activeWork} />
+            <WaitingWorkList
+              works={waitingWorks}
+              activeWorkId={activeWork.id}
+              onSelect={(workId) => {
+                setActiveWorkId(workId);
+                setTimelineOpen(false);
+              }}
+            />
           </div>
         )}
       </main>
