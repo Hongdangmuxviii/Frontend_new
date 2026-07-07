@@ -17,6 +17,22 @@ npm run dev
 
 - 개발 서버: `http://localhost:5173/#/`
 
+기본 실행은 목업 데이터 모드입니다. 서버 API 없이도 화면을 확인할 수 있도록 `.env`에 아래 값이 포함되어 있습니다.
+
+```env
+VITE_USE_MOCKS=true
+```
+
+실제 서버 API에 연결해서 확인하려면 Git에 올리지 않는 개인 설정 파일 `.env.local`을 만들고 아래처럼 덮어쓰면 됩니다.
+
+```env
+VITE_USE_MOCKS=false
+VITE_API_BASE_URL=http://15.164.217.82:8000/api/v1
+VITE_DEV_USER_ID=dev-user-001
+```
+
+`.env.local`은 `.gitignore`의 `*.local` 규칙 때문에 커밋되지 않습니다.
+
 ---
 
 ## 라우트
