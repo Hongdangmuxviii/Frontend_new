@@ -66,6 +66,66 @@ const heroPreviewCards = [
   },
 ] as const;
 
+const recommendationOffsets = [-2, -1, 0, 1, 2] as const;
+
+const todaysFontRecommendations = [
+  {
+    id: 'rec-pretendard',
+    eyebrow: 'TODAY PICK',
+    title: 'Pretendard Bold',
+    subtitle: 'NEW ARRIVAL',
+    sample: '정돈된 구조 위에 힘 있게 올라가는 헤드라인',
+    description: '인터페이스와 배너 타이틀에 모두 잘 맞는 균형형 산세리프.',
+    fontFamily: '"Pretendard", sans-serif',
+    cover: 'P',
+    coverLabel: 'SANS',
+  },
+  {
+    id: 'rec-myeongjo',
+    eyebrow: 'EDITORIAL',
+    title: 'Nanum Myeongjo',
+    subtitle: 'SERIF MOOD',
+    sample: '긴 문장에서도 분위기를 유지하는 안정적인 명조',
+    description: '브랜드 스토리, 에디토리얼 카드, 감성형 상세 페이지에 적합.',
+    fontFamily: '"Nanum Myeongjo", serif',
+    cover: '문',
+    coverLabel: 'SERIF',
+  },
+  {
+    id: 'rec-blackhan',
+    eyebrow: 'DISPLAY TYPE',
+    title: 'Black Han Sans',
+    subtitle: 'CENTER FOCUS',
+    sample: '강한 첫인상이 필요한 순간을 위한 선명한 존재감',
+    description: '프로모션, 이벤트, 썸네일처럼 임팩트가 필요한 영역에 어울림.',
+    fontFamily: '"Black Han Sans", sans-serif',
+    cover: 'B',
+    coverLabel: 'DISPLAY',
+  },
+  {
+    id: 'rec-pen',
+    eyebrow: 'HANDWRITING',
+    title: 'Nanum Pen Script',
+    subtitle: 'PERSONAL NOTE',
+    sample: '친근하고 가볍게 읽히는 손글씨 톤의 포인트 폰트',
+    description: '메모, 후기, 큐레이션 카드처럼 감정을 실어 보여줄 때 적합.',
+    fontFamily: '"Nanum Pen Script", cursive',
+    cover: '손',
+    coverLabel: 'SCRIPT',
+  },
+  {
+    id: 'rec-playfair',
+    eyebrow: 'LUXE SERIF',
+    title: 'Playfair Display',
+    subtitle: 'PRESTIGE',
+    sample: '대비감 있는 획으로 완성하는 세련된 브랜드 무드',
+    description: '패션, 뷰티, 프리미엄 큐레이션 영역에서 존재감이 강한 타입.',
+    fontFamily: '"Playfair Display", serif',
+    cover: 'P',
+    coverLabel: 'LUXE',
+  },
+] as const;
+
 type LikedFeaturedFont = Pick<
   HomeFontCardData,
   'id' | 'name' | 'source' | 'sample' | 'fontFamily' | 'description' | 'attribution'
@@ -144,7 +204,7 @@ function HomeFontCard({
               <span>{font.previewDisplay}</span>
             ) : (
               <>
-                <span>{font.previewGlyph ?? 'R'}</span>
+                <span>{font.previewGlyph ?? '?'}</span>
                 <span>{font.previewGlyphSecondary ?? '?'}</span>
               </>
             )}
@@ -238,6 +298,9 @@ export default function HomePage() {
   const [slideDirection, setSlideDirection] = useState<'next' | 'prev'>('next');
   const [slidePhase, setSlidePhase] = useState<'idle' | 'enter'>('idle');
   const [previousSlideIndex, setPreviousSlideIndex] = useState<number | null>(null);
+  const [recommendationIndex, setRecommendationIndex] = useState(0);
+  const [recommendationPreviousIndex, setRecommendationPreviousIndex] = useState(0);
+  const [recommendationDirection, setRecommendationDirection] = useState<'next' | 'prev'>('next');
   const [featuredPage, setFeaturedPage] = useState(0);
   const [featuredDirection, setFeaturedDirection] = useState<'next' | 'prev'>('next');
   const [visibleCommunityCount, setVisibleCommunityCount] = useState(0);
@@ -293,6 +356,18 @@ export default function HomePage() {
     window.location.hash = '#/image-font-search';
   };
 
+  const goToPrevRecommendation = () => {
+    setRecommendationDirection('prev');
+    setRecommendationPreviousIndex(recommendationIndex);
+    setRecommendationIndex((prev) => (prev - 1 + todaysFontRecommendations.length) % todaysFontRecommendations.length);
+  };
+
+  const goToNextRecommendation = () => {
+    setRecommendationDirection('next');
+    setRecommendationPreviousIndex(recommendationIndex);
+    setRecommendationIndex((prev) => (prev + 1) % todaysFontRecommendations.length);
+  };
+
   const goToPrevFeaturedPage = () => {
     setFeaturedDirection('prev');
     setFeaturedPage((prev) => (prev - 1 + featuredPages.length) % featuredPages.length);
@@ -337,6 +412,29 @@ export default function HomePage() {
     }, 8000);
     return () => window.clearInterval(timer);
   }, [slideIndex, slidePhase]);
+
+  const visibleRecommendations = todaysFontRecommendations.map((data, itemIndex) => {
+    const rawOffset =
+      (itemIndex - recommendationIndex + todaysFontRecommendations.length) % todaysFontRecommendations.length;
+    const normalizedOffset =
+      rawOffset > Math.floor(todaysFontRecommendations.length / 2)
+        ? rawOffset - todaysFontRecommendations.length
+        : rawOffset;
+    const previousRawOffset =
+      (itemIndex - recommendationPreviousIndex + todaysFontRecommendations.length) % todaysFontRecommendations.length;
+    const previousNormalizedOffset =
+      previousRawOffset > Math.floor(todaysFontRecommendations.length / 2)
+        ? previousRawOffset - todaysFontRecommendations.length
+        : previousRawOffset;
+    const offset = normalizedOffset as (typeof recommendationOffsets)[number];
+
+    return {
+      offset,
+      data,
+      isActive: offset === 0,
+      isJumpReset: Math.abs(previousNormalizedOffset - normalizedOffset) > 2,
+    };
+  });
 
   const getHeroDotDirection = (targetIndex: number): 'next' | 'prev' => {
     const forwardDistance = (targetIndex - slideIndex + heroSlideCount) % heroSlideCount;
@@ -1017,6 +1115,94 @@ export default function HomePage() {
           </div>
         </section>
 
+        <section className="container section recommendationShowcase">
+          <div className="recommendationShowcase__head">
+            <div>
+              <p className="recommendationShowcase__eyebrow">TODAY&apos;S PICK</p>
+              <h2 className="recommendationShowcase__title">오늘의 추천 폰트</h2>
+              <p className="recommendationShowcase__desc">당신의 디자인을 더욱 돋보이게 할 특별한 큐레이션</p>
+            </div>
+
+            <div className="recommendationShowcase__nav" aria-label="추천 폰트 넘기기">
+              <button
+                type="button"
+                className="recommendationShowcase__navButton"
+                onClick={goToPrevRecommendation}
+                aria-label="이전 추천 폰트"
+              >
+                ←
+              </button>
+              <button
+                type="button"
+                className="recommendationShowcase__navButton"
+                onClick={goToNextRecommendation}
+                aria-label="다음 추천 폰트"
+              >
+                →
+              </button>
+            </div>
+          </div>
+
+          <div className={`recommendationDeck recommendationDeck--${recommendationDirection}`}>
+            <div className="recommendationDeck__stage">
+              {visibleRecommendations.map(({ offset, data, isActive, isJumpReset }) => (
+                <article
+                  key={data.id}
+                  className={[
+                    'recommendationCard',
+                    `recommendationCard--offset-${offset}`,
+                    isActive ? 'is-active' : '',
+                    isJumpReset ? 'is-jump-reset' : '',
+                  ]
+                    .filter(Boolean)
+                    .join(' ')}
+                >
+                  <div className="recommendationCard__inner">
+                    <div className="recommendationCard__face recommendationCard__face--front">
+                      <div className="recommendationCard__media" aria-hidden="true" />
+                      <div className="recommendationCard__content">
+                        <span className="recommendationCard__eyebrow">{data.eyebrow}</span>
+                        <h3 className="recommendationCard__name">{data.title}</h3>
+                        <p className="recommendationCard__sample" style={{ fontFamily: data.fontFamily }}>
+                          {data.sample}
+                        </p>
+                        <p className="recommendationCard__description">{data.description}</p>
+                      </div>
+                      <div className="recommendationCard__footer">
+                        <span>{data.subtitle}</span>
+                        <span>★ ★ ★</span>
+                      </div>
+                    </div>
+
+                    <div className="recommendationCard__face recommendationCard__face--back">
+                      <div className="recommendationCard__backLabel">{data.coverLabel}</div>
+                      <div className="recommendationCard__backGlyph" style={{ fontFamily: data.fontFamily }}>
+                        {data.cover}
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <div className="recommendationDeck__dots" aria-label="추천 폰트 인디케이터">
+              {todaysFontRecommendations.map((item, idx) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  className={`recommendationDeck__dot ${idx === recommendationIndex ? 'is-active' : ''}`}
+                  onClick={() => {
+                    setRecommendationDirection(idx > recommendationIndex ? 'next' : 'prev');
+                    setRecommendationPreviousIndex(recommendationIndex);
+                    setRecommendationIndex(idx);
+                  }}
+                  aria-label={`${item.title} 보기`}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+
         <section className="howto">
           <div className="howto__blur" aria-hidden="true" />
 
@@ -1055,6 +1241,140 @@ export default function HomePage() {
 
               <div className="steps__line" aria-hidden="true" />
             </div>
+          </div>
+        </section>
+
+        <section className="container section recommendationShowcase recommendationShowcaseDuplicate">
+          <div className="recommendationShowcase__head">
+            <div>
+              <p className="recommendationShowcase__eyebrow">TODAY&apos;S PICK</p>
+              <h2 className="recommendationShowcase__title">오늘의 추천 폰트</h2>
+              <p className="recommendationShowcase__desc">당신의 디자인을 더욱 돋보이게 할 특별한 큐레이션</p>
+            </div>
+
+            <div className="recommendationShowcase__nav" aria-label="추천 폰트 넘기기">
+              <button
+                type="button"
+                className="recommendationShowcase__navButton"
+                onClick={goToPrevRecommendation}
+                aria-label="이전 추천 폰트"
+              >
+                ←
+              </button>
+              <button
+                type="button"
+                className="recommendationShowcase__navButton"
+                onClick={goToNextRecommendation}
+                aria-label="다음 추천 폰트"
+              >
+                →
+              </button>
+            </div>
+          </div>
+
+          <div className={`recommendationDeck recommendationDeck--${recommendationDirection}`}>
+            <div className="recommendationDeck__stage">
+              {visibleRecommendations.map(({ offset, data, isActive, isJumpReset }) => (
+                <article
+                  key={data.id}
+                  className={[
+                    'recommendationCard',
+                    `recommendationCard--offset-${offset}`,
+                    isActive ? 'is-active' : '',
+                    isJumpReset ? 'is-jump-reset' : '',
+                  ]
+                    .filter(Boolean)
+                    .join(' ')}
+                >
+                  <div className="recommendationCard__inner">
+                    <div className="recommendationCard__face recommendationCard__face--front">
+                      <div className="recommendationCard__media" aria-hidden="true" />
+                      <div className="recommendationCard__content">
+                        <span className="recommendationCard__eyebrow">{data.eyebrow}</span>
+                        <h3 className="recommendationCard__name">{data.title}</h3>
+                        <p className="recommendationCard__sample" style={{ fontFamily: data.fontFamily }}>
+                          {data.sample}
+                        </p>
+                        <p className="recommendationCard__description">{data.description}</p>
+                      </div>
+                      <div className="recommendationCard__footer">
+                        <span>{data.subtitle}</span>
+                        <span>★ ★ ★</span>
+                      </div>
+                    </div>
+
+                    <div className="recommendationCard__face recommendationCard__face--back">
+                      <div className="recommendationCard__backLabel">{data.coverLabel}</div>
+                      <div className="recommendationCard__backGlyph" style={{ fontFamily: data.fontFamily }}>
+                        {data.cover}
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <div className="recommendationDeck__dots" aria-label="추천 폰트 인디케이터">
+              {todaysFontRecommendations.map((item, idx) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  className={`recommendationDeck__dot ${idx === recommendationIndex ? 'is-active' : ''}`}
+                  onClick={() => {
+                    setRecommendationDirection(idx > recommendationIndex ? 'next' : 'prev');
+                    setRecommendationPreviousIndex(recommendationIndex);
+                    setRecommendationIndex(idx);
+                  }}
+                  aria-label={`${item.title} 보기`}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="container section section--popularFonts section--popularFontsDuplicate">
+          <div className="section__head">
+            <div className="section__title">
+              <h2>인기 폰트</h2>
+              <span>(다운로드 순)</span>
+            </div>
+            <div className="featureFontsToolbar">
+              <div className="featureFontsPager" aria-label="인기 폰트 넘기기">
+                <button
+                  type="button"
+                  className="featureFontsPager__button"
+                  onClick={goToPrevFeaturedPage}
+                  aria-label="이전 인기 폰트"
+                >
+                  ←
+                </button>
+                <span className="featureFontsPager__status">
+                  {featuredPage + 1} / {featuredPages.length}
+                </span>
+                <button
+                  type="button"
+                  className="featureFontsPager__button"
+                  onClick={goToNextFeaturedPage}
+                  aria-label="다음 인기 폰트"
+                >
+                  →
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div
+            key={`${featuredPage}-${featuredDirection}`}
+            className={`featureFontsGrid featureFontsGrid--threeUp featureFontsGrid--animated featureFontsGrid--${featuredDirection}`}
+          >
+            {featuredPages[featuredPage].map((font) => (
+              <HomeFontCard
+                key={font.id}
+                font={font}
+                liked={likedFeaturedFontIds.includes(font.id)}
+                onToggleLike={toggleFeaturedFontLike}
+              />
+            ))}
           </div>
         </section>
 
