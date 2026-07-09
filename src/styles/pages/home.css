@@ -1537,11 +1537,33 @@
   font-weight:500;
 }
 
-.recommendationShowcase__nav{
+.recommendationShowcase__actions{
   display:flex;
   align-items:center;
   gap:10px;
   padding-top:0;
+}
+
+.recommendationShowcase__actionButton{
+  min-width:114px;
+  height:46px;
+  padding:0 18px;
+  border:1px solid #dbe4ff;
+  border-radius:999px;
+  background:#fff;
+  color:#3159d6;
+  font-size:14px;
+  line-height:1;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 8px 18px rgba(49,89,214,.08);
+  transition:border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+
+.recommendationShowcase__actionButton:hover{
+  border-color:#b9caff;
+  transform:translateY(-1px);
+  box-shadow:0 12px 24px rgba(49,89,214,.12);
 }
 
 .recommendationShowcase__navButton{
@@ -1568,6 +1590,19 @@
 
 .recommendationDeck{
   margin-top:0;
+}
+
+.recommendationDeck__controls{
+  margin-top:8px;
+  display:flex;
+  justify-content:center;
+}
+
+.recommendationDeck__nav{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
 }
 
 .recommendationDeck__stage{
@@ -1799,7 +1834,7 @@
 }
 
 .recommendationDeck__dots{
-  margin-top:8px;
+  margin-top:0;
   display:flex;
   justify-content:center;
   align-items:center;
@@ -1835,6 +1870,11 @@
     line-height:24px;
   }
 
+  .recommendationShowcase__actions{
+    width:100%;
+    justify-content:flex-end;
+  }
+
   .recommendationDeck__stage{
     height:560px;
   }
@@ -1865,10 +1905,24 @@
 }
 
 @media (max-width: 720px){
+  .recommendationShowcase__actions{
+    justify-content:flex-start;
+  }
+
+  .recommendationShowcase__actionButton{
+    height:42px;
+    padding:0 16px;
+    font-size:13px;
+  }
+
   .recommendationShowcase__navButton{
     width:42px;
     height:42px;
     font-size:18px;
+  }
+
+  .recommendationDeck__nav{
+    gap:14px;
   }
 
   .recommendationDeck__stage{
@@ -2237,102 +2291,390 @@
 
 /* How it works */
 .howto{
-  background:rgba(245,249,255,.5);
-  padding:96px 0;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(59,130,246,.06), transparent 24%),
+    linear-gradient(180deg, #fcfdff 0%, #f8fbff 100%);
+  padding:116px 0;
   position:relative;
   overflow:hidden;
   border-top:1px solid rgba(229,231,235,.0);
 }
 .howto__blur{
   position:absolute;
-  left:-80px;
-  top:80px;
-  width:384px;
-  height:384px;
+  left:-56px;
+  top:64px;
+  width:360px;
+  height:360px;
   border-radius:999px;
-  background:rgba(12,132,218,.05);
-  filter:blur(32px);
+  background:rgba(59,130,246,.06);
+  filter:blur(48px);
 }
 .howto__inner{text-align:center; position:relative}
 .howto__eyebrow{
   margin:0 0 8px;
-  font-size:14px;
-  letter-spacing:.05em;
+  font-size:13px;
+  letter-spacing:.08em;
   text-transform:uppercase;
-  color:#0c1ada;
-  font-weight:700;
+  color:#2563eb;
+  font-weight:800;
 }
 .howto__title{
-  margin:0 0 64px;
-  font-size:36px;
-  line-height:40px;
+  margin:0 0 68px;
+  font-size:42px;
+  line-height:1.1;
   font-weight:700;
   color:var(--title);
 }
-.steps{
+.howtoFlow{
+  display:grid;
+  grid-template-columns:320px minmax(0, 1fr);
+  gap:48px;
+  align-items:start;
+  text-align:left;
+}
+.howtoSteps{
   position:relative;
   display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:32px;
-  align-items:start;
-  justify-items:center;
+  gap:38px;
+  padding:40px 0 28px;
 }
-.steps__line{
+.howtoSteps__line{
   position:absolute;
-  left:16%;
-  right:16%;
-  top:40px;
-  height:0;
-  border-top:2px dashed rgba(12,132,218,.2);
-  background:transparent;
+  left:23px;
+  top:56px;
+  bottom:56px;
+  width:1px;
+  background:linear-gradient(180deg, rgba(37,99,235,.28), rgba(37,99,235,.08));
 }
-.step{max-width:320px}
-.step__icon{
-  width:80px;height:80px;
-  border-radius:var(--r-32);
-  background:var(--surface-base);
-  border:1px solid var(--primary-soft-border);
-  box-shadow:0 10px 15px -3px rgba(219,234,254,.5), 0 4px 6px -4px rgba(219,234,254,.5);
-  margin:0 auto 20px;
+.howtoStep{
+  position:relative;
+  display:grid;
+  grid-template-columns:58px 1fr;
+  gap:20px;
+  align-items:center;
+  z-index:1;
+}
+.howtoStep__icon{
+  width:58px;
+  height:58px;
+  border-radius:16px;
+  background:#fff;
+  border:1px solid rgba(37,99,235,.10);
+  box-shadow:0 8px 20px rgba(37,99,235,.08);
   display:grid;
   place-items:center;
-  position:relative;
 }
-.step__icon--a,
-.step__icon--b{
-  background:var(--surface-base);
-}
-.step__icon--c{
-  background:var(--surface-base);
-  border:1px solid var(--primary-soft-border);
-  box-shadow:0 10px 15px -3px rgba(219,234,254,.5), 0 4px 6px -4px rgba(219,234,254,.5);
-}
-.step__icon::before{
-  content:none;
-}
-.step__icon svg{
-  width:32px;
-  height:32px;
+.howtoStep__icon svg{
+  width:28px;
+  height:28px;
   fill:none;
-  stroke:var(--primary-strong);
+  stroke:#2563eb;
   stroke-width:1.8;
   stroke-linecap:round;
   stroke-linejoin:round;
 }
-.step h3{
+.howtoStep__number{
+  display:block;
+  margin-bottom:8px;
+  color:#2563eb;
+  font-size:13px;
+  line-height:1;
+  font-weight:800;
+  letter-spacing:.08em;
+}
+.howtoStep__body h3{
   margin:0 0 8px;
-  font-size:20px;
-  line-height:28px;
+  font-size:22px;
+  line-height:1.35;
   color:var(--title);
   font-weight:700;
 }
-.step p{
+.howtoStep__body p{
   margin:0;
-  font-size:14px;
-  line-height:22.75px;
-  color:var(--muted-3);
+  font-size:15px;
+  line-height:1.7;
+  color:#6f7b90;
 }
-.step--active h3{color:var(--primary)}
+.howtoPanels{
+  display:grid;
+  gap:16px;
+  max-width:820px;
+}
+.howtoPanel{
+  padding:22px 24px 20px;
+  border-radius:16px;
+  background:rgba(255,255,255,.96);
+  border:1px solid #edf1f8;
+  box-shadow:0 14px 32px rgba(148,163,184,.08);
+}
+.howtoPanel__eyebrow{
+  display:block;
+  margin-bottom:10px;
+  color:#3159d6;
+  font-size:12px;
+  line-height:1;
+  font-weight:800;
+  letter-spacing:.09em;
+}
+.howtoPanel__select{
+  min-height:68px;
+  padding:0 20px;
+  border:1px solid #e9eef8;
+  border-radius:12px;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  color:#1f2a44;
+  font-size:22px;
+  line-height:1;
+  font-weight:500;
+}
+.howtoPanel__caret{
+  color:#3159d6;
+  font-size:18px;
+}
+.howtoPanel__caption{
+  margin:12px 0 0;
+  color:#8a94a8;
+  font-size:17px;
+  line-height:1.65;
+}
+.howtoPanel__transform,
+.howtoPanel__download{
+  min-height:84px;
+  padding:6px 8px 0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+}
+.howtoPanel__fontSample{
+  color:#19233c;
+  white-space:nowrap;
+}
+.howtoPanel__fontSample--latin{
+  font-family:"Nanum Myeongjo", serif;
+  font-size:36px;
+  line-height:1;
+}
+.howtoPanel__fontSample--korean{
+  font-size:40px;
+  line-height:1;
+  font-weight:600;
+}
+.howtoPanel__connector{
+  flex:0 0 44px;
+  width:44px;
+  height:1px;
+  background:
+    linear-gradient(90deg, rgba(59,130,246,.18), rgba(59,130,246,.18)) center/100% 1px no-repeat,
+    radial-gradient(circle, rgba(59,130,246,.95) 0 1.5px, transparent 1.6px) left center/18px 8px repeat-x;
+  animation:howtoConnectorWave 1.6s linear infinite;
+}
+.howtoPanel__loader{
+  flex:0 0 auto;
+  width:46px;
+  height:46px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+}
+.howtoPanel__loaderSpin{
+  width:46px;
+  height:46px;
+  border-radius:12px;
+  background:linear-gradient(135deg, #2457ff, #3468ff);
+  box-shadow:0 8px 16px rgba(49,89,214,.18);
+  display:grid;
+  place-items:center;
+  animation:howtoLoaderSpin 2.2s linear infinite;
+}
+.howtoPanel__loaderCore{
+  color:#fff;
+  font-size:18px;
+  line-height:1;
+  font-weight:700;
+}
+.howtoPanel__downloadButton{
+  min-width:162px;
+  height:42px;
+  padding:0 18px;
+  border:1px solid #5e7bff;
+  border-radius:999px;
+  background:#fff;
+  color:#3159d6;
+  font-size:13px;
+  line-height:1;
+  font-weight:700;
+  cursor:default;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+}
+
+.howtoPanel__download{
+  justify-content:center;
+  gap:36px;
+  padding-left:0;
+}
+
+.howtoPanel__download .howtoPanel__fontSample--korean{
+  min-width:88px;
+  text-align:center;
+}
+.howtoPanel__downloadIcon{
+  font-size:14px;
+  line-height:1;
+}
+
+@keyframes howtoLoaderSpin{
+  from{transform:rotate(0deg)}
+  to{transform:rotate(360deg)}
+}
+
+@keyframes howtoConnectorWave{
+  0%{
+    background-position:center center, 0 center;
+  }
+  100%{
+    background-position:center center, 18px center;
+  }
+}
+
+@media (max-width: 960px){
+  .howto{
+    padding:88px 0;
+  }
+
+  .howto__title{
+    margin-bottom:40px;
+    font-size:36px;
+  }
+
+  .howtoFlow{
+    grid-template-columns:1fr;
+    gap:28px;
+  }
+
+  .howtoSteps{
+    padding:0;
+  }
+
+  .howtoSteps__line{
+    left:31px;
+    top:48px;
+    bottom:48px;
+  }
+
+  .howtoStep__body h3{
+    font-size:20px;
+  }
+
+  .howtoStep__body p{
+    font-size:14px;
+  }
+
+  .howtoPanel__select{
+    font-size:20px;
+  }
+
+  .howtoPanel__caption{
+    font-size:16px;
+  }
+
+  .howtoPanel__fontSample--latin{
+    font-size:30px;
+  }
+
+  .howtoPanel__fontSample--korean{
+    font-size:32px;
+  }
+}
+
+@media (max-width: 720px){
+  .howto{
+    padding:72px 0;
+  }
+
+  .howto__title{
+    font-size:32px;
+  }
+
+  .howtoStep{
+    grid-template-columns:42px 1fr;
+    gap:12px;
+  }
+
+  .howtoStep__icon{
+    width:42px;
+    height:42px;
+    border-radius:12px;
+  }
+
+  .howtoSteps__line{
+    left:21px;
+  }
+
+  .howtoPanel{
+    padding:14px 12px 12px;
+  }
+
+  .howtoPanel__select{
+    min-height:48px;
+    padding:0 14px;
+    font-size:17px;
+  }
+
+  .howtoPanel__transform,
+  .howtoPanel__download{
+    min-height:56px;
+    padding:0 4px;
+    gap:10px;
+  }
+
+  .howtoPanel__download{
+    gap:22px;
+    padding-left:12px;
+  }
+
+  .howtoPanel__fontSample--latin{
+    font-size:22px;
+  }
+
+  .howtoPanel__fontSample--korean{
+    font-size:24px;
+  }
+
+  .howtoPanel__loader,
+  .howtoPanel__loaderSpin{
+    width:30px;
+    height:30px;
+    border-radius:9px;
+  }
+
+  .howtoPanel__downloadButton{
+    min-width:118px;
+    height:30px;
+    font-size:11px;
+  }
+
+  .howtoStep__body p,
+  .howtoPanel__caption{
+    font-size:15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .howtoPanel__loaderSpin{
+    animation:none;
+  }
+
+  .howtoPanel__connector{
+    animation:none;
+  }
+}
 
 /* Community (而ㅻ??덊떚/由щ럭 ?뱀뀡) */
 .community{padding-top:48px; padding-bottom:48px}

@@ -368,6 +368,17 @@ export default function HomePage() {
     setRecommendationIndex((prev) => (prev + 1) % todaysFontRecommendations.length);
   };
 
+  const rerollRecommendation = () => {
+    const availableIndexes = todaysFontRecommendations
+      .map((_, idx) => idx)
+      .filter((idx) => idx !== recommendationIndex);
+    const nextIndex = availableIndexes[Math.floor(Math.random() * availableIndexes.length)] ?? recommendationIndex;
+
+    setRecommendationDirection(nextIndex > recommendationIndex ? 'next' : 'prev');
+    setRecommendationPreviousIndex(recommendationIndex);
+    setRecommendationIndex(nextIndex);
+  };
+
   const goToPrevFeaturedPage = () => {
     setFeaturedDirection('prev');
     setFeaturedPage((prev) => (prev - 1 + featuredPages.length) % featuredPages.length);
@@ -1123,22 +1134,14 @@ export default function HomePage() {
               <p className="recommendationShowcase__desc">당신의 디자인을 더욱 돋보이게 할 특별한 큐레이션</p>
             </div>
 
-            <div className="recommendationShowcase__nav" aria-label="추천 폰트 넘기기">
+            <div className="recommendationShowcase__actions">
               <button
                 type="button"
-                className="recommendationShowcase__navButton"
-                onClick={goToPrevRecommendation}
-                aria-label="이전 추천 폰트"
+                className="recommendationShowcase__actionButton"
+                onClick={rerollRecommendation}
+                aria-label="새 추천 폰트 뽑기"
               >
-                ←
-              </button>
-              <button
-                type="button"
-                className="recommendationShowcase__navButton"
-                onClick={goToNextRecommendation}
-                aria-label="다음 추천 폰트"
-              >
-                →
+                새로 뽑기
               </button>
             </div>
           </div>
@@ -1185,61 +1188,131 @@ export default function HomePage() {
               ))}
             </div>
 
-            <div className="recommendationDeck__dots" aria-label="추천 폰트 인디케이터">
-              {todaysFontRecommendations.map((item, idx) => (
+            <div className="recommendationDeck__controls">
+              <div className="recommendationDeck__nav" aria-label="추천 폰트 넘기기">
                 <button
-                  key={item.id}
                   type="button"
-                  className={`recommendationDeck__dot ${idx === recommendationIndex ? 'is-active' : ''}`}
-                  onClick={() => {
-                    setRecommendationDirection(idx > recommendationIndex ? 'next' : 'prev');
-                    setRecommendationPreviousIndex(recommendationIndex);
-                    setRecommendationIndex(idx);
-                  }}
-                  aria-label={`${item.title} 보기`}
-                />
-              ))}
+                  className="recommendationShowcase__navButton"
+                  onClick={goToPrevRecommendation}
+                  aria-label="이전 추천 폰트"
+                >
+                  ←
+                </button>
+                <div className="recommendationDeck__dots" aria-label="추천 폰트 인디케이터">
+                  {todaysFontRecommendations.map((item, idx) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      className={`recommendationDeck__dot ${idx === recommendationIndex ? 'is-active' : ''}`}
+                      onClick={() => {
+                        setRecommendationDirection(idx > recommendationIndex ? 'next' : 'prev');
+                        setRecommendationPreviousIndex(recommendationIndex);
+                        setRecommendationIndex(idx);
+                      }}
+                      aria-label={`${item.title} 보기`}
+                    />
+                  ))}
+                </div>
+                <button
+                  type="button"
+                  className="recommendationShowcase__navButton"
+                  onClick={goToNextRecommendation}
+                  aria-label="다음 추천 폰트"
+                >
+                  →
+                </button>
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="howto">
+<section className="howto">
           <div className="howto__blur" aria-hidden="true" />
 
           <div className="container howto__inner">
             <p className="howto__eyebrow">How It Works</p>
             <h2 className="howto__title">작동 방식</h2>
 
-            <div className="steps" role="list">
-              <div className="step" role="listitem">
-                <div className="step__icon step__icon--a">
-                  <StepIcon type="select" />
+            <div className="howtoFlow">
+              <div className="howtoSteps" role="list" aria-label="작동 방식 단계">
+                <div className="howtoStep" role="listitem">
+                  <div className="howtoStep__icon">
+                    <StepIcon type="select" />
+                  </div>
+                  <div className="howtoStep__body">
+                    <span className="howtoStep__number">01</span>
+                    <h3>구글 폰트 선택</h3>
+                    <p>마음에 드는 영문 폰트를 선택하세요.</p>
+                  </div>
                 </div>
-                <h3>영문 폰트 선택</h3>
-                <p>마음에 드는 영문 폰트를 선택하세요.</p>
+
+                <div className="howtoStep howtoStep--active" role="listitem">
+                  <div className="howtoStep__icon">
+                    <StepIcon type="convert" />
+                  </div>
+                  <div className="howtoStep__body">
+                    <span className="howtoStep__number">02</span>
+                    <h3>AI 스타일 분석 및 변환</h3>
+                    <p>
+                      AI가 선택한 폰트의 특징을 분석하여
+                      <br />
+                      어울리는 한글 글꼴을 생성합니다.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="howtoStep" role="listitem">
+                  <div className="howtoStep__icon">
+                    <StepIcon type="download" />
+                  </div>
+                  <div className="howtoStep__body">
+                    <span className="howtoStep__number">03</span>
+                    <h3>폰트 다운로드</h3>
+                    <p>생성된 한글 폰트를 즉시 다운로드하세요.</p>
+                  </div>
+                </div>
+
+                <div className="howtoSteps__line" aria-hidden="true" />
               </div>
 
-              <div className="step step--active" role="listitem">
-                <div className="step__icon step__icon--b">
-                  <StepIcon type="convert" />
-                </div>
-                <h3>AI 스타일 분석 및 변환</h3>
-                <p>
-                  AI가 선택한 폰트의 특징을 분석하여
-                  <br />
-                  어울리는 한글 글꼴을 생성합니다.
-                </p>
-              </div>
+              <div className="howtoPanels">
+                <article className="howtoPanel">
+                  <span className="howtoPanel__eyebrow">STEP 01</span>
+                  <div className="howtoPanel__select">
+                    <span>Lora</span>
+                    <span className="howtoPanel__caret" aria-hidden="true">⌄</span>
+                  </div>
+                  <p className="howtoPanel__caption">Google Fonts에서 원하는 영문 폰트를 선택합니다.</p>
+                </article>
 
-              <div className="step" role="listitem">
-                <div className="step__icon step__icon--c">
-                  <StepIcon type="download" />
-                </div>
-                <h3>폰트 다운로드</h3>
-                <p>생성된 한글 폰트를 바로 다운로드하세요.</p>
-              </div>
+                <article className="howtoPanel">
+                  <span className="howtoPanel__eyebrow">STEP 02</span>
+                  <div className="howtoPanel__transform">
+                    <span className="howtoPanel__fontSample howtoPanel__fontSample--latin">Lora</span>
+                    <span className="howtoPanel__connector" aria-hidden="true" />
+                    <div className="howtoPanel__loader" aria-hidden="true">
+                      <div className="howtoPanel__loaderSpin">
+                        <span className="howtoPanel__loaderCore">Φ</span>
+                      </div>
+                    </div>
+                    <span className="howtoPanel__connector" aria-hidden="true" />
+                    <span className="howtoPanel__fontSample howtoPanel__fontSample--korean">안녕</span>
+                  </div>
+                  <p className="howtoPanel__caption">AI가 폰트의 특징과 비율, 개성을 분석하여 어울리는 한글 글꼴을 생성합니다.</p>
+                </article>
 
-              <div className="steps__line" aria-hidden="true" />
+                <article className="howtoPanel">
+                  <span className="howtoPanel__eyebrow">STEP 03</span>
+                  <div className="howtoPanel__download">
+                    <span className="howtoPanel__fontSample howtoPanel__fontSample--korean">안녕</span>
+                    <button type="button" className="howtoPanel__downloadButton">
+                      <span className="howtoPanel__downloadIcon" aria-hidden="true">↓</span>
+                      TTF 다운로드
+                    </button>
+                  </div>
+                  <p className="howtoPanel__caption">생성된 한글 폰트를 확인하고 TTF 파일로 다운로드합니다.</p>
+                </article>
+              </div>
             </div>
           </div>
         </section>
@@ -1252,22 +1325,14 @@ export default function HomePage() {
               <p className="recommendationShowcase__desc">당신의 디자인을 더욱 돋보이게 할 특별한 큐레이션</p>
             </div>
 
-            <div className="recommendationShowcase__nav" aria-label="추천 폰트 넘기기">
+            <div className="recommendationShowcase__actions">
               <button
                 type="button"
-                className="recommendationShowcase__navButton"
-                onClick={goToPrevRecommendation}
-                aria-label="이전 추천 폰트"
+                className="recommendationShowcase__actionButton"
+                onClick={rerollRecommendation}
+                aria-label="새 추천 폰트 뽑기"
               >
-                ←
-              </button>
-              <button
-                type="button"
-                className="recommendationShowcase__navButton"
-                onClick={goToNextRecommendation}
-                aria-label="다음 추천 폰트"
-              >
-                →
+                새로 뽑기
               </button>
             </div>
           </div>
@@ -1314,20 +1379,40 @@ export default function HomePage() {
               ))}
             </div>
 
-            <div className="recommendationDeck__dots" aria-label="추천 폰트 인디케이터">
-              {todaysFontRecommendations.map((item, idx) => (
+            <div className="recommendationDeck__controls">
+              <div className="recommendationDeck__nav" aria-label="추천 폰트 넘기기">
                 <button
-                  key={item.id}
                   type="button"
-                  className={`recommendationDeck__dot ${idx === recommendationIndex ? 'is-active' : ''}`}
-                  onClick={() => {
-                    setRecommendationDirection(idx > recommendationIndex ? 'next' : 'prev');
-                    setRecommendationPreviousIndex(recommendationIndex);
-                    setRecommendationIndex(idx);
-                  }}
-                  aria-label={`${item.title} 보기`}
-                />
-              ))}
+                  className="recommendationShowcase__navButton"
+                  onClick={goToPrevRecommendation}
+                  aria-label="이전 추천 폰트"
+                >
+                  ←
+                </button>
+                <div className="recommendationDeck__dots" aria-label="추천 폰트 인디케이터">
+                  {todaysFontRecommendations.map((item, idx) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      className={`recommendationDeck__dot ${idx === recommendationIndex ? 'is-active' : ''}`}
+                      onClick={() => {
+                        setRecommendationDirection(idx > recommendationIndex ? 'next' : 'prev');
+                        setRecommendationPreviousIndex(recommendationIndex);
+                        setRecommendationIndex(idx);
+                      }}
+                      aria-label={`${item.title} 보기`}
+                    />
+                  ))}
+                </div>
+                <button
+                  type="button"
+                  className="recommendationShowcase__navButton"
+                  onClick={goToNextRecommendation}
+                  aria-label="다음 추천 폰트"
+                >
+                  →
+                </button>
+              </div>
             </div>
           </div>
         </section>
