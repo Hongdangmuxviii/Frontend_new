@@ -1161,26 +1161,28 @@ export default function HomePage() {
                     .join(' ')}
                 >
                   <div className="recommendationCard__inner">
-                    <div className="recommendationCard__face recommendationCard__face--front">
-                      <div className="recommendationCard__media" aria-hidden="true" />
-                      <div className="recommendationCard__content">
-                        <span className="recommendationCard__eyebrow">{data.eyebrow}</span>
-                        <h3 className="recommendationCard__name">{data.title}</h3>
-                        <p className="recommendationCard__sample" style={{ fontFamily: data.fontFamily }}>
-                          {data.sample}
-                        </p>
-                        <p className="recommendationCard__description">{data.description}</p>
+                    <div className="recommendationCard__motion">
+                      <div className="recommendationCard__face recommendationCard__face--front">
+                        <div className="recommendationCard__media" aria-hidden="true" />
+                        <div className="recommendationCard__content">
+                          <span className="recommendationCard__eyebrow">{data.eyebrow}</span>
+                          <h3 className="recommendationCard__name">{data.title}</h3>
+                          <p className="recommendationCard__sample" style={{ fontFamily: data.fontFamily }}>
+                            {data.sample}
+                          </p>
+                          <p className="recommendationCard__description">{data.description}</p>
+                        </div>
+                        <div className="recommendationCard__footer">
+                          <span>{data.subtitle}</span>
+                          <span>★ ★ ★</span>
+                        </div>
                       </div>
-                      <div className="recommendationCard__footer">
-                        <span>{data.subtitle}</span>
-                        <span>★ ★ ★</span>
-                      </div>
-                    </div>
 
-                    <div className="recommendationCard__face recommendationCard__face--back">
-                      <div className="recommendationCard__backLabel">{data.coverLabel}</div>
-                      <div className="recommendationCard__backGlyph" style={{ fontFamily: data.fontFamily }}>
-                        {data.cover}
+                      <div className="recommendationCard__face recommendationCard__face--back">
+                        <div className="recommendationCard__backLabel">{data.coverLabel}</div>
+                        <div className="recommendationCard__backGlyph" style={{ fontFamily: data.fontFamily }}>
+                          {data.cover}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1352,26 +1354,28 @@ export default function HomePage() {
                     .join(' ')}
                 >
                   <div className="recommendationCard__inner">
-                    <div className="recommendationCard__face recommendationCard__face--front">
-                      <div className="recommendationCard__media" aria-hidden="true" />
-                      <div className="recommendationCard__content">
-                        <span className="recommendationCard__eyebrow">{data.eyebrow}</span>
-                        <h3 className="recommendationCard__name">{data.title}</h3>
-                        <p className="recommendationCard__sample" style={{ fontFamily: data.fontFamily }}>
-                          {data.sample}
-                        </p>
-                        <p className="recommendationCard__description">{data.description}</p>
+                    <div className="recommendationCard__motion">
+                      <div className="recommendationCard__face recommendationCard__face--front">
+                        <div className="recommendationCard__media" aria-hidden="true" />
+                        <div className="recommendationCard__content">
+                          <span className="recommendationCard__eyebrow">{data.eyebrow}</span>
+                          <h3 className="recommendationCard__name">{data.title}</h3>
+                          <p className="recommendationCard__sample" style={{ fontFamily: data.fontFamily }}>
+                            {data.sample}
+                          </p>
+                          <p className="recommendationCard__description">{data.description}</p>
+                        </div>
+                        <div className="recommendationCard__footer">
+                          <span>{data.subtitle}</span>
+                          <span>★ ★ ★</span>
+                        </div>
                       </div>
-                      <div className="recommendationCard__footer">
-                        <span>{data.subtitle}</span>
-                        <span>★ ★ ★</span>
-                      </div>
-                    </div>
 
-                    <div className="recommendationCard__face recommendationCard__face--back">
-                      <div className="recommendationCard__backLabel">{data.coverLabel}</div>
-                      <div className="recommendationCard__backGlyph" style={{ fontFamily: data.fontFamily }}>
-                        {data.cover}
+                      <div className="recommendationCard__face recommendationCard__face--back">
+                        <div className="recommendationCard__backLabel">{data.coverLabel}</div>
+                        <div className="recommendationCard__backGlyph" style={{ fontFamily: data.fontFamily }}>
+                          {data.cover}
+                        </div>
                       </div>
                     </div>
                   </div>

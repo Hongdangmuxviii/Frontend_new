@@ -1618,7 +1618,6 @@
   position:absolute;
   left:50%;
   top:50%;
-  margin-top:0;
   width:276px;
   height:440px;
   --recommendation-card-active-x:-50%;
@@ -1627,8 +1626,8 @@
   --recommendation-card-active-scale:1.08;
   transform-style:preserve-3d;
   transform-origin:center center;
-  transition:transform .65s cubic-bezier(.22,1,.36,1), opacity .45s ease, margin-top .65s cubic-bezier(.22,1,.36,1), z-index .01s linear;
-  will-change:transform, opacity, margin-top;
+  transition:transform .78s cubic-bezier(.22,1,.36,1), opacity .52s ease, z-index .01s linear;
+  will-change:transform, opacity;
 }
 
 .recommendationCard.is-jump-reset{
@@ -1659,10 +1658,8 @@
     var(--recommendation-card-active-y),
     var(--recommendation-card-active-z)
   ) rotate(0deg) scale(var(--recommendation-card-active-scale));
-  margin-top:-10px;
   z-index:5;
   opacity:1;
-  animation:recommendationCardFloat 3.8s ease-in-out infinite;
 }
 
 .recommendationCard--offset-1{
@@ -1682,11 +1679,23 @@
   width:100%;
   height:100%;
   transform-style:preserve-3d;
-  transition:transform .78s cubic-bezier(.22,1,.36,1);
+  transition:transform .82s cubic-bezier(.22,1,.36,1);
+}
+
+.recommendationCard__motion{
+  position:relative;
+  width:100%;
+  height:100%;
+  transform-style:preserve-3d;
+  transition:transform .52s ease;
 }
 
 .recommendationCard.is-active .recommendationCard__inner{
   transform:rotateY(180deg);
+}
+
+.recommendationCard--offset-0 .recommendationCard__motion{
+  animation:recommendationCardFloat 4.6s cubic-bezier(.42,0,.22,1) infinite;
 }
 
 .recommendationCard__face{
@@ -1788,6 +1797,8 @@
   line-height:1.18;
   font-weight:800;
   letter-spacing:-.04em;
+  word-break:keep-all;
+  overflow-wrap:normal;
 }
 
 .recommendationCard__sample{
@@ -1795,6 +1806,10 @@
   color:#111827;
   font-size:26px;
   line-height:1.32;
+  white-space:normal;
+  word-break:keep-all;
+  overflow-wrap:break-word;
+  line-break:loose;
 }
 
 .recommendationCard__description{
@@ -1802,6 +1817,10 @@
   color:#4b5563;
   font-size:13px;
   line-height:1.65;
+  white-space:normal;
+  word-break:keep-all;
+  overflow-wrap:break-word;
+  line-break:loose;
 }
 
 .recommendationCard__footer{
@@ -1826,10 +1845,10 @@
 @keyframes recommendationCardFloat{
   0%,
   100%{
-    margin-top:-10px;
+    transform:translateY(0);
   }
   50%{
-    margin-top:-18px;
+    transform:translateY(-10px);
   }
 }
 
@@ -1965,7 +1984,7 @@
 }
 
 @media (prefers-reduced-motion: reduce){
-  .recommendationCard--offset-0{
+  .recommendationCard--offset-0 .recommendationCard__motion{
     animation:none;
   }
 }
