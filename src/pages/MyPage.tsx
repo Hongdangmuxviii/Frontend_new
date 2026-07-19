@@ -3,7 +3,6 @@ import Header from '../components/Header';
 import { fontifyApi } from '../api/fontifyApi';
 import { mapDownloadToOwnedFont, mapMeToUserProfile, mapUserStats } from '../api/mappers';
 import { useApiResource } from '../hooks/useApiResource';
-import { mockOwnedFonts, mockUserActivityStats, mockUserProfile } from '../mocks/user';
 import type { UserActivityStat } from '../types/user';
 import type { UserOwnedFont } from '../types/font';
 
@@ -57,11 +56,15 @@ function FontCard({ font }: { font: UserOwnedFont }) {
 }
 
 export default function MyPage() {
-  const { data } = useApiResource(
+  const { data, isLoading, error } = useApiResource(
     {
-      profile: mockUserProfile,
-      stats: mockUserActivityStats,
-      ownedFonts: mockOwnedFonts,
+      profile: {
+        name: '',
+        joinedDaysLabel: '',
+        avatarSrc: '/images/my-page/profile-avatar.png',
+      },
+      stats: [],
+      ownedFonts: [],
     },
     async () => {
       const [me, ratings, generations, downloads] = await Promise.all([
@@ -82,6 +85,7 @@ export default function MyPage() {
       };
     },
     [],
+    'my-page',
   );
 
   return (
@@ -95,8 +99,14 @@ export default function MyPage() {
               <img className="mypage__avatar" src={data.profile.avatarSrc} alt="" />
             </div>
 
-            <div className="mypage__name">{data.profile.name}</div>
-            <div className="mypage__sub">{data.profile.joinedDaysLabel}</div>
+            <div className="mypage__name">{isLoading ? '불러오는 중...' : data.profile.name || '사용자'}</div>
+            <div className="mypage__sub">
+              {error
+                ? '마이 페이지 정보를 불러오지 못했습니다.'
+                : isLoading
+                  ? '계정 정보를 불러오고 있습니다.'
+                  : data.profile.joinedDaysLabel}
+            </div>
 
             <button
               className="mypage__editBtn"
@@ -113,9 +123,7 @@ export default function MyPage() {
             <h2 className="mypage__sectionTitle">나의 활동</h2>
 
             <div className="mypage__cards3">
-              {data.stats.map((stat) => (
-                <StatCard key={stat.id} stat={stat} />
-              ))}
+              {data.stats.length > 0 ? data.stats.map((stat) => <StatCard key={stat.id} stat={stat} />) : null}
             </div>
           </section>
 

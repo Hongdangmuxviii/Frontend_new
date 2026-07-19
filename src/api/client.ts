@@ -12,7 +12,7 @@ type ImportMetaWithEnv = ImportMeta & {
 const env = (import.meta as ImportMetaWithEnv).env ?? {};
 const rawApiBaseUrl =
   typeof env.VITE_API_BASE_URL === 'string' ? env.VITE_API_BASE_URL : undefined;
-const fallbackApiBaseUrl = env.DEV ? '/api/v1' : 'http://localhost:8000/api/v1';
+const fallbackApiBaseUrl = env.DEV ? '/api/v1' : 'http://fontify.duckdns.org:8000/api/v1';
 const rawProxyTarget =
   typeof env.VITE_API_PROXY_TARGET === 'string' ? env.VITE_API_PROXY_TARGET : undefined;
 const rawUseMocks = env.VITE_USE_MOCKS;
@@ -41,7 +41,7 @@ export const API_ASSET_ORIGIN = (() => {
     return window.location.origin;
   }
 
-  return 'http://localhost:8000';
+  return 'http://fontify.duckdns.org:8000';
 })();
 
 const DEV_USER_ID = env.VITE_DEV_USER_ID ?? 'dev-user-001';

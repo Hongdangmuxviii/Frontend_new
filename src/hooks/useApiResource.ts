@@ -14,8 +14,9 @@ export function useApiResource<T>(
   fallbackData: T,
   loader: () => Promise<T>,
   dependencies: unknown[] = [],
+  cacheNamespace = 'default',
 ) {
-  const resourceKey = JSON.stringify(dependencies);
+  const resourceKey = JSON.stringify([cacheNamespace, ...dependencies]);
   const [state, setState] = useState<ApiResourceState<T>>({
     data: resourceDataCache.has(resourceKey)
       ? (resourceDataCache.get(resourceKey) as T)

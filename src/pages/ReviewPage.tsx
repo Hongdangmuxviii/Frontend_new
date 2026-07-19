@@ -101,6 +101,7 @@ export default function ReviewPage() {
       };
     },
     [],
+    'review-page',
   );
 
   return (
