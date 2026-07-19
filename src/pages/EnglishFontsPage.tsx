@@ -484,6 +484,18 @@ export default function EnglishFontsPage() {
                       <div className="englishFonts__listActions">
                         <a
                           className="englishFonts__actionBtn englishFonts__actionBtn--ghost"
+                          href={resolveApiAssetUrl(getFontAssetPath(font.representativeFont))}
+                          target="_blank"
+                          rel="noreferrer"
+                          download
+                          onClick={(event) => {
+                            if (!getFontAssetPath(font.representativeFont)) event.preventDefault();
+                          }}
+                        >
+                          Download TTF
+                        </a>
+                        <a
+                          className="englishFonts__actionBtn englishFonts__actionBtn--ghost"
                           href={`#/english-detail?family=${encodeURIComponent(font.familyKey)}`}
                         >
                           상세 페이지

@@ -419,6 +419,8 @@
   flex:0 0 auto;
   display:flex;
   align-items:center;
+  flex-wrap:wrap;
+  justify-content:flex-end;
   gap:12px;
 }
 

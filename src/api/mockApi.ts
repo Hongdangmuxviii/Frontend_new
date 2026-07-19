@@ -52,11 +52,11 @@ const mockFonts: ApiFontFileItem[] = [
 ];
 
 const mockGeneratedFonts: ApiGeneratedFontItem[] = [
-  { generated_font_id: 9001, name: 'Ubuntu Hangul 6', file_url: '/mock-fonts/generated-ubuntu-hangul.ttf' },
-  { generated_font_id: 9002, name: 'Merriweather Korean Serif', file_url: '/mock-fonts/generated-merriweather-kr.ttf' },
-  { generated_font_id: 9003, name: 'Playfair Hangul Display', file_url: '/mock-fonts/generated-playfair-kr.ttf' },
-  { generated_font_id: 9004, name: 'Lato Gothic KR', file_url: '/mock-fonts/generated-lato-kr.ttf' },
-  { generated_font_id: 9005, name: 'Montserrat Rounded Hangul', file_url: '/mock-fonts/generated-montserrat-kr.ttf' },
+  { generated_font_id: 9001, file_url: '/mock-fonts/generated-ubuntu-hangul.ttf' },
+  { generated_font_id: 9002, file_url: '/mock-fonts/generated-merriweather-kr.ttf' },
+  { generated_font_id: 9003, file_url: '/mock-fonts/generated-playfair-kr.ttf' },
+  { generated_font_id: 9004, file_url: '/mock-fonts/generated-lato-kr.ttf' },
+  { generated_font_id: 9005, file_url: '/mock-fonts/generated-montserrat-kr.ttf' },
 ];
 
 const mockJobs: ApiGenerationJobItem[] = [

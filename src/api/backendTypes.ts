@@ -72,7 +72,6 @@ export type ApiFontFileItem = {
 
 export type ApiGeneratedFontItem = {
   generated_font_id: number;
-  name?: string | null;
   file_url: string;
 };
 

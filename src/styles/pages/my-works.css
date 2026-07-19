@@ -41,6 +41,41 @@
   gap:32px;
 }
 
+.myWorksPage__pagination{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+}
+
+.myWorksPage__pageBtn{
+  min-width:88px;
+  height:40px;
+  padding:0 16px;
+  border:1px solid #d8deea;
+  border-radius:999px;
+  background:#fff;
+  color:#3153f6;
+  font-size:13px;
+  line-height:18px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.myWorksPage__pageBtn:disabled{
+  color:#a1acc3;
+  cursor:not-allowed;
+}
+
+.myWorksPage__pageStatus{
+  min-width:72px;
+  text-align:center;
+  color:#7c879a;
+  font-size:13px;
+  line-height:18px;
+  font-weight:800;
+}
+
 .workListStatus{
   min-height:320px;
   border:1px dashed #c9d3ea;

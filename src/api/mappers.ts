@@ -318,7 +318,7 @@ export function mapFontFileToEnglishFont(item: ApiFontFileItem): EnglishFontCard
 
 export function mapGeneratedFontToTopFont(item: ApiGeneratedFontItem, index: number): TopFont {
   const backgrounds = ['#1f1f1f', '#33475b', '#44576c', '#748496', '#b85700'];
-  const title = item.name?.trim() || `Generated Font #${item.generated_font_id}`;
+  const title = `Generated Font #${item.generated_font_id}`;
   return {
     id: String(item.generated_font_id),
     rank: index + 1,

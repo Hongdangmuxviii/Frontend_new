@@ -257,9 +257,13 @@ export default function EnglishDetailPage() {
                 href={resolveApiAssetUrl(getFontAssetPath(selectedFont))}
                 target="_blank"
                 rel="noreferrer"
+                download
                 aria-disabled={!getFontAssetPath(selectedFont)}
+                onClick={(event) => {
+                  if (!getFontAssetPath(selectedFont)) event.preventDefault();
+                }}
               >
-                Source file
+                Download TTF
               </a>
               <button
                 className="btn btn--ghost btn--sm eng-detail__primary"

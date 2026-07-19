@@ -11,6 +11,10 @@ import type { WorkItem, WorkTimelineLog } from '../types/work';
 const progressSteps = ['영문 분석', '14자 한글 생성', 'AI 재학습', '11,172자 완성'] as const;
 const fallbackPreviewLetters = ['가', '나', '다', '라', '마', '바', '사', '아', '자', '차', '카', '타', '파', '하'];
 const totalGlyphCount = 11172;
+const WORKS_PAGE_SIZE = 3;
+const progressStepLabels = ['영문 분석', '14자 생성', 'AI 재구성 (약 10분)', '11,172자 완성'] as const;
+
+void progressSteps;
 
 function clampPercent(value: number) {
   return Math.min(100, Math.max(0, Math.round(value)));
@@ -162,7 +166,7 @@ function ProgressStepper({ work }: { work: WorkItem }) {
         <span style={{ width: `${normalizedProgress}%` }} />
       </div>
       <div className="workStepper__items">
-        {progressSteps.map((step, index) => {
+        {progressStepLabels.map((step, index) => {
           const state = getProcessStageState(work, index);
 
           return (
@@ -413,6 +417,10 @@ export default function MyWorksPage() {
   const [workItems, setWorkItems] = useState<WorkItem[]>(mockWorkItems);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [activeCount, setActiveCount] = useState(0);
+  const [queuedCount, setQueuedCount] = useState(0);
 
   useEffect(() => {
     let isMounted = true;
@@ -425,16 +433,28 @@ export default function MyWorksPage() {
       try {
         const jobs = await fontifyApi.getMyGenerations();
         const storedJobs = getStoredGenerationJobs();
+        const sortedJobs = [...jobs].sort(
+          (left, right) => new Date(right.requested_at).getTime() - new Date(left.requested_at).getTime(),
+        );
+        const nextTotalPages = Math.max(1, Math.ceil(sortedJobs.length / WORKS_PAGE_SIZE));
+        const safePage = Math.min(currentPage, nextTotalPages);
+        const visibleJobs = sortedJobs.slice(
+          (safePage - 1) * WORKS_PAGE_SIZE,
+          safePage * WORKS_PAGE_SIZE,
+        );
 
-        if (jobs.length === 0) {
+        if (sortedJobs.length === 0) {
           if (!isMounted) return;
           setWorkItems([]);
           setLoadError('');
+          setActiveCount(0);
+          setQueuedCount(0);
+          setTotalPages(1);
           return;
         }
 
         const results = await Promise.allSettled(
-          jobs.map(async (job) => {
+          visibleJobs.map(async (job) => {
             const status = await fontifyApi.getGenerationStatus(job.job_id);
             const storedJob = storedJobs.find((item) => item.jobId === job.job_id);
 
@@ -456,6 +476,12 @@ export default function MyWorksPage() {
         const failedCount = results.length - resolvedItems.length;
 
         if (!isMounted) return;
+        setActiveCount(sortedJobs.filter((job) => !job.status.toUpperCase().includes('QUEUE')).length);
+        setQueuedCount(sortedJobs.filter((job) => job.status.toUpperCase().includes('QUEUE')).length);
+        setTotalPages(nextTotalPages);
+        if (safePage !== currentPage) {
+          setCurrentPage(safePage);
+        }
         setWorkItems(resolvedItems);
         setLoadError(
           failedCount > 0
@@ -483,7 +509,7 @@ export default function MyWorksPage() {
       isMounted = false;
       window.clearInterval(polling);
     };
-  }, []);
+  }, [currentPage]);
 
   useEffect(() => {
     if (workItems.length === 0) {
@@ -499,8 +525,6 @@ export default function MyWorksPage() {
 
   const activeWork = workItems.find((work) => work.id === activeWorkId) ?? workItems[0];
   const waitingWorks = activeWork ? workItems.filter((work) => work.id !== activeWork.id) : [];
-  const activeCount = workItems.filter((work) => work.phase !== 'queued').length;
-  const queuedCount = workItems.filter((work) => work.phase === 'queued').length;
 
   const handleDeleteWork = (workId: string) => {
     removeStoredGenerationJob(Number(workId));
@@ -546,6 +570,29 @@ export default function MyWorksPage() {
                 setTimelineOpen(false);
               }}
             />
+            {totalPages > 1 ? (
+              <div className="myWorksPage__pagination" aria-label="작업중인 폰트 페이지네이션">
+                <button
+                  type="button"
+                  className="myWorksPage__pageBtn"
+                  onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+                  disabled={currentPage === 1}
+                >
+                  이전
+                </button>
+                <span className="myWorksPage__pageStatus">
+                  {currentPage} / {totalPages}
+                </span>
+                <button
+                  type="button"
+                  className="myWorksPage__pageBtn"
+                  onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
+                  disabled={currentPage === totalPages}
+                >
+                  다음
+                </button>
+              </div>
+            ) : null}
           </div>
         )}
       </main>

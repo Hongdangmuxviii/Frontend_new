@@ -28,9 +28,18 @@ function readSelectedParamsFromHash(): SelectedRouteParams {
   };
 }
 
-function getGeneratedFontTitle(font: ApiGeneratedFontItem | null) {
+function getGeneratedFontTitle(font: ApiGeneratedFontItem | null, family: string) {
   if (!font) return '완성된 폰트';
-  return font.name?.trim() || `Generated Font #${font.generated_font_id}`;
+  if (family.trim()) return `${family.trim()} Gen`;
+  return font ? `Generated Font #${font.generated_font_id}` : '?꾩꽦???고듃';
+}
+
+void getGeneratedFontTitle;
+
+function getSelectedFontTitle(font: ApiGeneratedFontItem | null, family: string) {
+  if (family.trim()) return `${family.trim()} Gen`;
+  if (!font) return 'Generated Font';
+  return `Generated Font #${font.generated_font_id}`;
 }
 
 function getFileNameFromUrl(url: string, fallback: string) {
@@ -169,7 +178,7 @@ export default function SelectedPage() {
     };
   }, [generatedFont, generatedFontUrlFromJob]);
 
-  const fontTitle = getGeneratedFontTitle(generatedFont);
+  const fontTitle = getSelectedFontTitle(generatedFont, params.family);
   const generatedFontUrl = resolveApiAssetUrl(generatedFont?.file_url) ?? generatedFontUrlFromJob;
   const originalFontHref = params.sourceFontId
     ? `#/english-detail?fontId=${encodeURIComponent(params.sourceFontId)}`
@@ -191,31 +200,20 @@ export default function SelectedPage() {
   }, [fontSize]);
 
   const handleDownload = async () => {
-    if (!params.jobId && !generatedFont) {
+    if (!generatedFontUrl) {
       window.alert('다운로드할 작업 정보가 없습니다.');
       return;
     }
 
     try {
       setIsDownloading(true);
-      const download = params.jobId
-        ? await fontifyApi.downloadGenerationJob(params.jobId)
-        : await fontifyApi.downloadGeneratedFont(generatedFont!.generated_font_id);
-      const downloadUrl = resolveApiAssetUrl(download.file_url) ?? generatedFontUrl;
-      if (!downloadUrl) throw new Error('download url missing');
-
-      const filename = getFileNameFromUrl(downloadUrl, `${fontTitle}.ttf`);
-      const response = await fetch(downloadUrl);
-      if (!response.ok) throw new Error('download failed');
-      const blob = await response.blob();
-      const objectUrl = URL.createObjectURL(blob);
       const anchor = document.createElement('a');
-      anchor.href = objectUrl;
-      anchor.download = filename;
+      anchor.href = generatedFontUrl;
+      anchor.download = getFileNameFromUrl(generatedFontUrl, `${fontTitle}.ttf`);
+      anchor.rel = 'noopener noreferrer';
       document.body.appendChild(anchor);
       anchor.click();
       anchor.remove();
-      URL.revokeObjectURL(objectUrl);
     } catch {
       if (generatedFontUrl) {
         window.open(generatedFontUrl, '_blank', 'noopener,noreferrer');

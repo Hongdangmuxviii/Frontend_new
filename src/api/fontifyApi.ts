@@ -91,7 +91,7 @@ export const fontifyApi = {
   },
   downloadGenerationJob(jobId: number | string) {
     if (USE_MOCKS) return mockFontifyApi.downloadGenerationJob(jobId);
-    return apiRequest<ApiDownloadResponse>(`/jobs/${jobId}/download`, { method: 'POST' });
+    return apiRequest<ApiDownloadResponse>(`/generations/jobs/${jobId}/download`, { method: 'POST' });
   },
   tagFont(fontId: number | string) {
     if (USE_MOCKS) return mockFontifyApi.tagFont();
